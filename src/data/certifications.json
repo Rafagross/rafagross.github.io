@@ -1,31 +1,60 @@
 {
   "certifications": [
     {
-      "name": "AWS Certified SysOps Administrator – Associate",
+      "name": "AWS Certified SysOps Administrator – Associate (CloudOps)",
+      "abbrev": "AWS SysOps",
       "issuer": "Amazon Web Services",
-      "abbrev": "SOA-C02",
-      "status": "target",
-      "date": null,
-      "credentialUrl": null,
-      "badgeUrl": null
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
     },
     {
-      "name": "AWS Certified Solutions Architect – Associate",
+      "name": "Google Cloud Professional Cloud Architect",
+      "abbrev": "GCP PCA",
+      "issuer": "Google Cloud",
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
+    },
+    {
+      "name": "Google Cloud Associate Cloud Engineer",
+      "abbrev": "GCP ACE",
+      "issuer": "Google Cloud",
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
+    },
+    {
+      "name": "CompTIA Cloud+ (CV0-004)",
+      "abbrev": "Cloud+",
+      "issuer": "CompTIA",
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
+    },
+    {
+      "name": "ISC2 Certified in Cybersecurity",
+      "abbrev": "ISC2 CC",
+      "issuer": "ISC2",
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
+    },
+    {
+      "name": "AWS Technical Accredited",
+      "abbrev": "AWS TA",
       "issuer": "Amazon Web Services",
-      "abbrev": "SAA-C03",
-      "status": "target",
-      "date": null,
-      "credentialUrl": null,
-      "badgeUrl": null
+      "status": "active",
+      "credentialUrl": "https://www.credly.com/users/rafa-gross"
     },
     {
       "name": "Certified Kubernetes Administrator",
-      "issuer": "Cloud Native Computing Foundation",
       "abbrev": "CKA",
+      "issuer": "Cloud Native Computing Foundation",
       "status": "target",
-      "date": null,
-      "credentialUrl": null,
-      "badgeUrl": null
+      "credentialUrl": null
+    },
+    {
+      "name": "Nevada Gaming License",
+      "abbrev": "NV Gaming",
+      "issuer": "State of Nevada, Gaming Control Board",
+      "status": "active",
+      "credentialUrl": null
     }
   ]
 }

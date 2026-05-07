@@ -7,7 +7,6 @@ import { getCollection } from 'astro:content';
 import projectsData from '../data/projects.json';
 import skillsData from '../data/skills.json';
 
-// Get recent runbooks and writing
 const runbooks = await getCollection('runbooks', ({ data }) => !data.draft);
 const writing = await getCollection('writing', ({ data }) => !data.draft);
 
@@ -19,12 +18,10 @@ const recentWriting = writing
   .sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime())
   .slice(0, 3);
 
-// Featured projects
 const featuredProjects = projectsData
   .filter((p) => p.featured)
   .sort((a, b) => a.displayOrder - b.displayOrder);
 
-// Flatten all skills for a compact display
 const topSkills = skillsData.categories
   .flatMap((cat) => cat.skills.filter((s) => s.level === 'advanced'))
   .slice(0, 10);
@@ -34,52 +31,72 @@ const topSkills = skillsData.categories
   <!-- Hero -->
   <section class="py-20 md:py-28" style="border-bottom:1px solid var(--color-border)">
     <div class="container" style="max-width:800px">
-      <div class="flex items-center gap-2 mb-6">
-        <span class="inline-block w-2 h-2 rounded-full" style="background:var(--color-accent)"></span>
-        <span class="text-sm font-medium font-mono" style="color:var(--color-accent)">Available for new roles</span>
-      </div>
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
+        <!-- Text content -->
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="inline-block w-2 h-2 rounded-full" style="background:var(--color-accent)"></span>
+            <span class="text-sm font-medium font-mono" style="color:var(--color-accent)">Available for new roles</span>
+          </div>
 
-      <h1 class="text-4xl md:text-5xl font-semibold mb-6 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.025em">
-        Elvis Rafael Gross
-      </h1>
+          <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.025em">
+            Elvis Rafael Gross
+          </h1>
 
-      <p class="text-xl md:text-2xl font-medium mb-4" style="color:var(--color-text-secondary)">
-        CloudOps Engineer · Platform Engineer · SRE
-      </p>
+          <p class="text-xl md:text-2xl font-medium mb-4" style="color:var(--color-text-secondary)">
+            CloudOps Engineer · Platform Engineer · SRE
+          </p>
 
-      <p class="text-lg leading-relaxed mb-8 max-w-2xl" style="color:var(--color-text-secondary)">
-        I build and operate cloud infrastructure at scale — AWS EC2 fleets, Kubernetes platforms, 
-        hybrid architectures, and the observability that keeps them running. 
-        This portfolio documents real projects, operational runbooks, and the engineering decisions behind them.
-      </p>
+          <p class="text-lg leading-relaxed mb-8 max-w-2xl" style="color:var(--color-text-secondary)">
+            I build and operate cloud infrastructure at scale — AWS EC2 fleets, Kubernetes platforms,
+            hybrid architectures, and the observability that keeps them running.
+            This portfolio documents real projects, operational runbooks, and the engineering decisions behind them.
+          </p>
 
-      <div class="flex flex-wrap gap-4 mb-10">
-        <a
-          href="/projects"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90"
-          style="background:var(--color-accent); color:white"
-        >
-          View Projects →
-        </a>
-        <a
-          href="/runbooks"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
-          style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)"
-        >
-          Runbooks
-        </a>
-        <a
-          href="/contact"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
-          style="background:transparent; color:var(--color-text-secondary); border:1px solid var(--color-border)"
-        >
-          Contact
-        </a>
-      </div>
+          <div class="flex flex-wrap gap-4 mb-10">
+            <a
+              href="/projects"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90"
+              style="background:var(--color-accent); color:white"
+            >
+              View Projects →
+            </a>
+            <a
+              href="/runbooks"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
+              style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)"
+            >
+              Runbooks
+            </a>
+            <a
+              href="/contact"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
+              style="background:transparent; color:var(--color-text-secondary); border:1px solid var(--color-border)"
+            >
+              Contact
+            </a>
+          </div>
 
-      <!-- Compact skill tags -->
-      <div class="flex flex-wrap gap-2">
-        {topSkills.map((s) => <Tag>{s.name}</Tag>)}
+          <div class="flex flex-wrap gap-2">
+            {topSkills.map((s) => <Tag>{s.name}</Tag>)}
+          </div>
+        </div>
+
+        <!-- Profile photo -->
+        <div class="flex-shrink-0 flex justify-center sm:justify-end">
+          <div class="relative">
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden" style="border:3px solid var(--color-border); box-shadow:0 4px 24px rgba(0,0,0,0.12)">
+              <img
+                src="/profile.jpg"
+                alt="Elvis Rafael Gross"
+                class="w-full h-full object-cover object-top"
+                loading="eager"
+              />
+            </div>
+            <!-- Online indicator -->
+            <span class="absolute bottom-2 right-2 w-4 h-4 rounded-full border-2" style="background:#22c55e; border-color:var(--color-bg)"></span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -117,13 +134,9 @@ const topSkills = skillsData.categories
         </div>
       ) : (
         <div class="py-12 text-center rounded-lg" style="border:1px dashed var(--color-border)">
-          <p class="text-sm" style="color:var(--color-text-muted)">Projects coming soon. Check back shortly.</p>
+          <p class="text-sm" style="color:var(--color-text-muted)">Projects coming soon.</p>
         </div>
       )}
-
-      <div class="mt-8 sm:hidden">
-        <a href="/projects" class="text-sm hover:underline" style="color:var(--color-accent)">All projects →</a>
-      </div>
     </div>
   </section>
 
