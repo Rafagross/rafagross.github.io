@@ -1,0 +1,183 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Tag from '../components/ui/Tag.astro';
+import { getSeverityClasses, getStatusClasses, formatDate } from '../lib/filters';
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+  severity: string;
+  estimatedTime: string;
+  status: string;
+  publishedDate: Date;
+  updatedDate?: Date;
+  awsServices: string[];
+  prerequisites: string[];
+  relatedRunbooks: string[];
+}
+
+const {
+  title,
+  description,
+  category,
+  tags,
+  severity,
+  estimatedTime,
+  status,
+  publishedDate,
+  updatedDate,
+  awsServices,
+  prerequisites,
+  relatedRunbooks,
+} = Astro.props;
+
+const severityClasses = getSeverityClasses(severity);
+const statusClasses = getStatusClasses(status);
+const published = formatDate(publishedDate);
+const updated = updatedDate ? formatDate(updatedDate) : null;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="py-12 md:py-16">
+    <div class="container" style="max-width:1200px">
+      <!-- Breadcrumb -->
+      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
+          <li><a href="/runbooks" class="hover:underline" style="color:var(--color-accent)">Runbooks</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" style="color:var(--color-text-secondary)">{title}</li>
+        </ol>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <!-- Main content -->
+        <div class="lg:col-span-3">
+          <!-- Header -->
+          <header class="mb-10 pb-8" style="border-bottom:1px solid var(--color-border)">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <span class={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold font-mono ${severityClasses}`}>
+                {severity}
+              </span>
+              <span class={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${statusClasses}`}>
+                {status}
+              </span>
+              <span class="text-sm" style="color:var(--color-text-muted)">{category}</span>
+            </div>
+
+            <h1 class="text-2xl md:text-3xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.015em">
+              {title}
+            </h1>
+
+            <p class="text-base leading-relaxed mb-5" style="color:var(--color-text-secondary)">{description}</p>
+
+            <!-- Quick info bar -->
+            <div class="flex flex-wrap gap-6 text-sm" style="color:var(--color-text-muted)">
+              <div class="flex items-center gap-1.5">
+                <span>⏱</span>
+                <span>{estimatedTime}</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span>📅</span>
+                <span>Updated {updated ?? published}</span>
+              </div>
+              {awsServices.length > 0 && (
+                <div class="flex items-center gap-1.5">
+                  <span>☁️</span>
+                  <span>{awsServices.slice(0, 3).join(', ')}{awsServices.length > 3 ? ` +${awsServices.length - 3}` : ''}</span>
+                </div>
+              )}
+            </div>
+          </header>
+
+          <!-- Prerequisites callout -->
+          {prerequisites.length > 0 && (
+            <div class="mb-8 p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border); border-left:3px solid var(--color-accent)">
+              <p class="text-sm font-semibold mb-3" style="color:var(--color-text-primary)">Prerequisites</p>
+              <ul class="space-y-1.5">
+                {prerequisites.map((req) => (
+                  <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                    <span class="mt-0.5 flex-shrink-0">→</span>
+                    <span>{req}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <!-- MDX Content -->
+          <div class="prose max-w-none">
+            <slot />
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <!-- Quick Reference -->
+            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+              <h3 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Quick Reference</h3>
+              <div class="space-y-3 text-sm">
+                <div>
+                  <p class="text-xs" style="color:var(--color-text-muted)">Severity</p>
+                  <span class={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold font-mono ${severityClasses}`}>{severity}</span>
+                </div>
+                <div>
+                  <p class="text-xs" style="color:var(--color-text-muted)">Est. Time</p>
+                  <p class="font-medium" style="color:var(--color-text-primary)">{estimatedTime}</p>
+                </div>
+                <div>
+                  <p class="text-xs" style="color:var(--color-text-muted)">Status</p>
+                  <span class={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${statusClasses}`}>{status}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- AWS Services -->
+            {awsServices.length > 0 && (
+              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">AWS Services</h3>
+                <div class="flex flex-wrap gap-1.5">
+                  {awsServices.map((svc) => <Tag size="sm" variant="accent">{svc}</Tag>)}
+                </div>
+              </div>
+            )}
+
+            <!-- Tags -->
+            {tags.length > 0 && (
+              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Tags</h3>
+                <div class="flex flex-wrap gap-1.5">
+                  {tags.map((tag) => <Tag size="sm">{tag}</Tag>)}
+                </div>
+              </div>
+            )}
+
+            <!-- Related Runbooks -->
+            {relatedRunbooks.length > 0 && (
+              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Related Runbooks</h3>
+                <ul class="space-y-2">
+                  {relatedRunbooks.map((slug) => (
+                    <li>
+                      <a href={`/runbooks/${slug}`} class="text-sm hover:underline" style="color:var(--color-accent)">
+                        → {slug.replace(/-/g, ' ')}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <!-- Dates -->
+            <div class="text-xs space-y-1" style="color:var(--color-text-muted)">
+              <p>Published: {published}</p>
+              {updated && <p>Updated: {updated}</p>}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

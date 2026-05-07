@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RunbookCard from '../../components/runbook/RunbookCard.astro';
+import { getCollection } from 'astro:content';
+import { WRITING_CATEGORIES } from '../../lib/filters';
+
+const allRunbooks = await getCollection('runbooks', ({ data }) => !data.draft);
+const runbooks = allRunbooks.sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime()
+);
+
+const categories = [...new Set(runbooks.map((r) => r.data.category))];
+const severities = ['P1', 'P2', 'P3', 'P4'];
+---
+
+<BaseLayout
+  title="Runbooks"
+  description="AWS CloudOps, Kubernetes, and Linux troubleshooting runbooks by Rafael Gross — structured operational procedures for real incidents."
+>
+  <section class="py-12 md:py-16">
+    <div class="container" style="max-width:1200px">
+      <!-- Page header -->
+      <header class="mb-12">
+        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Operations</p>
+        <h1 class="text-3xl md:text-4xl font-semibold mb-4" style="color:var(--color-text-primary); letter-spacing:-0.02em">Runbooks</h1>
+        <p class="text-lg max-w-2xl" style="color:var(--color-text-secondary)">
+          Step-by-step operational procedures for troubleshooting, remediation, and routine operations.
+          Each runbook includes prerequisites, validation steps, and rollback procedures.
+        </p>
+
+        <!-- Severity legend -->
+        <div class="flex flex-wrap gap-4 mt-5 text-xs" style="color:var(--color-text-muted)">
+          <span class="font-semibold">Severity:</span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full" style="background:#dc2626"></span>P1 — Critical, immediate action
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full" style="background:#d97706"></span>P2 — High, same-day resolution
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full" style="background:#2563eb"></span>P3 — Medium, scheduled
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full" style="background:#6b7280"></span>P4 — Low / informational
+          </span>
+        </div>
+      </header>
+
+      <!-- Category filter -->
+      {categories.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-10" role="group" aria-label="Filter by category">
+          <button class="filter-btn active px-3 py-1.5 rounded-md text-sm font-medium" data-filter="all">All</button>
+          {categories.map((cat) => (
+            <button class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium" data-filter={cat}>{cat}</button>
+          ))}
+        </div>
+      )}
+
+      <!-- Runbooks grid -->
+      {runbooks.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="runbooks-grid">
+          {runbooks.map((rb) => (
+            <div class="runbook-item" data-category={rb.data.category} data-severity={rb.data.severity}>
+              <RunbookCard
+                slug={rb.id}
+                title={rb.data.title}
+                description={rb.data.description}
+                category={rb.data.category}
+                severity={rb.data.severity}
+                estimatedTime={rb.data.estimatedTime}
+                status={rb.data.status}
+                tags={rb.data.tags}
+                awsServices={rb.data.awsServices ?? []}
+                publishedDate={rb.data.publishedDate}
+                updatedDate={rb.data.updatedDate}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="py-20 text-center rounded-lg" style="border:1px dashed var(--color-border)">
+          <p class="text-base font-medium mb-2" style="color:var(--color-text-primary)">Runbooks coming soon</p>
+          <p class="text-sm" style="color:var(--color-text-muted)">Operational runbooks are being authored and will be published shortly.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--color-accent-muted);
+    color: var(--color-accent);
+    border-color: transparent;
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const items = document.querySelectorAll<HTMLElement>('.runbook-item');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      items.forEach((item) => {
+        const show = filter === 'all' || item.dataset.category === filter;
+        item.style.display = show ? 'block' : 'none';
+      });
+    });
+  });
+</script>

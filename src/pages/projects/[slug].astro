@@ -1,0 +1,40 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import projectsData from '../../data/projects.json';
+
+export async function getStaticPaths() {
+  return projectsData.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<ProjectLayout
+  title={project.title}
+  shortDescription={project.shortDescription}
+  longDescription={project.longDescription}
+  category={project.category}
+  status={project.status}
+  tags={project.tags}
+  techStack={project.techStack}
+  awsServices={project.awsServices}
+  gcpServices={project.gcpServices}
+  architecture={project.architecture}
+  operationalValue={project.operationalValue}
+  links={{ ...project.links, github: project.github.url }}
+  publishedDate={project.publishedDate}
+  updatedDate={project.updatedDate}
+>
+  <!-- 
+    Extended project content can be added here.
+    Future enhancement: load a matching MDX file from src/content/projects/[slug].mdx
+    for full case study content, deployment steps, lessons learned, etc.
+  -->
+  <p style="color:var(--color-text-muted); font-style:italic">
+    Detailed case study documentation is in progress. 
+    See the <a href={project.github.url} target="_blank" rel="noopener noreferrer">GitHub repository</a> for implementation details and README.
+  </p>
+</ProjectLayout>

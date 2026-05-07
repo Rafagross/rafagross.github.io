@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { WRITING_CATEGORIES, categoryToSlug, formatDate } from '../../lib/filters';
+import { estimateReadingTime, formatReadingTime } from '../../lib/reading-time';
+
+const allPosts = await getCollection('writing', ({ data }) => !data.draft);
+const posts = allPosts.sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime()
+);
+
+const categories = WRITING_CATEGORIES.filter((cat) =>
+  posts.some((p) => p.data.category === cat)
+);
+---
+
+<BaseLayout
+  title="Writing"
+  description="CloudOps notes, Kubernetes labs, Linux troubleshooting, homelab docs, and architecture decisions by Rafael Gross."
+>
+  <section class="py-12 md:py-16">
+    <div class="container" style="max-width:1200px">
+      <!-- Header -->
+      <header class="mb-12">
+        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Notes & Tutorials</p>
+        <h1 class="text-3xl md:text-4xl font-semibold mb-4" style="color:var(--color-text-primary); letter-spacing:-0.02em">Writing</h1>
+        <p class="text-lg max-w-2xl" style="color:var(--color-text-secondary)">
+          Technical notes, tutorials, homelab documentation, and architecture decisions. 
+          Covers AWS, Kubernetes, Linux, observability, automation, and more.
+        </p>
+      </header>
+
+      <!-- Category filter pills -->
+      {categories.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-10" role="group" aria-label="Filter by category">
+          <button class="filter-btn active px-3 py-1.5 rounded-md text-sm font-medium" data-filter="all">All</button>
+          {categories.map((cat) => (
+            <button class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium" data-filter={cat}>
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <!-- Posts grid -->
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="writing-grid">
+          {posts.map((post) => {
+            const readTime = formatReadingTime(post.data.readingTime ?? estimateReadingTime(post.body ?? ''));
+            return (
+              <article
+                class="writing-item group relative flex flex-col rounded-lg overflow-hidden transition-shadow hover:shadow-lg"
+                style="background:var(--color-surface); border:1px solid var(--color-border)"
+                data-category={post.data.category}
+              >
+                <div class="flex flex-col flex-1 p-5">
+                  <!-- Category + date -->
+                  <div class="flex items-center justify-between mb-3">
+                    <a
+                      href={`/writing/category/${categoryToSlug(post.data.category)}`}
+                      class="text-xs px-2 py-0.5 rounded font-medium hover:opacity-80 transition-opacity"
+                      style="background:var(--color-accent-muted); color:var(--color-accent)"
+                      onclick="event.stopPropagation()"
+                    >
+                      {post.data.category}
+                    </a>
+                    <span class="text-xs" style="color:var(--color-text-muted)">
+                      {formatDate(post.data.publishedDate)}
+                    </span>
+                  </div>
+
+                  <!-- Title -->
+                  <h2 class="text-base font-semibold mb-2 leading-snug group-hover:opacity-80 transition-opacity" style="color:var(--color-text-primary)">
+                    <a href={`/writing/${post.id}`} class="stretched-link">{post.data.title}</a>
+                  </h2>
+
+                  <!-- Description -->
+                  <p class="text-sm leading-relaxed flex-1" style="color:var(--color-text-secondary)">
+                    {post.data.description}
+                  </p>
+
+                  <!-- Footer -->
+                  <div class="mt-4 pt-3 text-xs" style="border-top:1px solid var(--color-border); color:var(--color-text-muted)">
+                    {readTime}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="py-20 text-center rounded-lg" style="border:1px dashed var(--color-border)">
+          <p class="text-base font-medium mb-2" style="color:var(--color-text-primary)">Writing coming soon</p>
+          <p class="text-sm" style="color:var(--color-text-muted)">Technical notes and tutorials are in progress.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--color-accent-muted);
+    color: var(--color-accent);
+    border-color: transparent;
+  }
+  .stretched-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  a[onclick] {
+    position: relative;
+    z-index: 2;
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const items = document.querySelectorAll<HTMLElement>('.writing-item');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      items.forEach((item) => {
+        const show = filter === 'all' || item.dataset.category === filter;
+        item.style.display = show ? 'flex' : 'none';
+      });
+    });
+  });
+</script>

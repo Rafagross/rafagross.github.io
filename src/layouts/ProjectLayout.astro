@@ -1,0 +1,221 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Tag from '../components/ui/Tag.astro';
+import { getStatusClasses, formatDate } from '../lib/filters';
+
+interface TechStack {
+  [key: string]: string[];
+}
+
+interface Props {
+  title: string;
+  shortDescription: string;
+  longDescription: string;
+  category: string;
+  status: string;
+  tags: string[];
+  techStack: TechStack;
+  awsServices: string[];
+  gcpServices: string[];
+  architecture: {
+    summary: string;
+    diagramUrl?: string;
+    diagramAlt?: string;
+  };
+  operationalValue: {
+    problemSolved: string;
+    outcomes: string[];
+    metrics?: {
+      costImpact?: string;
+      reliabilityImpact?: string;
+    };
+  };
+  links: {
+    readme?: string | null;
+    runbook?: string | null;
+    diagram?: string | null;
+    demo?: string | null;
+    github?: string;
+  };
+  publishedDate: string;
+  updatedDate?: string;
+}
+
+const {
+  title,
+  shortDescription,
+  longDescription,
+  category,
+  status,
+  tags,
+  techStack,
+  awsServices,
+  gcpServices,
+  architecture,
+  operationalValue,
+  links,
+  publishedDate,
+  updatedDate,
+} = Astro.props;
+
+const statusClasses = getStatusClasses(status);
+const published = formatDate(new Date(publishedDate));
+const updated = updatedDate ? formatDate(new Date(updatedDate)) : null;
+const allCloudServices = [...awsServices, ...gcpServices];
+---
+
+<BaseLayout title={title} description={shortDescription}>
+  <article class="py-12 md:py-16">
+    <div class="container" style="max-width:1200px">
+      <!-- Breadcrumb -->
+      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
+          <li><a href="/projects" class="hover:underline" style="color:var(--color-accent)">Projects</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" style="color:var(--color-text-secondary)">{title}</li>
+        </ol>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Main content -->
+        <div class="lg:col-span-2">
+          <!-- Header -->
+          <header class="mb-10">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <span class={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${statusClasses}`}>
+                {status}
+              </span>
+              <span class="text-sm" style="color:var(--color-text-muted)">{category}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.02em">
+              {title}
+            </h1>
+            <p class="text-lg leading-relaxed mb-6" style="color:var(--color-text-secondary)">
+              {longDescription}
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => <Tag>{tag}</Tag>)}
+            </div>
+          </header>
+
+          <!-- Architecture -->
+          <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4" style="color:var(--color-text-primary); border-bottom:1px solid var(--color-border); padding-bottom:0.5rem">
+              Architecture
+            </h2>
+            <p class="mb-4 leading-relaxed" style="color:var(--color-text-secondary)">{architecture.summary}</p>
+            {architecture.diagramUrl && (
+              <div class="rounded-lg overflow-hidden p-4 text-center text-sm" style="background:var(--color-surface-raised); border:1px solid var(--color-border); color:var(--color-text-muted)">
+                [Architecture diagram — add SVG to {architecture.diagramUrl}]
+              </div>
+            )}
+          </section>
+
+          <!-- Operational Value -->
+          <section class="mb-10">
+            <h2 class="text-xl font-semibold mb-4" style="color:var(--color-text-primary); border-bottom:1px solid var(--color-border); padding-bottom:0.5rem">
+              Operational Value
+            </h2>
+            <div class="mb-4 p-4 rounded-lg" style="background:var(--color-accent-muted); border-left:3px solid var(--color-accent)">
+              <p class="font-medium mb-1" style="color:var(--color-text-primary)">Problem Solved</p>
+              <p style="color:var(--color-text-secondary)">{operationalValue.problemSolved}</p>
+            </div>
+            <ul class="space-y-2 mb-6">
+              {operationalValue.outcomes.map((outcome) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-1 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold" style="background:var(--color-accent-muted); color:var(--color-accent)">✓</span>
+                  <span style="color:var(--color-text-secondary)">{outcome}</span>
+                </li>
+              ))}
+            </ul>
+            {operationalValue.metrics && (
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {operationalValue.metrics.costImpact && (
+                  <div class="p-4 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                    <p class="text-xs font-semibold uppercase tracking-wide mb-1" style="color:var(--color-text-muted)">Cost Impact</p>
+                    <p class="text-sm" style="color:var(--color-text-primary)">{operationalValue.metrics.costImpact}</p>
+                  </div>
+                )}
+                {operationalValue.metrics.reliabilityImpact && (
+                  <div class="p-4 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                    <p class="text-xs font-semibold uppercase tracking-wide mb-1" style="color:var(--color-text-muted)">Reliability Impact</p>
+                    <p class="text-sm" style="color:var(--color-text-primary)">{operationalValue.metrics.reliabilityImpact}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+
+          <!-- MDX Content slot -->
+          <section class="prose max-w-none">
+            <slot />
+          </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <!-- Links -->
+            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+              <h3 class="text-sm font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Links</h3>
+              <div class="space-y-2">
+                {links.github && (
+                  <a href={links.github} target="_blank" rel="noopener noreferrer"
+                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
+                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
+                    <span>↗</span> GitHub Repository
+                  </a>
+                )}
+                {links.runbook && (
+                  <a href={links.runbook}
+                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
+                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
+                    <span>📋</span> Runbook
+                  </a>
+                )}
+                {links.readme && (
+                  <a href={links.readme} target="_blank" rel="noopener noreferrer"
+                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
+                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
+                    <span>📄</span> README
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+              <h3 class="text-sm font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Tech Stack</h3>
+              <div class="space-y-3">
+                {Object.entries(techStack).map(([group, items]) => (
+                  <div>
+                    <p class="text-xs font-medium mb-1.5 capitalize" style="color:var(--color-text-muted)">{group.replace(/([A-Z])/g, ' $1').trim()}</p>
+                    <div class="flex flex-wrap gap-1.5">
+                      {(items as string[]).map((item) => <Tag size="sm">{item}</Tag>)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <!-- Cloud Services -->
+            {allCloudServices.length > 0 && (
+              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
+                <h3 class="text-sm font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Cloud Services</h3>
+                <div class="flex flex-wrap gap-1.5">
+                  {allCloudServices.map((svc) => <Tag size="sm" variant="accent">{svc}</Tag>)}
+                </div>
+              </div>
+            )}
+
+            <!-- Metadata -->
+            <div class="text-xs space-y-1" style="color:var(--color-text-muted)">
+              <p>Published: {published}</p>
+              {updated && <p>Updated: {updated}</p>}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

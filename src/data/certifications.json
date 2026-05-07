@@ -1,0 +1,31 @@
+{
+  "certifications": [
+    {
+      "name": "AWS Certified SysOps Administrator – Associate",
+      "issuer": "Amazon Web Services",
+      "abbrev": "SOA-C02",
+      "status": "target",
+      "date": null,
+      "credentialUrl": null,
+      "badgeUrl": null
+    },
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "issuer": "Amazon Web Services",
+      "abbrev": "SAA-C03",
+      "status": "target",
+      "date": null,
+      "credentialUrl": null,
+      "badgeUrl": null
+    },
+    {
+      "name": "Certified Kubernetes Administrator",
+      "issuer": "Cloud Native Computing Foundation",
+      "abbrev": "CKA",
+      "status": "target",
+      "date": null,
+      "credentialUrl": null,
+      "badgeUrl": null
+    }
+  ]
+}

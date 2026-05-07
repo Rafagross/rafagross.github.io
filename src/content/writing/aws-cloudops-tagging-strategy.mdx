@@ -1,0 +1,103 @@
+---
+title: "A Pragmatic AWS Tagging Strategy That Survives Audits"
+description: "A tag schema that satisfies finance, security, and platform teams without becoming a governance nightmare. Covers mandatory tags, enforcement with AWS Config, and automation."
+category: "AWS CloudOps"
+tags: ["aws", "tagging", "cost-optimization", "governance", "config-rules", "iam"]
+publishedDate: 2026-01-10
+draft: false
+featured: false
+---
+
+import Callout from '../../components/ui/Callout.astro';
+
+AWS tagging strategies fall into two failure modes: too few tags and nobody can attribute costs, or too many tags and nobody enforces them consistently. This post describes a practical middle ground that I've seen hold up over time.
+
+## The Core Problem
+
+Tags exist to serve at least three distinct audiences with different needs:
+
+- **Finance**: needs to split costs by project, team, and environment for chargeback
+- **Security**: needs to identify resources by classification, data sensitivity, and owner
+- **Platform/Ops**: needs to identify environment, application, and support tier to route alerts and apply automation
+
+The mistake is designing tags only for one audience. If you design for finance, security can't find who owns a resource during an incident. If you design for ops, finance can't run a cost report.
+
+## Mandatory Tag Set (the non-negotiables)
+
+Keep the mandatory set small. Every tag you add to "mandatory" is a tag that will be missing on 30% of resources six months from now unless you enforce it automatically.
+
+| Tag Key | Values | Purpose |
+|---|---|---|
+| `Environment` | `prod`, `staging`, `dev`, `sandbox` | Lifecycle and automation gating |
+| `Project` | `payments-api`, `data-platform`, etc. | Cost attribution |
+| `Team` | `platform`, `data`, `security` | Ownership and alert routing |
+| `ManagedBy` | `terraform`, `cloudformation`, `console` | Drift detection |
+| `CostCenter` | Finance-assigned codes | Chargeback |
+
+Five tags. That's it for mandatory. You can add optional tags for things like `DataClassification` or `BackupPolicy` but those don't block deployment.
+
+<Callout type="warning" title="Avoid these common mistakes">
+  Don't create a `Name` tag convention that duplicates the resource ID — AWS already shows resource names. Don't use `Owner` as a freeform field — emails change, people leave. Use `Team` instead. Don't create `Tier: gold/silver/bronze` without defining what each tier means operationally.
+</Callout>
+
+## Enforcement with AWS Config
+
+Good intentions don't enforce tags. AWS Config rules do.
+
+Use the managed rule `required-tags` to check that your five mandatory tags exist on key resource types:
+
+```json
+{
+  "ConfigRuleName": "required-tags-ec2",
+  "Source": {
+    "Owner": "AWS",
+    "SourceIdentifier": "REQUIRED_TAGS"
+  },
+  "InputParameters": {
+    "tag1Key": "Environment",
+    "tag2Key": "Project",
+    "tag3Key": "Team",
+    "tag4Key": "ManagedBy",
+    "tag5Key": "CostCenter"
+  },
+  "Scope": {
+    "ComplianceResourceTypes": ["AWS::EC2::Instance", "AWS::RDS::DBInstance", "AWS::S3::Bucket"]
+  }
+}
+```
+
+Set the rule to **non-compliant** (not auto-remediate) for the first 30 days while teams catch up. After that, use a Config remediation action to tag non-compliant resources with `Team: unowned` — which makes them visible in the cost report and creates social pressure to fix them.
+
+## Tagging in Terraform
+
+Enforce tags at the provider level using `default_tags` in your AWS provider block. This applies the tag to every resource created by that provider without having to set it on each resource block:
+
+```hcl
+provider "aws" {
+  region = var.aws_region
+
+  default_tags {
+    tags = {
+      Environment = var.environment
+      Project     = var.project
+      Team        = var.team
+      ManagedBy   = "terraform"
+      CostCenter  = var.cost_center
+    }
+  }
+}
+```
+
+Individual resources can still override these or add additional tags. But the five mandatory ones are never missing.
+
+## Cost Attribution That Actually Works
+
+Once tags are consistent, Cost Explorer becomes useful. Create a Cost Category in Cost Explorer that splits by `Project` tag. Set a rule to catch untagged resources under a separate category called `Unattributed` — that number being non-zero is your SLA for tag compliance.
+
+<Callout type="tip">
+  Run a monthly "tag hygiene" report: resources older than 7 days with missing mandatory tags. Send it to team leads. This is more effective than automation alerts because it creates accountability at the team level rather than generating noise for the platform team.
+</Callout>
+
+## What I'd Do Differently
+
+Enforce tags at resource creation time using Service Control Policies (SCPs) if you're in an AWS Organizations setup. An SCP that denies `ec2:RunInstances` unless the request includes all five mandatory tags is the cleanest enforcement mechanism — it fails at the source rather than flagging after deployment. The tradeoff is that it requires everyone using the account to add tags, which creates friction for exploratory work in sandbox accounts. I typically exempt sandbox accounts from SCP enforcement and keep strict enforcement in staging and production only.

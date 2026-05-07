@@ -1,0 +1,101 @@
+---
+title: "Running k3s on Proxmox: What I Learned Building a Homelab Kubernetes Platform"
+description: "Practical lessons from setting up a 3-node k3s cluster on Proxmox VE — storage, networking, ArgoCD, and the things that broke along the way."
+category: "Homelab"
+tags: ["kubernetes", "k3s", "proxmox", "homelab", "argocd", "longhorn", "metallb"]
+publishedDate: 2026-02-15
+draft: false
+featured: false
+---
+
+import Callout from '../../components/ui/Callout.astro';
+
+I've been running a 3-node Proxmox homelab for a while now, and the most valuable thing I did with it was set up a production-analogous Kubernetes platform on top. Not because homelab Kubernetes is a cost-effective way to run workloads — it isn't — but because it's where I test operational patterns before applying them to production EKS environments.
+
+Here's what I learned.
+
+## The Hardware Setup
+
+Three nodes, repurposed from old workstations:
+
+- **Node 1 (control plane)**: 4 cores, 16 GB RAM, 256 GB SSD
+- **Node 2 (worker)**: 8 cores, 32 GB RAM, 512 GB SSD
+- **Node 3 (worker)**: 8 cores, 32 GB RAM, 512 GB SSD
+
+Each runs Proxmox VE 8.x. The Kubernetes VMs are Ubuntu 22.04 LTS, 4 vCPU / 8 GB RAM each, with Proxmox VirtIO drivers for disk and network.
+
+## Why k3s Over kubeadm or Kind
+
+k3s fits homelabs well for three reasons:
+
+1. Single binary, installs in under 2 minutes
+2. Uses `containerd` and `sqlite` by default — no need to install a container runtime and etcd separately
+3. Comes with Traefik and CoreDNS pre-bundled
+
+The tradeoff: k3s replaces etcd with SQLite for single-node installs, or with an embedded etcd for HA. For a 3-node setup, I use embedded etcd — it requires running the first server node with `--cluster-init` before adding the other two with the cluster token.
+
+<Callout type="info">
+  For a homelab, don't bother with an external etcd. Embedded etcd is fine for 3 nodes and removes a dependency that adds failure surface.
+</Callout>
+
+## Storage: Longhorn
+
+The first thing I got wrong was storage. I started with local-path provisioner (k3s default), which creates PVs on the local disk of whichever node the pod schedules on. That's a problem when pods reschedule to a different node — the data doesn't follow them.
+
+Longhorn solves this by replicating volumes across nodes. Installation is straightforward via Helm:
+
+```bash
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+helm install longhorn longhorn/longhorn \
+  --namespace longhorn-system \
+  --create-namespace \
+  --set defaultSettings.defaultReplicaCount=2
+```
+
+With `replicaCount=2`, each PV is replicated across two worker nodes. Lose one worker, data survives.
+
+The gotcha: Longhorn requires `open-iscsi` on every node. Install it before Longhorn or the pods will fail to start:
+
+```bash
+apt-get install -y open-iscsi
+systemctl enable iscsid --now
+```
+
+## Load Balancer: MetalLB
+
+k3s comes with `ServiceLB` (formerly klipper-lb), which works but binds to host ports and doesn't give you real IP allocation. MetalLB gives you a proper LoadBalancer implementation for bare-metal — pods get IPs from a pool you define, and those IPs are announced via ARP on your local network.
+
+Disable ServiceLB first when installing k3s:
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable servicelb" sh -
+```
+
+Then install MetalLB and define an `IPAddressPool` from a range in your home network that isn't used by DHCP. Services of type `LoadBalancer` get IPs from that pool and are reachable from anything on your LAN.
+
+## GitOps with ArgoCD
+
+ArgoCD is where the homelab starts feeling like real platform engineering. Every cluster change goes through Git — no more `kubectl apply -f random-manifest.yaml` directly.
+
+The app-of-apps pattern works well here: one root ArgoCD application that points to a directory of other ArgoCD application definitions. Adding a new service to the cluster means committing an ArgoCD application manifest, not running any commands.
+
+The thing that catches people: ArgoCD's default admin password is stored in a Secret in the `argocd` namespace. Change it immediately after installation:
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+## What Broke (and What I Learned)
+
+**Proxmox snapshots vs. Kubernetes state**: I took a Proxmox snapshot of all three nodes and restored it after a botched Longhorn upgrade. The cluster came back up but etcd was inconsistent — the nodes had diverged state from before/after the snapshot. The fix was to demote the two follower nodes and rejoin them. Lesson: Proxmox snapshots are not a Kubernetes backup strategy. Use Velero for application-level backups.
+
+**NTP drift**: Two of my nodes were running NTP from different sources and drifted by 4 seconds. etcd became unhealthy because it uses tight time bounds for leader elections. All Kubernetes nodes must run the same NTP source with sub-second drift. Add NTP verification to your node provisioning playbook.
+
+**k3s upgrades**: The k3s upgrade controller is the right tool for cluster upgrades — don't upgrade nodes manually with `curl | sh`. The upgrade controller drains nodes before upgrading, which prevents workload disruption.
+
+## Whether It's Worth It
+
+Yes, but for the right reason. I don't run anything important on this cluster. Its value is that every runbook I write for EKS, I've tested the procedure here first. When a Longhorn PVC goes to `Lost` state in my homelab, I know exactly what the recovery steps are before it happens at work.
+
+That's the point. The homelab is a $0 incident rehearsal environment.

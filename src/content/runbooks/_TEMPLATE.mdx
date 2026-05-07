@@ -1,0 +1,98 @@
+---
+# RUNBOOK TEMPLATE — copy this file and rename it
+# File naming convention: kebab-case-describing-the-issue.mdx
+# Example: rds-connection-refused-from-lambda.mdx
+
+title: "Short, action-oriented title describing what this runbook resolves"
+description: "One or two sentences. What does this runbook help with? Who should use it?"
+category: "AWS CloudOps"  # Must match one of the defined categories exactly
+tags: ["tag1", "tag2", "tag3"]  # lowercase, hyphenated, specific
+severity: "P2"             # P1 | P2 | P3 | P4
+estimatedTime: "10-20 min" # Be realistic
+status: "draft"            # draft | stable | deprecated
+publishedDate: 2026-01-01
+updatedDate: 2026-01-01
+awsServices: []            # List of AWS service names used in this runbook
+gcpServices: []            # List of GCP service names (if applicable)
+prerequisites:
+  - "What access does the operator need?"
+  - "What tools must be available?"
+  - "What knowledge is assumed?"
+relatedRunbooks: []        # slugs of related runbooks, no file extension
+draft: true                # Keep true until reviewed and marked stable
+---
+
+{/* 
+  Delete this comment block when writing the actual runbook.
+  Section order must follow the standard template.
+  Every runbook must have: Summary, When to Use, Steps, Validation, Rollback (if applicable), Revision History.
+*/}
+
+## Summary
+
+One paragraph. What problem does this runbook solve? What is the expected end state after following it?
+
+---
+
+## When to Use This Runbook
+
+Bullet list of observable symptoms, alert names, or conditions that indicate this runbook is relevant.
+
+- Alert: `[Alert name here]` fires in CloudWatch / PagerDuty
+- Symptom: users report [observable behavior]
+- Check: `[command or console path]` returns [unexpected value]
+
+---
+
+## Prerequisites
+
+Already listed in frontmatter, but repeat here if there are more detailed requirements worth calling out inline.
+
+---
+
+## Step N: [Action-oriented step title]
+
+**Console path:** [Service → Sub-service → Page] (always include for console steps)
+
+What to do. Be specific. Include commands for CLI where relevant.
+
+```bash
+# Example command
+aws ec2 describe-instances --instance-ids i-xxxxx --region us-east-1
+```
+
+**Expected result:** What should the operator see if this step succeeded?
+
+---
+
+{/* Repeat Step blocks as needed. Keep steps atomic — one action per step. */}
+
+---
+
+## Validation
+
+| Check | How to Verify | Expected Result |
+|---|---|---|
+| [What you're checking] | [Console path or command] | [What success looks like] |
+
+---
+
+## Rollback
+
+If the resolution steps made changes that can be undone, describe how to undo them. If no rollback is needed, state: "No destructive changes are made by this runbook."
+
+---
+
+## Escalation
+
+| Condition | Next Action |
+|---|---|
+| [When to stop and escalate] | [Who to contact or what to do] |
+
+---
+
+## Revision History
+
+| Date | Author | Change |
+|---|---|---|
+| YYYY-MM-DD | Name | Initial version |

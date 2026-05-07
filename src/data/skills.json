@@ -1,0 +1,54 @@
+{
+  "categories": [
+    {
+      "name": "Cloud Platforms",
+      "skills": [
+        { "name": "AWS", "level": "advanced", "note": "EC2, SSM, CloudWatch, VPC, IAM, Lambda, EventBridge, S3, EKS, RDS" },
+        { "name": "GCP", "level": "intermediate", "note": "Compute Engine, GKE, Cloud Monitoring, IAM" }
+      ]
+    },
+    {
+      "name": "Infrastructure & Orchestration",
+      "skills": [
+        { "name": "Kubernetes", "level": "advanced", "note": "k3s, EKS, workload management, RBAC, networking" },
+        { "name": "Terraform", "level": "advanced", "note": "Module design, state management, workspace strategies" },
+        { "name": "Ansible", "level": "intermediate", "note": "OS provisioning, patching, configuration management" },
+        { "name": "Helm", "level": "intermediate", "note": "Chart authoring, values management, lifecycle hooks" },
+        { "name": "Proxmox VE", "level": "intermediate", "note": "Hypervisor administration, VM and LXC management" }
+      ]
+    },
+    {
+      "name": "Observability",
+      "skills": [
+        { "name": "CloudWatch", "level": "advanced", "note": "Agent, Logs, Insights, Alarms, Dashboards, Composite Alarms" },
+        { "name": "Prometheus", "level": "intermediate", "note": "PromQL, scrape configuration, alerting rules" },
+        { "name": "Grafana", "level": "intermediate", "note": "Dashboard design, data source integration, alerting" }
+      ]
+    },
+    {
+      "name": "Automation & Scripting",
+      "skills": [
+        { "name": "Bash / Shell", "level": "advanced", "note": "Operational scripts, automation, SSM Run Commands" },
+        { "name": "Python", "level": "intermediate", "note": "Lambda functions, automation scripts, AWS SDK (boto3)" },
+        { "name": "AWS Systems Manager", "level": "advanced", "note": "Session Manager, Run Command, Patch Manager, Documents" },
+        { "name": "GitHub Actions", "level": "intermediate", "note": "CI/CD pipelines, workflow automation" }
+      ]
+    },
+    {
+      "name": "Networking & Security",
+      "skills": [
+        { "name": "AWS VPC", "level": "advanced", "note": "Subnet design, routing tables, VPC endpoints, peering, TGW" },
+        { "name": "IAM", "level": "advanced", "note": "Least-privilege policy design, roles, permission boundaries" },
+        { "name": "Linux", "level": "advanced", "note": "Amazon Linux 2/2023, RHEL, Ubuntu — systemd, networking, storage" }
+      ]
+    },
+    {
+      "name": "GitOps & Developer Tooling",
+      "skills": [
+        { "name": "Git", "level": "advanced", "note": "Branching strategies, workflows, code review" },
+        { "name": "ArgoCD", "level": "intermediate", "note": "App of apps pattern, sync policies, RBAC" },
+        { "name": "Docker", "level": "intermediate", "note": "Image builds, multi-stage, Compose for local development" }
+      ]
+    }
+  ]
+}

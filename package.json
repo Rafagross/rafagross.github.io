@@ -1,0 +1,27 @@
+{
+  "name": "rafagross-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/tailwind": "^6.0.2",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.2.2",
+    "shiki": "^4.0.2",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

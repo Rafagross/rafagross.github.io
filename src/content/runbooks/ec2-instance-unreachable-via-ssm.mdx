@@ -1,0 +1,225 @@
+---
+title: "EC2 Instance Unreachable via SSM Session Manager"
+description: "Diagnose and resolve an EC2 instance that fails to connect via AWS Systems Manager Session Manager. Covers IAM role, SSM Agent, VPC endpoint, and network path diagnostics."
+category: "AWS CloudOps"
+tags: ["ec2", "ssm", "session-manager", "vpc-endpoints", "iam", "troubleshooting"]
+severity: "P2"
+estimatedTime: "15-30 min"
+status: "stable"
+publishedDate: 2026-01-15
+updatedDate: 2026-05-01
+awsServices: ["EC2", "Systems Manager", "VPC", "IAM", "CloudWatch"]
+prerequisites:
+  - "AWS Console access with EC2 + SSM permissions (ec2:DescribeInstances, ssm:DescribeInstanceInformation, ssm:StartSession)"
+  - "The instance ID and region"
+  - "Access to the VPC and subnet configuration for the affected instance"
+relatedRunbooks:
+  - "ec2-instance-impaired-status-check"
+draft: false
+---
+
+import Callout from '../../components/ui/Callout.astro';
+
+## Summary
+
+This runbook resolves the situation where an EC2 instance is running and visible in the console but either does not appear in the Systems Manager Fleet Manager inventory, or returns a connection error when you attempt to start a Session Manager session.
+
+---
+
+## When to Use This Runbook
+
+Use this runbook when you observe any of the following:
+
+- Session Manager shows "Instance not connected" or "Unable to start session"
+- The instance does not appear in **Systems Manager → Fleet Manager → Managed Nodes**
+- `ssm:StartSession` returns `TargetNotConnected`
+- A previously working instance stopped responding to SSM after a restart, IAM change, or network modification
+
+---
+
+## Step 1: Verify Instance State
+
+**Console path:** EC2 → Instances → [Instance ID]
+
+Confirm the instance is in `running` state and that both **Status checks** show 2/2 passed.
+
+If status checks are failing, stop here and use the EC2 Status Check runbook. SSM is irrelevant if the instance itself is impaired.
+
+**Expected result:** Instance state = `running`, 2/2 status checks passed.
+
+---
+
+## Step 2: Check SSM Managed Node Status
+
+**Console path:** Systems Manager → Fleet Manager → Managed nodes
+
+Search for the instance ID. If it does not appear, or shows `Connection Lost`, the issue is one of: missing IAM role, stopped SSM agent, or blocked network path.
+
+**Expected result:** Instance appears with status `Online`. If missing or `Connection Lost`, continue to Step 3.
+
+---
+
+## Step 3: Verify IAM Instance Profile
+
+**Console path:** EC2 → Instances → [Instance ID] → Security tab → IAM Role
+
+The instance must have an IAM role attached with the `AmazonSSMManagedInstanceCore` managed policy (or equivalent custom policy granting the minimum SSM actions).
+
+Minimum required IAM actions if using a custom policy:
+
+```
+ssm:UpdateInstanceInformation
+ssm:ListInstanceAssociations
+ssm:DescribeInstanceProperties
+ssm:DescribeDocumentParameters
+ssmmessages:CreateControlChannel
+ssmmessages:CreateDataChannel
+ssmmessages:OpenControlChannel
+ssmmessages:OpenDataChannel
+ec2messages:AcknowledgeMessage
+ec2messages:DeleteMessage
+ec2messages:FailMessage
+ec2messages:GetEndpoint
+ec2messages:GetMessages
+ec2messages:SendReply
+```
+
+<Callout type="warning" title="IAM propagation delay">
+  IAM role changes applied to a running instance take effect on next SSM agent heartbeat, typically within 2-3 minutes. If you just updated the role, wait 5 minutes and re-check Fleet Manager before continuing.
+</Callout>
+
+**Expected result:** IAM role attached with `AmazonSSMManagedInstanceCore` or equivalent. If missing, attach the role and wait 5 minutes.
+
+---
+
+## Step 4: Check SSM Agent on the Instance
+
+**Console path:** EC2 → Instances → [Instance ID] → Actions → Monitor and troubleshoot → Get system log
+
+Look for lines referencing `amazon-ssm-agent`. A healthy agent shows:
+
+```
+amazon-ssm-agent.service: active (running)
+```
+
+Errors to look for:
+- `Failed to start Amazon SSM Agent` — agent start failure, likely OS-level issue
+- `Error connecting to endpoint` — network path problem (proceed to Step 5)
+- No SSM lines at all — agent not installed or not running
+
+If the agent is not running, you can use EC2 Run Command with `AWS-RunShellScript` to restart it — but only if the instance is already registered (partial connectivity). If it's fully unreachable, use EC2 Instance Connect or serial console (if available) to restart manually.
+
+**Expected result:** SSM agent running. No connection errors.
+
+---
+
+## Step 5: Diagnose the Network Path
+
+SSM Session Manager requires outbound HTTPS (port 443) from the EC2 instance to three regional endpoints:
+
+| Endpoint | Purpose |
+|---|---|
+| `ssm.{region}.amazonaws.com` | Agent registration |
+| `ssmmessages.{region}.amazonaws.com` | Session data channel |
+| `ec2messages.{region}.amazonaws.com` | EC2 message delivery |
+
+**For private instances (no NAT Gateway, VPC endpoint required):**
+
+**Console path:** VPC → Endpoints
+
+Verify that all three interface endpoints exist, are associated with the correct VPC, and have status `available`. Check that the endpoint security group allows inbound HTTPS from the instance's security group.
+
+**Console path:** VPC → Security Groups → [Endpoint SG]
+
+Inbound rule required:
+```
+Type: HTTPS (443)
+Source: [Instance security group ID]
+```
+
+**For instances with NAT Gateway:**
+
+**Console path:** VPC → Route Tables → [Instance subnet's route table]
+
+Confirm a `0.0.0.0/0` route pointing to the NAT Gateway exists and the NAT Gateway is in `available` state.
+
+<Callout type="info">
+  If the instance has a public IP and is in a public subnet with an IGW route, outbound port 443 directly to AWS endpoints is sufficient. No VPC endpoints needed in that case.
+</Callout>
+
+**Expected result:** Either VPC endpoints present and `available`, or valid NAT/IGW route exists. Instance SG allows outbound 443.
+
+---
+
+## Step 6: Check Instance Security Group Outbound Rules
+
+**Console path:** EC2 → Instances → [Instance ID] → Security tab → Security groups → [SG ID] → Outbound rules
+
+Confirm outbound HTTPS is allowed. The default AWS SG allows all outbound traffic. If rules have been tightened:
+
+```
+Type: HTTPS (443)
+Destination: 0.0.0.0/0
+```
+OR (preferred, more restrictive):
+```
+Type: HTTPS (443)
+Destination: [VPC endpoint prefix list or specific endpoint IPs]
+```
+
+**Expected result:** Outbound 443 allowed from instance security group.
+
+---
+
+## Step 7: Force SSM Agent Re-Registration (Last Resort)
+
+If all above checks pass but the instance still doesn't appear in Fleet Manager, the agent's registration may be stale (common after AMI snapshots or instance cloning).
+
+Use EC2 Run Command with `AWS-RunShellScript`:
+
+```bash
+# Amazon Linux 2 / AL2023
+sudo systemctl stop amazon-ssm-agent
+sudo rm -rf /var/lib/amazon/ssm/registration
+sudo systemctl start amazon-ssm-agent
+sudo systemctl status amazon-ssm-agent
+```
+
+Wait 2 minutes, then re-check Fleet Manager.
+
+---
+
+## Validation Checks
+
+| Check | How to Verify | Expected Result |
+|---|---|---|
+| Instance in Fleet Manager | SSM → Fleet Manager → search instance ID | Status: Online |
+| Session starts | SSM → Session Manager → Start session → select instance | Terminal opens |
+| Agent heartbeat | CloudWatch Logs → /aws/ssm/amazon-ssm-agent | Recent heartbeat log entries |
+
+---
+
+## Rollback
+
+No destructive changes are made by this runbook. If you attached a new IAM role that you want to remove:
+
+**Console path:** EC2 → Instances → [Instance ID] → Actions → Security → Modify IAM role → No role
+
+---
+
+## Escalation
+
+| Condition | Next Action |
+|---|---|
+| All steps pass but instance still unreachable | Open AWS Support case — provide instance ID, region, VPC endpoint IDs, and CloudWatch agent logs |
+| Agent crashes immediately on start | Check OS disk space (`df -h`), memory, and `/var/log/amazon/ssm/amazon-ssm-agent.log` for errors |
+| Instance in private subnet, no VPC endpoints, no NAT | Network path is broken by design — work with network team to add VPC endpoints or NAT |
+
+---
+
+## Revision History
+
+| Date | Author | Change |
+|---|---|---|
+| 2026-01-15 | Rafael Gross | Initial version |
+| 2026-05-01 | Rafael Gross | Added VPC endpoint outbound rule details; Step 7 re-registration |

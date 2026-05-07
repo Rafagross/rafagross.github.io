@@ -1,0 +1,98 @@
+---
+import '../styles/global.css';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description = 'Elvis Rafael Gross — CloudOps Engineer, Platform Engineer, SRE. AWS, Kubernetes, observability, and operational excellence.',
+  ogImage = '/og-default.png',
+  canonicalUrl,
+  noIndex = false,
+} = Astro.props;
+
+const siteUrl = 'https://rafagross.github.io';
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, siteUrl).href;
+const fullTitle = title === 'Home'
+  ? 'Elvis Rafael Gross — CloudOps & Platform Engineer'
+  : `${title} | Rafael Gross`;
+---
+
+<!doctype html>
+<html lang="en" class="no-transition">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:site_name" content="Rafael Gross — CloudOps Portfolio" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- RSS Feed -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Rafael Gross — Writing & Runbooks"
+      href="/rss.xml"
+    />
+
+    <!-- Fonts: Self-hosted Inter and JetBrains Mono -->
+    <!-- Using Google Fonts CDN as placeholder — replace with self-hosted in production -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme initialization — runs before paint to prevent FOUC -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored ?? (prefersDark ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Remove no-transition class after hydration to enable smooth transitions -->
+    <script is:inline>
+      document.documentElement.classList.remove('no-transition');
+    </script>
+
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content';
+import RunbookLayout from '../../layouts/RunbookLayout.astro';
+
+export async function getStaticPaths() {
+  const runbooks = await getCollection('runbooks');
+  return runbooks
+    .filter((entry) => !entry.id.startsWith('_'))
+    .map((entry) => ({
+      params: { slug: entry.id },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<RunbookLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  category={entry.data.category}
+  tags={entry.data.tags}
+  severity={entry.data.severity}
+  estimatedTime={entry.data.estimatedTime}
+  status={entry.data.status}
+  publishedDate={entry.data.publishedDate}
+  updatedDate={entry.data.updatedDate}
+  awsServices={entry.data.awsServices ?? []}
+  prerequisites={entry.data.prerequisites ?? []}
+  relatedRunbooks={entry.data.relatedRunbooks ?? []}
+>
+  <Content />
+</RunbookLayout>

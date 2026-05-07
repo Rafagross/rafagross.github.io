@@ -1,0 +1,177 @@
+---
+title: "Kubernetes Pod Stuck in Pending State"
+description: "Diagnose why a Kubernetes pod is stuck in Pending and resolve the most common causes: resource constraints, node selector mismatches, missing PVCs, and taint/toleration issues."
+category: "Kubernetes"
+tags: ["kubernetes", "pods", "scheduling", "resources", "pvc", "nodes", "troubleshooting"]
+severity: "P3"
+estimatedTime: "10-20 min"
+status: "stable"
+publishedDate: 2026-02-01
+updatedDate: 2026-05-01
+awsServices: ["EKS"]
+prerequisites:
+  - "kubectl access to the cluster with get/describe permissions on pods, nodes, and events"
+  - "The namespace and pod name"
+relatedRunbooks:
+  - "ec2-instance-unreachable-via-ssm"
+draft: false
+---
+
+import Callout from '../../components/ui/Callout.astro';
+
+## Summary
+
+A pod in `Pending` state means the Kubernetes scheduler has not yet placed it on a node. This runbook covers the five most common causes and their resolutions.
+
+---
+
+## When to Use This Runbook
+
+- Pod shows `Pending` status for more than 2-3 minutes
+- `kubectl get pod` shows `0/1` READY with STATUS `Pending`
+- Deployment or StatefulSet is not scaling up despite available replicas
+
+---
+
+## Step 1: Describe the Pod
+
+This is always the first step. The `Events` section at the bottom of the output contains the scheduler's reason for not placing the pod.
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Scroll to the `Events:` section. Common messages and their corresponding steps:
+
+| Event Message | Go to |
+|---|---|
+| `Insufficient cpu` or `Insufficient memory` | Step 2 |
+| `0/N nodes are available: N node(s) didn't match node selector` | Step 3 |
+| `0/N nodes are available: N node(s) had taint...` | Step 4 |
+| `0/N nodes are available: N persistentvolumeclaim...` | Step 5 |
+| `pod has unbound immediate PersistentVolumeClaims` | Step 5 |
+
+**Expected result:** Event message gives you a direct pointer to the cause.
+
+---
+
+## Step 2: Resource Constraints
+
+The pod's resource `requests` exceed what any node can provide.
+
+```bash
+# Check what resources the pod is requesting
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.containers[*].resources}'
+
+# Check node allocatable resources
+kubectl describe nodes | grep -A 5 "Allocatable:"
+
+# Check how much is already consumed
+kubectl describe nodes | grep -A 10 "Allocated resources:"
+```
+
+<Callout type="info">
+  Remember: resource **requests** determine scheduling eligibility, not limits. A node with 2 CPUs that already has pods requesting 1.8 CPUs cannot schedule a new pod requesting 500m CPU even if actual utilization is 10%.
+</Callout>
+
+**Resolution options:**
+- Reduce the pod's resource requests if they're over-provisioned
+- Add more nodes to the cluster (scale node group or add a node)
+- For EKS: check if Cluster Autoscaler or Karpenter is configured and if it's blocked
+
+**Expected result:** Pod requests fit within at least one node's available allocatable resources.
+
+---
+
+## Step 3: Node Selector or Node Affinity Mismatch
+
+The pod requires a label on nodes that doesn't exist.
+
+```bash
+# Check the pod's nodeSelector
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.nodeSelector}'
+
+# Check node labels
+kubectl get nodes --show-labels
+
+# For affinity rules
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.affinity}'
+```
+
+**Resolution:** Either add the required label to a node, or update the pod spec's `nodeSelector`/`affinity` to match existing node labels.
+
+```bash
+# Add label to a node (if appropriate)
+kubectl label node <node-name> <key>=<value>
+```
+
+---
+
+## Step 4: Taint / Toleration Mismatch
+
+Nodes are tainted and the pod doesn't have a matching toleration.
+
+```bash
+# Check node taints
+kubectl describe node <node-name> | grep Taints
+
+# Check pod tolerations
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.tolerations}'
+```
+
+**Resolution:** Add the required toleration to the pod spec, or remove the taint from the node if it was applied unintentionally.
+
+Example toleration for a `NoSchedule` taint:
+```yaml
+tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "monitoring"
+    effect: "NoSchedule"
+```
+
+---
+
+## Step 5: Unbound PersistentVolumeClaim
+
+The pod references a PVC that doesn't exist or hasn't been bound to a PV.
+
+```bash
+# Find the PVC referenced by the pod
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.volumes[*].persistentVolumeClaim}'
+
+# Check PVC status
+kubectl get pvc -n <namespace>
+kubectl describe pvc <pvc-name> -n <namespace>
+```
+
+PVC status meanings:
+- `Pending` — no PV available to bind to (check StorageClass and provisioner)
+- `Bound` — PVC is bound; problem is elsewhere
+- `Lost` — underlying PV was deleted
+
+**Expected result:** PVC in `Bound` state.
+
+---
+
+## Validation
+
+```bash
+kubectl get pod <pod-name> -n <namespace> -w
+```
+
+Pod should transition: `Pending` → `ContainerCreating` → `Running`.
+
+| Check | Command | Expected |
+|---|---|---|
+| Pod running | `kubectl get pod <pod-name> -n <namespace>` | STATUS: Running, READY: 1/1 |
+| No scheduling events | `kubectl describe pod <pod-name> -n <namespace>` | No `FailedScheduling` events |
+
+---
+
+## Revision History
+
+| Date | Author | Change |
+|---|---|---|
+| 2026-02-01 | Rafael Gross | Initial version |
+| 2026-05-01 | Rafael Gross | Added EKS-specific notes; Step 5 PVC section expanded |

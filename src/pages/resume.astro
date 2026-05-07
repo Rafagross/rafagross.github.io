@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import skillsData from '../data/skills.json';
+import certsData from '../data/certifications.json';
+---
+
+<BaseLayout
+  title="Resume"
+  description="Elvis Rafael Gross — CloudOps Engineer resume. AWS, Kubernetes, Platform Engineering, SRE."
+>
+  <section class="py-12 md:py-16">
+    <div class="container" style="max-width:800px">
+      <!-- Resume actions bar -->
+      <div class="flex items-center justify-between mb-10 pb-6" style="border-bottom:1px solid var(--color-border)">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:var(--color-accent)">Resume</p>
+          <p class="text-sm" style="color:var(--color-text-muted)">Last updated: May 2026</p>
+        </div>
+        <a
+          href="/resume.pdf"
+          download
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
+          style="background:var(--color-accent); color:white"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Download PDF
+        </a>
+      </div>
+
+      <!-- Resume content -->
+      <div id="resume-content" class="space-y-10">
+
+        <!-- Header -->
+        <header>
+          <h1 class="text-3xl font-semibold mb-1" style="color:var(--color-text-primary); letter-spacing:-0.02em">
+            Elvis Rafael Gross
+          </h1>
+          <p class="text-lg mb-3" style="color:var(--color-text-secondary)">
+            CloudOps Engineer · Platform Engineer · SRE
+          </p>
+          <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-muted)">
+            <a href="https://github.com/Rafagross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">github.com/Rafagross</a>
+            <a href="https://linkedin.com/in/rafagross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">linkedin.com/in/rafagross</a>
+            <a href="https://rafagross.github.io" class="hover:underline" style="color:var(--color-accent)">rafagross.github.io</a>
+          </div>
+        </header>
+
+        <!-- Summary -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Summary
+          </h2>
+          <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">
+            Cloud Operations Engineer with hands-on experience managing AWS EC2 fleets, building Kubernetes platforms, 
+            and designing hybrid infrastructure. Specializes in Systems Manager, CloudWatch observability, VPC networking, 
+            and operational runbook development. Brings an SRE mindset to infrastructure work: document before incidents, 
+            measure everything, and design for least privilege from day one.
+          </p>
+        </section>
+
+        <!-- Core Competencies -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Core Competencies
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1 text-sm" style="color:var(--color-text-secondary)">
+            <span>→ AWS EC2, SSM, VPC, IAM, CloudWatch</span>
+            <span>→ Kubernetes (EKS, k3s) · ArgoCD · Helm</span>
+            <span>→ Terraform · Ansible · Infrastructure as Code</span>
+            <span>→ Prometheus · Grafana · CloudWatch Dashboards</span>
+            <span>→ Private networking · VPC Endpoints · Zero-trust</span>
+            <span>→ Linux administration · Bash · Python (boto3)</span>
+            <span>→ Incident runbook authoring · Operational documentation</span>
+            <span>→ Cost optimization · AWS Well-Architected Framework</span>
+          </div>
+        </section>
+
+        <!-- Skills by category (abbreviated) -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Technical Skills
+          </h2>
+          <div class="space-y-3">
+            {skillsData.categories.map((cat) => (
+              <div class="flex gap-4 text-sm">
+                <span class="flex-shrink-0 w-40 font-medium" style="color:var(--color-text-primary)">{cat.name}</span>
+                <span style="color:var(--color-text-secondary)">
+                  {cat.skills.map((s) => s.name).join(' · ')}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Experience placeholder -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Experience
+          </h2>
+          <div class="p-4 rounded-lg text-sm" style="background:var(--color-surface-raised); border:1px solid var(--color-border); color:var(--color-text-muted); font-style:italic">
+            Work experience details available in the downloadable PDF resume and on LinkedIn.
+          </div>
+        </section>
+
+        <!-- Certifications -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Certifications
+          </h2>
+          <div class="space-y-2">
+            {certsData.certifications.map((cert) => (
+              <div class="flex items-center justify-between text-sm">
+                <span style="color:var(--color-text-primary)">{cert.name}</span>
+                <span class={`text-xs px-2 py-0.5 rounded ${
+                  cert.status === 'active'
+                    ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30'
+                    : cert.status === 'target'
+                    ? 'text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30'
+                    : 'text-gray-500 bg-gray-100 dark:bg-gray-800'
+                }`}>
+                  {cert.status === 'target' ? 'In Progress' : cert.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Projects highlight -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Selected Projects
+          </h2>
+          <p class="text-sm mb-3" style="color:var(--color-text-secondary)">
+            Full project details including architecture diagrams, operational value, and linked runbooks are available at:
+          </p>
+          <a href="/projects" class="text-sm hover:underline" style="color:var(--color-accent)">rafagross.github.io/projects →</a>
+        </section>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>

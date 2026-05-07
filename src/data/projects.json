@@ -1,0 +1,185 @@
+[
+  {
+    "slug": "aws-cloudops-private-ec2-operations-platform",
+    "title": "AWS CloudOps Private EC2 Operations Platform",
+    "shortDescription": "Production-grade operations platform for managing private EC2 fleets via SSM, CloudWatch, and automated runbooks — zero SSH, full auditability.",
+    "longDescription": "A complete operations architecture for managing EC2 instances in private subnets without SSH or bastion hosts. Replaces traditional bastion-based access with AWS Systems Manager Session Manager backed by VPC endpoints, with centralized session logging to CloudWatch Logs and S3. Includes automated runbooks as SSM Documents, EventBridge-triggered alerts, and a CloudWatch dashboard for fleet health.",
+    "category": "AWS CloudOps",
+    "status": "active",
+    "featured": true,
+    "displayOrder": 1,
+    "github": {
+      "owner": "Rafagross",
+      "repo": "aws-cloudops-private-ec2-operations-platform",
+      "url": "https://github.com/Rafagross/aws-cloudops-private-ec2-operations-platform"
+    },
+    "techStack": {
+      "cloud": ["AWS"],
+      "compute": ["EC2", "Systems Manager"],
+      "networking": ["VPC", "VPC Endpoints", "Private Subnets", "Security Groups"],
+      "observability": ["CloudWatch", "CloudWatch Logs", "CloudWatch Alarms"],
+      "iac": ["Terraform"],
+      "automation": ["SSM Documents", "EventBridge", "Lambda"],
+      "storage": ["S3"],
+      "security": ["IAM", "IAM Roles", "Resource Policies"],
+      "languages": ["Bash", "Python", "HCL"]
+    },
+    "awsServices": ["EC2", "SSM", "CloudWatch", "VPC", "IAM", "EventBridge", "Lambda", "S3"],
+    "gcpServices": [],
+    "architecture": {
+      "summary": "Hub-and-spoke design where a central operations account reaches workload VPCs through interface VPC endpoints for SSM, EC2Messages, and SSMMessages. No public IPs required on any instance. NAT Gateway handles outbound-only for patch management.",
+      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
+      "diagramAlt": "Architecture diagram: operations VPC → VPC endpoints → private workload subnets, SSM agent on EC2, session logs → CloudWatch Logs + S3"
+    },
+    "operationalValue": {
+      "problemSolved": "Eliminates SSH bastion hosts as a blast radius vector. Every admin session is logged, attributed, and auditable. Operators never need a key pair.",
+      "outcomes": [
+        "Zero public-facing SSH endpoints across all managed instances",
+        "Full session recording — keystrokes and output — to CloudWatch Logs and S3",
+        "Port 22 closed on all security groups, verified by AWS Config rule",
+        "Mean time to access reduced: session starts in under 5 seconds vs. bastion SSH"
+      ],
+      "metrics": {
+        "costImpact": "Eliminates bastion host EC2 cost (~$15-30/month per region) and associated EIP",
+        "reliabilityImpact": "Removes bastion as single point of failure for emergency access"
+      }
+    },
+    "links": {
+      "readme": "https://github.com/Rafagross/aws-cloudops-private-ec2-operations-platform#readme",
+      "runbook": "/runbooks/ec2-instance-unreachable-via-ssm",
+      "diagram": "/diagrams/aws-private-ec2-ops-platform.svg",
+      "demo": null
+    },
+    "screenshots": [],
+    "tags": ["aws", "ec2", "ssm", "vpc", "cloudwatch", "terraform", "private-networking", "zero-trust", "session-manager"],
+    "metadata": {
+      "stars": null,
+      "lastCommit": null,
+      "primaryLanguage": null,
+      "lastEnrichedAt": null
+    },
+    "publishedDate": "2026-01-15",
+    "updatedDate": "2026-05-01"
+  },
+  {
+    "slug": "kubernetes-homelab-platform",
+    "title": "Kubernetes Homelab Platform",
+    "shortDescription": "Multi-node k3s cluster on bare-metal with Prometheus, Grafana, ArgoCD, and Cert-Manager — full platform engineering stack on commodity hardware.",
+    "longDescription": "A production-analogous Kubernetes platform built on a 3-node Proxmox homelab. Runs k3s for lightweight control plane overhead, with GitOps via ArgoCD, full observability via the kube-prometheus-stack, automated TLS via Cert-Manager + Let's Encrypt, and Longhorn for persistent storage.",
+    "category": "Kubernetes",
+    "status": "active",
+    "featured": true,
+    "displayOrder": 2,
+    "github": {
+      "owner": "Rafagross",
+      "repo": "kubernetes-homelab-platform",
+      "url": "https://github.com/Rafagross/kubernetes-homelab-platform"
+    },
+    "techStack": {
+      "cloud": ["On-Premises"],
+      "compute": ["k3s", "Proxmox VE"],
+      "orchestration": ["Kubernetes", "ArgoCD"],
+      "observability": ["Prometheus", "Grafana", "Alertmanager"],
+      "storage": ["Longhorn"],
+      "networking": ["MetalLB", "Traefik", "Cert-Manager"],
+      "security": ["Let's Encrypt", "RBAC"],
+      "iac": ["Ansible", "Helm"],
+      "languages": ["YAML", "Bash", "Python"]
+    },
+    "awsServices": [],
+    "gcpServices": [],
+    "architecture": {
+      "summary": "Three-node Proxmox cluster hosting k3s VMs: 1 control plane, 2 workers. GitOps via ArgoCD with app-of-apps pattern. Longhorn replicated across workers for HA storage. MetalLB for bare-metal LoadBalancer support.",
+      "diagramUrl": "/diagrams/k8s-homelab.svg",
+      "diagramAlt": "Homelab Kubernetes architecture: Proxmox nodes, k3s cluster, ArgoCD GitOps flow, observability stack"
+    },
+    "operationalValue": {
+      "problemSolved": "Provides a real-world platform engineering environment for validating Kubernetes patterns, operator runbooks, and GitOps workflows before applying them in production cloud environments.",
+      "outcomes": [
+        "Full GitOps workflow — every cluster change tracked in Git",
+        "Prometheus + Grafana dashboards matching production observability patterns",
+        "Cert-Manager automates TLS for all internal services",
+        "Ansible playbooks for node provisioning and OS patching"
+      ],
+      "metrics": {
+        "costImpact": "~$0 cloud cost — runs on repurposed hardware",
+        "reliabilityImpact": "Longhorn replication tolerates single worker failure without data loss"
+      }
+    },
+    "links": {
+      "readme": "https://github.com/Rafagross/kubernetes-homelab-platform#readme",
+      "runbook": "/runbooks/eks-pod-stuck-pending",
+      "diagram": "/diagrams/k8s-homelab.svg",
+      "demo": null
+    },
+    "screenshots": [],
+    "tags": ["kubernetes", "k3s", "proxmox", "homelab", "argocd", "prometheus", "grafana", "gitops", "longhorn"],
+    "metadata": {
+      "stars": null,
+      "lastCommit": null,
+      "primaryLanguage": null,
+      "lastEnrichedAt": null
+    },
+    "publishedDate": "2026-02-01",
+    "updatedDate": "2026-04-15"
+  },
+  {
+    "slug": "aws-cloudwatch-observability-stack",
+    "title": "AWS CloudWatch Observability Stack",
+    "shortDescription": "Structured CloudWatch observability setup with metric filters, composite alarms, CloudWatch Insights queries, and SNS-based alerting for EC2 fleets.",
+    "longDescription": "A complete observability stack built entirely on native AWS services. Uses CloudWatch Agent for custom metrics and log collection, structured Insights queries for operational intelligence, composite alarms to reduce alert noise, and EventBridge rules to route critical events to SNS topics and Lambda-based responders.",
+    "category": "Observability",
+    "status": "active",
+    "featured": true,
+    "displayOrder": 3,
+    "github": {
+      "owner": "Rafagross",
+      "repo": "aws-cloudwatch-observability-stack",
+      "url": "https://github.com/Rafagross/aws-cloudwatch-observability-stack"
+    },
+    "techStack": {
+      "cloud": ["AWS"],
+      "observability": ["CloudWatch", "CloudWatch Agent", "CloudWatch Logs", "CloudWatch Insights", "CloudWatch Alarms"],
+      "alerting": ["SNS", "EventBridge"],
+      "automation": ["Lambda", "SSM"],
+      "iac": ["Terraform", "CloudFormation"],
+      "languages": ["Python", "Bash", "HCL", "JSON"]
+    },
+    "awsServices": ["CloudWatch", "SNS", "EventBridge", "Lambda", "SSM", "EC2", "IAM"],
+    "gcpServices": [],
+    "architecture": {
+      "summary": "CloudWatch Agent on EC2 → custom namespace metrics. Log groups → metric filters → composite alarms. EventBridge rules → SNS + Lambda automation. Insights queries saved as operational dashboards.",
+      "diagramUrl": "/diagrams/cloudwatch-obs-stack.svg",
+      "diagramAlt": "CloudWatch observability flow: agents → logs → metrics → alarms → EventBridge → SNS + Lambda responders"
+    },
+    "operationalValue": {
+      "problemSolved": "Provides structured, cost-effective observability without requiring third-party tools like Datadog. Composite alarms reduce noise by 70%+ compared to individual threshold alarms.",
+      "outcomes": [
+        "Custom metrics for memory, disk, and application-level signals not available by default",
+        "Composite alarms eliminate alert storms — pages only when multiple conditions are true simultaneously",
+        "CloudWatch Insights queries saved as runbook diagnostics for common failure modes",
+        "Under $50/month for a 20-instance fleet at standard CloudWatch pricing"
+      ],
+      "metrics": {
+        "costImpact": "Native AWS tooling — no third-party SaaS APM cost",
+        "reliabilityImpact": "MTTR reduced by structured diagnostic queries at incident time"
+      }
+    },
+    "links": {
+      "readme": "https://github.com/Rafagross/aws-cloudwatch-observability-stack#readme",
+      "runbook": null,
+      "diagram": "/diagrams/cloudwatch-obs-stack.svg",
+      "demo": null
+    },
+    "screenshots": [],
+    "tags": ["aws", "cloudwatch", "observability", "alarms", "metrics", "terraform", "lambda", "eventbridge"],
+    "metadata": {
+      "stars": null,
+      "lastCommit": null,
+      "primaryLanguage": null,
+      "lastEnrichedAt": null
+    },
+    "publishedDate": "2026-03-01",
+    "updatedDate": "2026-04-20"
+  }
+]
