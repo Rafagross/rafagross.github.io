@@ -4,7 +4,7 @@
       "name": "Cloud Platforms",
       "skills": [
         { "name": "AWS", "level": "advanced", "note": "EC2, SSM, CloudWatch, VPC, IAM, Lambda, EventBridge, S3, EKS, RDS" },
-        { "name": "GCP", "level": "intermediate", "note": "Compute Engine, GKE, Cloud Monitoring, IAM" }
+        { "name": "GCP", "level": "advanced", "note": "Compute Engine, GKE, Cloud Run, Cloud Functions, Cloud Monitoring, IAM" }
       ]
     },
     {
