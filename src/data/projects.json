@@ -83,7 +83,7 @@
     "gcpServices": [],
     "architecture": {
       "summary": "Multi-node cluster with dedicated control plane and worker nodes. CNI configured for pod networking, RBAC enforced from day one, persistent storage via hostPath and NFS.",
-      "diagramUrl": null,
+      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
       "diagramAlt": null
     },
     "operationalValue": {
@@ -139,7 +139,7 @@
     "gcpServices": [],
     "architecture": {
       "summary": "Layered observability: infrastructure metrics → application metrics → log insights → composite alarms → SNS notifications. Container Insights provides EKS cluster and pod-level visibility.",
-      "diagramUrl": null,
+      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
       "diagramAlt": null
     },
     "operationalValue": {
@@ -195,7 +195,7 @@
     "gcpServices": [],
     "architecture": {
       "summary": "Runbook library organized by failure domain: runtime crashes, image pull errors, CRI socket issues, OOMKill events, and node recovery procedures.",
-      "diagramUrl": null,
+      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
       "diagramAlt": null
     },
     "operationalValue": {
