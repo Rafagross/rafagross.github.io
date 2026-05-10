@@ -103,10 +103,33 @@ const allCloudServices = [...awsServices, ...gcpServices];
             <h2 class="text-xl font-semibold mb-4" style="color:var(--color-text-primary); border-bottom:1px solid var(--color-border); padding-bottom:0.5rem">
               Architecture
             </h2>
-            <p class="mb-4 leading-relaxed" style="color:var(--color-text-secondary)">{architecture.summary}</p>
+            <p class="mb-6 leading-relaxed" style="color:var(--color-text-secondary)">{architecture.summary}</p>
+
             {architecture.diagramUrl && (
-              <div class="rounded-lg overflow-hidden p-4 text-center text-sm" style="background:var(--color-surface-raised); border:1px solid var(--color-border); color:var(--color-text-muted)">
-                [Architecture diagram — add SVG to {architecture.diagramUrl}]
+              <div class="rounded-lg overflow-hidden" style="border:1px solid var(--color-border); background:var(--color-surface)">
+                <!-- Diagram toolbar -->
+                <div class="flex items-center justify-between px-4 py-2" style="border-bottom:1px solid var(--color-border); background:var(--color-surface-raised)">
+                  <span class="text-xs font-mono" style="color:var(--color-text-muted)">Architecture Diagram</span>
+                  <a
+                    href={architecture.diagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs hover:underline flex items-center gap-1"
+                    style="color:var(--color-accent)"
+                  >
+                    Open full size ↗
+                  </a>
+                </div>
+                <!-- SVG diagram -->
+                <div class="p-4 overflow-x-auto">
+                  <img
+                    src={architecture.diagramUrl}
+                    alt={architecture.diagramAlt ?? `${title} architecture diagram`}
+                    class="w-full h-auto rounded"
+                    style="max-width:100%; display:block;"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             )}
           </section>
@@ -163,21 +186,28 @@ const allCloudServices = [...awsServices, ...gcpServices];
                   <a href={links.github} target="_blank" rel="noopener noreferrer"
                     class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
                     style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    <span>↗</span> GitHub Repository
+                    ↗ GitHub Repository
                   </a>
                 )}
                 {links.runbook && (
                   <a href={links.runbook}
                     class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
                     style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    <span>📋</span> Runbook
+                    📋 Runbook
                   </a>
                 )}
                 {links.readme && (
                   <a href={links.readme} target="_blank" rel="noopener noreferrer"
                     class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
                     style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    <span>📄</span> README
+                    📄 README
+                  </a>
+                )}
+                {architecture.diagramUrl && (
+                  <a href={architecture.diagramUrl} target="_blank" rel="noopener noreferrer"
+                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
+                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
+                    🗺 Architecture Diagram
                   </a>
                 )}
               </div>
