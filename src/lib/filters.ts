@@ -11,9 +11,6 @@ export const WRITING_CATEGORIES = [
 
 export type WritingCategory = (typeof WRITING_CATEGORIES)[number];
 
-/**
- * Normalizes a category string to a URL-safe slug.
- */
 export function categoryToSlug(category: string): string {
   return category
     .toLowerCase()
@@ -21,55 +18,55 @@ export function categoryToSlug(category: string): string {
     .replace(/^-|-$/g, '');
 }
 
-/**
- * Converts a URL slug back to the display category name.
- */
 export function slugToCategory(slug: string): WritingCategory | undefined {
-  return WRITING_CATEGORIES.find(
-    (cat) => categoryToSlug(cat) === slug
-  );
+  return WRITING_CATEGORIES.find((cat) => categoryToSlug(cat) === slug);
 }
 
-/**
- * Returns all unique tags from a collection of entries.
- */
 export function getAllTags(entries: Array<{ data: { tags: string[] } }>): string[] {
   const tags = entries.flatMap((e) => e.data.tags);
   return [...new Set(tags)].sort();
 }
 
 /**
- * Status badge color classes.
+ * Status badge — inline styles only, works with both light and dark zinc palette.
+ * Returns { bg, text, border } as an inline style string.
  */
-export function getStatusClasses(status: string): string {
+export function getStatusStyle(status: string): string {
   const map: Record<string, string> = {
-    active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    stable: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    progress: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-    'in-progress': 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-    draft: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-    deprecated: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-    archived: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+    active:       'background:#16a34a1a; color:#16a34a; border:1px solid #16a34a33',
+    stable:       'background:#16a34a1a; color:#16a34a; border:1px solid #16a34a33',
+    progress:     'background:#d974061a; color:#d97406; border:1px solid #d9740633',
+    'in-progress':'background:#d974061a; color:#d97406; border:1px solid #d9740633',
+    draft:        'background:var(--color-surface-raised); color:var(--color-text-muted); border:1px solid var(--color-border)',
+    deprecated:   'background:#dc26261a; color:#dc2626; border:1px solid #dc262633',
+    archived:     'background:var(--color-surface-raised); color:var(--color-text-muted); border:1px solid var(--color-border)',
   };
   return map[status.toLowerCase()] ?? map.draft;
 }
 
+/** @deprecated Use getStatusStyle instead */
+export function getStatusClasses(status: string): string {
+  return '';
+}
+
 /**
- * Severity badge color classes for runbooks.
+ * Severity badge — inline styles, zinc-safe.
  */
-export function getSeverityClasses(severity: string): string {
+export function getSeverityStyle(severity: string): string {
   const map: Record<string, string> = {
-    P1: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800',
-    P2: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800',
-    P3: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
-    P4: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700',
+    P1: 'background:#dc26261a; color:#dc2626; border:1px solid #dc262633',
+    P2: 'background:#d974061a; color:#d97406; border:1px solid #d9740633',
+    P3: 'background:#2563eb1a; color:#2563eb; border:1px solid #2563eb33',
+    P4: 'background:var(--color-surface-raised); color:var(--color-text-muted); border:1px solid var(--color-border)',
   };
   return map[severity] ?? map.P4;
 }
 
-/**
- * Formats a date for display — consistent across all pages.
- */
+/** @deprecated Use getSeverityStyle instead */
+export function getSeverityClasses(severity: string): string {
+  return '';
+}
+
 export function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
