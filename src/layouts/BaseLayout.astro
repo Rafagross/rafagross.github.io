@@ -64,8 +64,7 @@ const fullTitle = title === 'Home'
       href="/rss.xml"
     />
 
-    <!-- Fonts: Self-hosted Inter and JetBrains Mono -->
-    <!-- Using Google Fonts CDN as placeholder — replace with self-hosted in production -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -73,7 +72,7 @@ const fullTitle = title === 'Home'
       rel="stylesheet"
     />
 
-    <!-- Theme initialization — runs before paint to prevent FOUC -->
+    <!-- Theme init — runs before paint to prevent FOUC -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('theme');
@@ -84,7 +83,6 @@ const fullTitle = title === 'Home'
     </script>
   </head>
   <body>
-    <!-- Remove no-transition class after hydration to enable smooth transitions -->
     <script is:inline>
       document.documentElement.classList.remove('no-transition');
     </script>
@@ -94,5 +92,34 @@ const fullTitle = title === 'Home'
       <slot />
     </main>
     <Footer />
+
+    <!-- Scroll animation observer — wires .reveal and .reveal-stagger classes -->
+    <script is:inline>
+      (function () {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+
+        function observe() {
+          document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
+            observer.observe(el);
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', observe);
+        } else {
+          observe();
+        }
+      })();
+    </script>
   </body>
 </html>
