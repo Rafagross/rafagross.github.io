@@ -1,6 +1,6 @@
 ---
 import Tag from '../ui/Tag.astro';
-import { getStatusClasses } from '../../lib/filters';
+import { getStatusStyle } from '../../lib/filters';
 
 interface Props {
   slug: string;
@@ -32,24 +32,30 @@ const {
   githubUrl,
 } = Astro.props;
 
-const statusClasses = getStatusClasses(status);
+const statusStyle = getStatusStyle(status);
 const topTags = tags.slice(0, 5);
-// Flatten tech stack for display
-const allTech = Object.values(techStack).flat().slice(0, 6);
 ---
 
 <article
-  class={`group relative flex flex-col h-full rounded-lg overflow-hidden transition-shadow hover:shadow-lg ${featured ? 'ring-1' : ''}`}
-  style={`background:var(--color-surface); border:1px solid var(--color-border); ${featured ? 'ring-color:var(--color-accent-muted)' : ''}`}
+  class="group relative flex flex-col h-full rounded-lg overflow-hidden card-interactive"
+  style="background:var(--color-surface); border:1px solid var(--color-border)"
 >
-  <!-- Top bar: category + status -->
+  <!-- Top bar -->
   <div class="flex items-center justify-between px-5 pt-5 pb-3">
-    <span class="text-xs font-medium" style="color:var(--color-text-muted)">{category}</span>
+    <span class="text-xs font-mono font-medium" style="color:var(--color-text-muted)">{category}</span>
     <div class="flex items-center gap-2">
       {featured && (
-        <span class="text-xs px-2 py-0.5 rounded font-medium" style="background:var(--color-accent); color:white">Featured</span>
+        <span
+          class="text-xs px-2 py-0.5 rounded font-medium"
+          style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)"
+        >
+          Featured
+        </span>
       )}
-      <span class={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${statusClasses}`}>
+      <span
+        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium font-mono"
+        style={statusStyle}
+      >
         {status}
       </span>
     </div>
@@ -57,34 +63,39 @@ const allTech = Object.values(techStack).flat().slice(0, 6);
 
   <!-- Content -->
   <div class="flex flex-col flex-1 px-5 pb-5">
-    <h3 class="text-base font-semibold mb-2 leading-snug group-hover:opacity-80 transition-opacity" style="color:var(--color-text-primary)">
-      <a href={`/projects/${slug}`} class="stretched-link">
-        {title}
-      </a>
+    <h3
+      class="text-base font-semibold mb-2 leading-snug group-hover:opacity-70 transition-opacity"
+      style="color:var(--color-text-primary)"
+    >
+      <a href={`/projects/${slug}`} class="stretched-link">{title}</a>
     </h3>
 
-    <p class="text-sm leading-relaxed mb-4 flex-1" style="color:var(--color-text-secondary)">
+    <p class="text-sm leading-relaxed mb-5 flex-1" style="color:var(--color-text-secondary)">
       {shortDescription}
     </p>
 
-    <!-- Tech badges -->
+    <!-- AWS service badges -->
     {awsServices.length > 0 && (
-      <div class="flex flex-wrap gap-1.5 mb-3">
+      <div class="flex flex-wrap gap-1.5 mb-2.5">
         {awsServices.slice(0, 4).map((svc) => (
           <Tag size="sm" variant="accent">{svc}</Tag>
         ))}
         {awsServices.length > 4 && (
-          <span class="text-xs" style="color:var(--color-text-muted)">+{awsServices.length - 4}</span>
+          <span class="text-xs self-center" style="color:var(--color-text-muted)">+{awsServices.length - 4}</span>
         )}
       </div>
     )}
 
-    <div class="flex flex-wrap gap-1.5 mb-4">
+    <!-- Tag badges -->
+    <div class="flex flex-wrap gap-1.5 mb-5">
       {topTags.map((tag) => <Tag size="sm">{tag}</Tag>)}
     </div>
 
-    <!-- Footer row -->
-    <div class="flex items-center justify-between mt-auto pt-3" style="border-top:1px solid var(--color-border)">
+    <!-- Footer -->
+    <div
+      class="flex items-center justify-between mt-auto pt-3"
+      style="border-top:1px solid var(--color-border)"
+    >
       {primaryLanguage ? (
         <span class="text-xs font-mono" style="color:var(--color-text-muted)">{primaryLanguage}</span>
       ) : <span />}
@@ -102,7 +113,7 @@ const allTech = Object.values(techStack).flat().slice(0, 6);
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-xs hover:opacity-70 transition-opacity"
+          class="text-xs font-mono hover:opacity-60 transition-opacity"
           style="color:var(--color-text-muted)"
           aria-label={`View ${title} on GitHub`}
           onclick="event.stopPropagation()"
