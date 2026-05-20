@@ -10,26 +10,27 @@ import certsData from '../data/certifications.json';
 >
   <section class="py-12 md:py-16">
     <div class="container" style="max-width:800px">
+
       <!-- Actions bar -->
-      <div class="flex items-center justify-between mb-10 pb-6" style="border-bottom:1px solid var(--color-border)">
+      <div class="flex items-center justify-between mb-10 pb-6 reveal" style="border-bottom:1px solid var(--color-border)">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:var(--color-accent)">Resume</p>
+          <p class="text-xs font-semibold uppercase tracking-widest mb-1 font-mono" style="color:var(--color-text-muted)">Resume</p>
           <p class="text-sm" style="color:var(--color-text-muted)">Last updated: May 2026</p>
         </div>
         <div class="flex gap-3">
           <a
             href="/cover-letter.pdf"
             download
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
-            style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-70 transition-opacity"
+            style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)"
           >
             Cover Letter
           </a>
           <a
             href="/resume.pdf"
             download
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
-            style="background:var(--color-accent); color:white"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-70 transition-opacity"
+            style="background:var(--color-text-primary); color:var(--color-bg)"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -42,7 +43,7 @@ import certsData from '../data/certifications.json';
       <div id="resume-content" class="space-y-10">
 
         <!-- Header -->
-        <header>
+        <header class="reveal">
           <h1 class="text-3xl font-semibold mb-1" style="color:var(--color-text-primary); letter-spacing:-0.02em">
             Elvis Rafael Gross Cardero
           </h1>
@@ -51,15 +52,15 @@ import certsData from '../data/certifications.json';
           </p>
           <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-muted)">
             <span>Las Vegas, NV</span>
-            <a href="mailto:rafagross15@gmail.com" class="hover:underline" style="color:var(--color-accent)">rafagross15@gmail.com</a>
-            <a href="https://www.linkedin.com/in/erafael-gross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">linkedin.com/in/erafael-gross</a>
-            <a href="https://www.credly.com/users/rafa-gross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">credly.com/users/rafa-gross</a>
+            <a href="mailto:rafagross15@gmail.com" class="hover:opacity-70 transition-opacity underline underline-offset-2" style="color:var(--color-text-secondary)">rafagross15@gmail.com</a>
+            <a href="https://www.linkedin.com/in/erafael-gross" target="_blank" rel="noopener noreferrer" class="hover:opacity-70 transition-opacity underline underline-offset-2" style="color:var(--color-text-secondary)">linkedin.com/in/erafael-gross</a>
+            <a href="https://www.credly.com/users/rafa-gross" target="_blank" rel="noopener noreferrer" class="hover:opacity-70 transition-opacity underline underline-offset-2" style="color:var(--color-text-secondary)">credly.com/users/rafa-gross</a>
           </div>
         </header>
 
         <!-- Summary -->
-        <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+        <section class="reveal">
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2 font-mono" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
             Summary
           </h2>
           <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">
@@ -72,8 +73,8 @@ import certsData from '../data/certifications.json';
         </section>
 
         <!-- Experience -->
-        <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-6 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+        <section class="reveal">
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-6 pb-2 font-mono" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
             Experience
           </h2>
           <div class="space-y-8">
@@ -89,23 +90,23 @@ import certsData from '../data/certifications.json';
               </div>
               <ul class="space-y-2">
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Managed multi-account AWS environments supporting mission-critical gaming infrastructure across production workloads serving millions of end users.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Led EKS cluster version upgrades in production using a Golden AMI strategy — zero-downtime node rotations via controlled drain/cordon workflows.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Designed SSM Patch Manager workflows across 200+ Linux and Windows EC2 instances, enforcing compliance and reducing manual intervention.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Implemented CloudWatch alarms, custom metrics, and log-based alerting — reduced mean time to detection (MTTD) for production incidents.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Owned DR strategy aligned to defined RTO/RPO targets, including DR testing cycles and runbook documentation ensuring repeatable recovery procedures.</span>
                 </li>
               </ul>
@@ -122,15 +123,15 @@ import certsData from '../data/certifications.json';
               </div>
               <ul class="space-y-2">
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Architected production-ready GCP solutions for enterprise clients using Cloud Run, Pub/Sub, BigQuery, Cloud Functions, and IAM.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Built end-to-end PoCs for serverless and real-time data pipeline architectures, accelerating client cloud adoption and reducing technical evaluation cycles.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span class="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style="background:var(--color-text-muted)"></span>
                   <span>Delivered live technical workshops and architecture demos to executive stakeholders, translating complex GCP capabilities into clear business value.</span>
                 </li>
               </ul>
@@ -139,8 +140,8 @@ import certsData from '../data/certifications.json';
         </section>
 
         <!-- Technical Skills -->
-        <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+        <section class="reveal">
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2 font-mono" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
             Technical Skills
           </h2>
           <div class="space-y-3">
@@ -156,28 +157,36 @@ import certsData from '../data/certifications.json';
         </section>
 
         <!-- Certifications -->
-        <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+        <section class="reveal">
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2 font-mono" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
             Certifications
           </h2>
-          <div class="space-y-2">
+          <div class="space-y-2.5">
             {certsData.certifications.map((cert) => (
               <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2.5">
                   <span style="color:var(--color-text-primary)">{cert.name}</span>
-                  <span class={`text-xs px-2 py-0.5 rounded ${
-                    cert.status === 'active'
-                      ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30'
-                      : cert.status === 'target'
-                      ? 'text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30'
-                      : 'text-gray-500 bg-gray-100 dark:bg-gray-800'
-                  }`}>
+                  <span
+                    class="text-xs px-2 py-0.5 rounded font-mono"
+                    style={
+                      cert.status === 'active'
+                        ? 'background:#16a34a1a; color:#16a34a; border:1px solid #16a34a33'
+                        : cert.status === 'target'
+                        ? 'background:#2563eb1a; color:#2563eb; border:1px solid #2563eb33'
+                        : 'background:var(--color-surface-raised); color:var(--color-text-muted); border:1px solid var(--color-border)'
+                    }
+                  >
                     {cert.status === 'target' ? 'In Progress' : cert.status}
                   </span>
                 </div>
                 {cert.credentialUrl && (
-                  <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer"
-                    class="text-xs hover:underline" style="color:var(--color-accent)">
+                  <a
+                    href={cert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs font-mono hover:opacity-60 transition-opacity"
+                    style="color:var(--color-text-muted)"
+                  >
                     Verify ↗
                   </a>
                 )}
@@ -187,14 +196,20 @@ import certsData from '../data/certifications.json';
         </section>
 
         <!-- Projects -->
-        <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+        <section class="reveal">
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2 font-mono" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
             Selected Projects
           </h2>
           <p class="text-sm mb-3" style="color:var(--color-text-secondary)">
             Full project details including architecture diagrams, operational value, and linked runbooks:
           </p>
-          <a href="/projects" class="text-sm hover:underline" style="color:var(--color-accent)">rafagross.github.io/projects →</a>
+          <a
+            href="/projects"
+            class="text-sm font-mono hover:opacity-60 transition-opacity underline underline-offset-2"
+            style="color:var(--color-text-primary)"
+          >
+            rafagross.github.io/projects →
+          </a>
         </section>
 
       </div>
