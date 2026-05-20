@@ -6,74 +6,86 @@
 @variant dark (&:where(.dark, .dark *));
 
 /* ============================================================
-   DESIGN TOKENS — Light mode (default)
-   Engineering documentation aesthetic: Stripe Docs / Cloudflare
+   DESIGN TOKENS — Zinc Monochrome (Opción A)
+   Light: pure white + zinc grays
+   Dark:  zinc-950 base, single white accent
+   Reference aesthetic: Vercel / Linear / Raycast
    ============================================================ */
 :root {
   /* Backgrounds */
   --color-bg: #ffffff;
-  --color-bg-subtle: #f9fafb;
+  --color-bg-subtle: #fafafa;
   --color-surface: #ffffff;
-  --color-surface-raised: #f3f4f6;
+  --color-surface-raised: #f4f4f5;
 
   /* Text */
-  --color-text-primary: #0a0a0a;
-  --color-text-secondary: #374151;
-  --color-text-muted: #6b7280;
+  --color-text-primary: #09090b;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #a1a1aa;
 
-  /* Accent — muted teal-blue, cloud-native adjacent without being AWS orange */
-  --color-accent: #0e7490;
-  --color-accent-hover: #0c6478;
-  --color-accent-muted: #e0f2fe;
+  /* Accent — black in light mode (high contrast, no color noise) */
+  --color-accent: #09090b;
+  --color-accent-hover: #27272a;
+  --color-accent-muted: #f4f4f5;
 
   /* Borders */
-  --color-border: #e5e7eb;
-  --color-border-strong: #d1d5db;
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
 
   /* Code */
-  --color-code-bg: #f6f8fa;
-  --color-code-text: #24292e;
+  --color-code-bg: #f4f4f5;
+  --color-code-text: #09090b;
 
-  /* Shadows */
-  --shadow-color: rgba(0, 0, 0, 0.08);
+  /* Shadows — very subtle in light mode */
+  --shadow-color: rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 1px 2px 0 rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 12px 0 rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
 
   /* Nav */
-  --color-nav-bg: rgba(255, 255, 255, 0.92);
+  --color-nav-bg: rgba(255, 255, 255, 0.85);
+
+  /* Status colors — kept intentional, small pops of color for operational data */
+  --color-status-active: #16a34a;
+  --color-status-warn: #d97706;
+  --color-status-error: #dc2626;
+  --color-status-muted: #71717a;
 }
 
 /* ============================================================
-   DARK MODE
+   DARK MODE — Zinc-950 base
    ============================================================ */
 .dark {
-  /* Backgrounds — GitHub dark palette */
-  --color-bg: #0d1117;
-  --color-bg-subtle: #161b22;
-  --color-surface: #161b22;
-  --color-surface-raised: #21262d;
+  /* Backgrounds */
+  --color-bg: #09090b;
+  --color-bg-subtle: #111113;
+  --color-surface: #18181b;
+  --color-surface-raised: #27272a;
 
   /* Text */
-  --color-text-primary: #e6edf3;
-  --color-text-secondary: #8b949e;
-  --color-text-muted: #6e7681;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #52525b;
 
-  /* Accent */
-  --color-accent: #22d3ee;
-  --color-accent-hover: #38bdf8;
-  --color-accent-muted: #0c4a6e;
+  /* Accent — white in dark mode */
+  --color-accent: #ffffff;
+  --color-accent-hover: #e4e4e7;
+  --color-accent-muted: #27272a;
 
   /* Borders */
-  --color-border: #30363d;
-  --color-border-strong: #484f58;
+  --color-border: #27272a;
+  --color-border-strong: #3f3f46;
 
   /* Code */
-  --color-code-bg: #161b22;
-  --color-code-text: #e6edf3;
+  --color-code-bg: #18181b;
+  --color-code-text: #fafafa;
 
-  /* Shadows */
+  /* Shadows — stronger in dark mode */
   --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04);
+  --shadow-card-hover: 0 4px 16px 0 rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
 
   /* Nav */
-  --color-nav-bg: rgba(13, 17, 23, 0.92);
+  --color-nav-bg: rgba(9, 9, 11, 0.85);
 }
 
 /* ============================================================
@@ -100,16 +112,80 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Transition for theme toggle */
+/* Theme transitions */
 body,
 body * {
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-/* Prevent transition on page load */
 body.no-transition,
 body.no-transition * {
   transition: none !important;
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS
+   Elements with .reveal fade+slide in when entering viewport.
+   JS at bottom of file wires up IntersectionObserver.
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children — each child delays slightly */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal-stagger.visible > *:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0ms; }
+.reveal-stagger.visible > *:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 80ms; }
+.reveal-stagger.visible > *:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 160ms; }
+.reveal-stagger.visible > *:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 240ms; }
+.reveal-stagger.visible > *:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 320ms; }
+.reveal-stagger.visible > *:nth-child(n+6) { opacity: 1; transform: translateY(0); transition-delay: 400ms; }
+
+/* Hero sequence — children animate in on page load */
+.hero-sequence > * {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: heroFadeIn 0.5s ease forwards;
+}
+.hero-sequence > *:nth-child(1) { animation-delay: 0ms; }
+.hero-sequence > *:nth-child(2) { animation-delay: 100ms; }
+.hero-sequence > *:nth-child(3) { animation-delay: 200ms; }
+.hero-sequence > *:nth-child(4) { animation-delay: 320ms; }
+.hero-sequence > *:nth-child(5) { animation-delay: 440ms; }
+.hero-sequence > *:nth-child(6) { animation-delay: 540ms; }
+
+@keyframes heroFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   CARD HOVER DEPTH
+   Add .card-interactive to any card for lift on hover.
+   ============================================================ */
+.card-interactive {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.card-interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-border-strong);
 }
 
 /* ============================================================
@@ -138,12 +214,14 @@ body.no-transition * {
 .prose p { margin-bottom: 1.25rem; }
 
 .prose a {
-  color: var(--color-accent);
+  color: var(--color-text-primary);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.1s;
+  border-bottom: 1px solid var(--color-border-strong);
+  transition: border-color 0.15s;
 }
-.prose a:hover { border-bottom-color: var(--color-accent); }
+.prose a:hover {
+  border-bottom-color: var(--color-text-primary);
+}
 
 .prose ul,
 .prose ol {
@@ -181,7 +259,7 @@ body.no-transition * {
 }
 
 .prose blockquote {
-  border-left: 3px solid var(--color-accent);
+  border-left: 3px solid var(--color-border-strong);
   padding-left: 1rem;
   color: var(--color-text-secondary);
   font-style: italic;
@@ -220,14 +298,12 @@ body.no-transition * {
 .prose strong { font-weight: 600; }
 
 /* ============================================================
-   SHIKI SYNTAX HIGHLIGHTING — Dual-theme (light/dark)
-   Shiki outputs inline color vars: --shiki-light / --shiki-dark
-   The wrapper background must be set separately per theme.
+   SHIKI SYNTAX HIGHLIGHTING
+   Light: github-light on zinc-100 bg
+   Dark:  github-dark on zinc-900 bg
    ============================================================ */
-
-/* Light mode: show light theme colors, hide dark */
 .astro-code {
-  background-color: #f6f8fa !important;
+  background-color: #f4f4f5 !important;
   border-radius: 0.5rem;
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: 0.875rem;
@@ -238,9 +314,8 @@ body.no-transition * {
   color: var(--shiki-light) !important;
 }
 
-/* Dark mode: swap background and use dark token colors */
 .dark .astro-code {
-  background-color: #161b22 !important;
+  background-color: #18181b !important;
 }
 
 .dark .astro-code span {
@@ -266,21 +341,23 @@ body.no-transition * {
   }
 }
 
-/* Focus ring — accessible and styled */
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-text-primary);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* Selection */
 ::selection {
-  background-color: var(--color-accent-muted);
+  background-color: var(--color-surface-raised);
   color: var(--color-text-primary);
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* ============================================================
+   SCROLL ANIMATION OBSERVER — wires .reveal classes
+   Runs once on DOMContentLoaded, no framework needed.
+   ============================================================ */
