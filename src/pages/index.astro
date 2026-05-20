@@ -28,49 +28,55 @@ const topSkills = skillsData.categories
 ---
 
 <BaseLayout title="Home">
+
   <!-- Hero -->
-  <section class="py-20 md:py-28" style="border-bottom:1px solid var(--color-border)">
+  <section class="py-20 md:py-32" style="border-bottom:1px solid var(--color-border)">
     <div class="container" style="max-width:800px">
-      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8 mb-8">
-        <!-- Text content -->
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-6">
-            <span class="inline-block w-2 h-2 rounded-full" style="background:var(--color-accent)"></span>
-            <span class="text-sm font-medium font-mono" style="color:var(--color-accent)">Available for new roles</span>
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10 mb-8">
+
+        <!-- Text — hero-sequence triggers staggered fade-in on load -->
+        <div class="flex-1 hero-sequence">
+
+          <div class="flex items-center gap-2 mb-7">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background:var(--color-status-active)"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2" style="background:var(--color-status-active)"></span>
+            </span>
+            <span class="text-xs font-medium font-mono tracking-wide" style="color:var(--color-text-muted)">Available for new roles</span>
           </div>
 
-          <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.025em">
+          <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.03em">
             Elvis Rafael Gross
           </h1>
 
-          <p class="text-xl md:text-2xl font-medium mb-4" style="color:var(--color-text-secondary)">
+          <p class="text-lg md:text-xl font-medium mb-5" style="color:var(--color-text-secondary)">
             CloudOps Engineer · Platform Engineer · SRE
           </p>
 
-          <p class="text-lg leading-relaxed mb-8 max-w-2xl" style="color:var(--color-text-secondary)">
+          <p class="text-base leading-relaxed mb-10 max-w-xl" style="color:var(--color-text-secondary)">
             I build and operate cloud infrastructure at scale — AWS EC2 fleets, Kubernetes platforms,
             hybrid architectures, and the observability that keeps them running.
             This portfolio documents real projects, operational runbooks, and the engineering decisions behind them.
           </p>
 
-          <div class="flex flex-wrap gap-4 mb-10">
+          <div class="flex flex-wrap gap-3 mb-10">
             <a
               href="/projects"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90"
-              style="background:var(--color-accent); color:white"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80 active:scale-95"
+              style="background:var(--color-text-primary); color:var(--color-bg)"
             >
               View Projects →
             </a>
             <a
               href="/runbooks"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
-              style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80"
+              style="background:transparent; color:var(--color-text-primary); border:1px solid var(--color-border)"
             >
               Runbooks
             </a>
             <a
               href="/contact"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-colors hover:opacity-80"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80"
               style="background:transparent; color:var(--color-text-secondary); border:1px solid var(--color-border)"
             >
               Contact
@@ -85,7 +91,10 @@ const topSkills = skillsData.categories
         <!-- Profile photo -->
         <div class="flex-shrink-0 flex justify-center sm:justify-end">
           <div class="relative">
-            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden" style="border:3px solid var(--color-border); box-shadow:0 4px 24px rgba(0,0,0,0.12)">
+            <div
+              class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden"
+              style="border:2px solid var(--color-border); box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-border)"
+            >
               <img
                 src="/profile.jpg"
                 alt="Elvis Rafael Gross"
@@ -93,119 +102,132 @@ const topSkills = skillsData.categories
                 loading="eager"
               />
             </div>
-            <!-- Online indicator -->
-            <span class="absolute bottom-2 right-2 w-4 h-4 rounded-full border-2" style="background:#22c55e; border-color:var(--color-bg)"></span>
+            <span class="absolute bottom-2 right-2 w-3.5 h-3.5 rounded-full border-2" style="background:var(--color-status-active); border-color:var(--color-bg)"></span>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- Featured Projects -->
-  <section class="py-16 md:py-20" style="border-bottom:1px solid var(--color-border)">
+  <section class="py-16 md:py-24" style="border-bottom:1px solid var(--color-border)">
     <div class="container" style="max-width:1200px">
-      <div class="flex items-end justify-between mb-10">
+
+      <div class="flex items-end justify-between mb-12 reveal">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Featured Work</p>
-          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.015em">Projects</h2>
-          <p class="mt-2 text-base" style="color:var(--color-text-secondary)">Production-grade work with real operational value.</p>
+          <p class="text-xs font-semibold uppercase tracking-widest mb-2 font-mono" style="color:var(--color-text-muted)">Featured Work</p>
+          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.02em">Projects</h2>
+          <p class="mt-2 text-sm" style="color:var(--color-text-secondary)">Production-grade work with real operational value.</p>
         </div>
-        <a href="/projects" class="hidden sm:inline-flex text-sm hover:underline" style="color:var(--color-accent)">All projects →</a>
+        <a href="/projects" class="hidden sm:inline-flex text-sm font-medium hover:opacity-60 transition-opacity" style="color:var(--color-text-primary)">
+          All projects →
+        </a>
       </div>
 
       {featuredProjects.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
           {featuredProjects.map((project) => (
-            <ProjectCard
-              slug={project.slug}
-              title={project.title}
-              shortDescription={project.shortDescription}
-              category={project.category}
-              status={project.status}
-              tags={project.tags}
-              techStack={project.techStack}
-              awsServices={project.awsServices}
-              featured={project.featured}
-              stars={project.metadata.stars}
-              primaryLanguage={project.metadata.primaryLanguage}
-              githubUrl={project.github.url}
-            />
+            <div class="card-interactive rounded-lg" style="border:1px solid var(--color-border)">
+              <ProjectCard
+                slug={project.slug}
+                title={project.title}
+                shortDescription={project.shortDescription}
+                category={project.category}
+                status={project.status}
+                tags={project.tags}
+                techStack={project.techStack}
+                awsServices={project.awsServices}
+                featured={project.featured}
+                stars={project.metadata.stars}
+                primaryLanguage={project.metadata.primaryLanguage}
+                githubUrl={project.github.url}
+              />
+            </div>
           ))}
         </div>
       ) : (
-        <div class="py-12 text-center rounded-lg" style="border:1px dashed var(--color-border)">
-          <p class="text-sm" style="color:var(--color-text-muted)">Projects coming soon.</p>
+        <div class="py-16 text-center rounded-lg reveal" style="border:1px dashed var(--color-border)">
+          <p class="text-sm font-mono" style="color:var(--color-text-muted)">// projects coming soon</p>
         </div>
       )}
     </div>
   </section>
 
   <!-- Recent Runbooks -->
-  <section class="py-16 md:py-20" style="border-bottom:1px solid var(--color-border); background:var(--color-bg-subtle)">
+  <section class="py-16 md:py-24" style="border-bottom:1px solid var(--color-border); background:var(--color-bg-subtle)">
     <div class="container" style="max-width:1200px">
-      <div class="flex items-end justify-between mb-10">
+
+      <div class="flex items-end justify-between mb-12 reveal">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Operations</p>
-          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.015em">Runbooks</h2>
-          <p class="mt-2 text-base" style="color:var(--color-text-secondary)">Step-by-step operational procedures for real incidents.</p>
+          <p class="text-xs font-semibold uppercase tracking-widest mb-2 font-mono" style="color:var(--color-text-muted)">Operations</p>
+          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.02em">Runbooks</h2>
+          <p class="mt-2 text-sm" style="color:var(--color-text-secondary)">Step-by-step operational procedures for real incidents.</p>
         </div>
-        <a href="/runbooks" class="hidden sm:inline-flex text-sm hover:underline" style="color:var(--color-accent)">All runbooks →</a>
+        <a href="/runbooks" class="hidden sm:inline-flex text-sm font-medium hover:opacity-60 transition-opacity" style="color:var(--color-text-primary)">
+          All runbooks →
+        </a>
       </div>
 
       {recentRunbooks.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
           {recentRunbooks.map((rb) => (
-            <RunbookCard
-              slug={rb.id}
-              title={rb.data.title}
-              description={rb.data.description}
-              category={rb.data.category}
-              severity={rb.data.severity}
-              estimatedTime={rb.data.estimatedTime}
-              status={rb.data.status}
-              tags={rb.data.tags}
-              awsServices={rb.data.awsServices ?? []}
-              publishedDate={rb.data.publishedDate}
-              updatedDate={rb.data.updatedDate}
-            />
+            <div class="card-interactive rounded-lg" style="border:1px solid var(--color-border)">
+              <RunbookCard
+                slug={rb.id}
+                title={rb.data.title}
+                description={rb.data.description}
+                category={rb.data.category}
+                severity={rb.data.severity}
+                estimatedTime={rb.data.estimatedTime}
+                status={rb.data.status}
+                tags={rb.data.tags}
+                awsServices={rb.data.awsServices ?? []}
+                publishedDate={rb.data.publishedDate}
+                updatedDate={rb.data.updatedDate}
+              />
+            </div>
           ))}
         </div>
       ) : (
-        <div class="py-12 text-center rounded-lg" style="border:1px dashed var(--color-border)">
-          <p class="text-sm" style="color:var(--color-text-muted)">Runbooks coming soon.</p>
+        <div class="py-16 text-center rounded-lg reveal" style="border:1px dashed var(--color-border)">
+          <p class="text-sm font-mono" style="color:var(--color-text-muted)">// runbooks coming soon</p>
         </div>
       )}
     </div>
   </section>
 
   <!-- Recent Writing -->
-  <section class="py-16 md:py-20">
+  <section class="py-16 md:py-24">
     <div class="container" style="max-width:1200px">
-      <div class="flex items-end justify-between mb-10">
+
+      <div class="flex items-end justify-between mb-12 reveal">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Notes & Tutorials</p>
-          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.015em">Writing</h2>
-          <p class="mt-2 text-base" style="color:var(--color-text-secondary)">CloudOps notes, Kubernetes labs, homelab docs, and architecture decisions.</p>
+          <p class="text-xs font-semibold uppercase tracking-widest mb-2 font-mono" style="color:var(--color-text-muted)">Notes & Tutorials</p>
+          <h2 class="text-2xl md:text-3xl font-semibold" style="color:var(--color-text-primary); letter-spacing:-0.02em">Writing</h2>
+          <p class="mt-2 text-sm" style="color:var(--color-text-secondary)">CloudOps notes, Kubernetes labs, homelab docs, and architecture decisions.</p>
         </div>
-        <a href="/writing" class="hidden sm:inline-flex text-sm hover:underline" style="color:var(--color-accent)">All writing →</a>
+        <a href="/writing" class="hidden sm:inline-flex text-sm font-medium hover:opacity-60 transition-opacity" style="color:var(--color-text-primary)">
+          All writing →
+        </a>
       </div>
 
       {recentWriting.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
           {recentWriting.map((post) => (
             <article
-              class="group relative flex flex-col rounded-lg p-5 transition-shadow hover:shadow-lg"
+              class="card-interactive group relative flex flex-col rounded-lg p-6"
               style="background:var(--color-surface); border:1px solid var(--color-border)"
             >
-              <div class="flex items-center justify-between mb-3">
-                <span class="text-xs px-2 py-0.5 rounded font-medium" style="background:var(--color-accent-muted); color:var(--color-accent)">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs px-2 py-1 rounded font-mono font-medium" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">
                   {post.data.category}
                 </span>
-                <span class="text-xs" style="color:var(--color-text-muted)">
+                <span class="text-xs font-mono" style="color:var(--color-text-muted)">
                   {post.data.publishedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
-              <h3 class="text-base font-semibold mb-2 leading-snug group-hover:opacity-80 transition-opacity" style="color:var(--color-text-primary)">
+              <h3 class="text-sm font-semibold mb-2 leading-snug group-hover:opacity-70 transition-opacity" style="color:var(--color-text-primary)">
                 <a href={`/writing/${post.id}`} class="stretched-link">{post.data.title}</a>
               </h3>
               <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">{post.data.description}</p>
@@ -213,12 +235,13 @@ const topSkills = skillsData.categories
           ))}
         </div>
       ) : (
-        <div class="py-12 text-center rounded-lg" style="border:1px dashed var(--color-border)">
-          <p class="text-sm" style="color:var(--color-text-muted)">Writing coming soon.</p>
+        <div class="py-16 text-center rounded-lg reveal" style="border:1px dashed var(--color-border)">
+          <p class="text-sm font-mono" style="color:var(--color-text-muted)">// writing coming soon</p>
         </div>
       )}
     </div>
   </section>
+
 </BaseLayout>
 
 <style>
