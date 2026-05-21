@@ -2,8 +2,8 @@
   {
     "slug": "aws-cloudops-private-ec2-operations-platform",
     "title": "AWS CloudOps Private EC2 Operations Platform",
-    "shortDescription": "Production-grade operations platform for managing private EC2 fleets via SSM, CloudWatch, and automated runbooks.",
-    "longDescription": "Hub-and-spoke architecture for managing private EC2 fleets at enterprise scale. SSM replaces bastion hosts entirely — all administrative access goes through Session Manager with full CloudWatch session logging. Designed for zero public SSH endpoints.",
+    "shortDescription": "Production-pattern EC2 fleet management with no public SSH, no bastion hosts, and no key pairs. Operator access exclusively through SSM Session Manager over VPC Interface Endpoints.",
+    "longDescription": "Reference AWS CloudOps platform for operating EC2 workloads in private subnets the way well-run shops actually do it in 2026: SSM-only access, Golden AMIs via EC2 Image Builder, self-healing via ASG min=max=1, customer-managed KMS encryption, and AWS Backup with cold-storage lifecycle. Terraform modules, 7 ADRs documenting non-obvious decisions, and operational runbooks. Targets under $100/month in us-east-1.",
     "category": "AWS CloudOps",
     "status": "active",
     "featured": true,
@@ -15,213 +15,162 @@
     },
     "techStack": {
       "cloud": ["AWS"],
-      "compute": ["EC2", "Systems Manager"],
-      "networking": ["VPC", "VPC Endpoints", "Private Subnets"],
-      "observability": ["CloudWatch", "CloudWatch Logs"],
+      "compute": ["EC2", "Auto Scaling Group", "EC2 Image Builder"],
+      "access": ["SSM Session Manager", "SSM Run Command", "SSM Patch Manager"],
+      "networking": ["VPC", "VPC Interface Endpoints", "Private Subnets"],
+      "observability": ["CloudWatch Agent", "CloudWatch Logs", "CloudWatch Alarms"],
+      "security": ["KMS CMK", "IAM", "AWS Backup"],
       "iac": ["Terraform"],
-      "automation": ["SSM Documents", "EventBridge", "Lambda"],
-      "languages": ["Bash", "Python", "HCL"]
+      "languages": ["HCL", "Bash", "Go"]
     },
-    "awsServices": ["EC2", "SSM", "CloudWatch", "VPC", "IAM", "EventBridge", "Lambda"],
+    "awsServices": ["EC2", "SSM", "CloudWatch", "VPC", "KMS", "IAM", "AWS Backup", "EC2 Image Builder", "SNS", "EventBridge"],
     "gcpServices": [],
     "architecture": {
-      "summary": "Hub-and-spoke design where a central operations VPC reaches private workload VPCs through VPC endpoints. SSM replaces bastion hosts for all administrative access.",
-      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
-      "diagramAlt": "Architecture diagram showing operations VPC connecting to workload VPCs via VPC endpoints"
+      "summary": "EC2 in private subnets, no internet gateway route for workloads. 5 VPC Interface Endpoints replace NAT for AWS service traffic. SSM is the only access path — no SSH keys provisioned. ASG min=max=1 provides self-healing at zero code cost. Image Builder + SSM Parameter Store + Launch Template decouple AMI ID from Terraform state.",
+      "diagramUrl": null,
+      "diagramAlt": null
     },
     "operationalValue": {
-      "problemSolved": "Eliminates SSH bastion hosts, reduces blast radius, provides auditable session logs.",
+      "problemSolved": "Eliminates SSH key sprawl, bastion host maintenance, and stale AMI drift — the three most common EC2 security failures.",
       "outcomes": [
-        "Zero public-facing SSH endpoints",
-        "Full session logging to CloudWatch and S3",
-        "Mean time to access reduced from minutes to seconds"
+        "Zero public-facing SSH endpoints — SSM Session Manager is the only access path",
+        "Full session audit trail to CloudWatch Logs via KMS-encrypted SSM logging",
+        "AMI pipeline automated — new AMIs published to SSM Parameter, picked up on next instance launch",
+        "Self-healing: ASG replaces failed instances automatically across AZs"
       ],
       "metrics": {
-        "costImpact": "~40% reduction vs bastion-based alternative",
-        "reliabilityImpact": "No bastion = no bastion outages"
+        "costImpact": "~$55/month in us-east-1 — detailed breakdown in repo",
+        "reliabilityImpact": "No bastion = no bastion outages or key rotation overhead"
       }
     },
     "links": {
       "readme": "https://github.com/Rafagross/aws-cloudops-private-ec2-operations-platform#readme",
-      "runbook": "/runbooks/ec2-instance-unreachable-via-ssm",
-      "diagram": null,
-      "demo": null
-    },
-    "screenshots": [],
-    "tags": ["aws", "ec2", "ssm", "vpc", "cloudwatch", "terraform", "private-networking", "zero-trust"],
-    "metadata": {
-      "stars": null,
-      "lastCommit": null,
-      "primaryLanguage": null,
-      "lastEnrichedAt": null
-    },
-    "publishedDate": "2026-01-15",
-    "updatedDate": "2026-02-01"
-  },
-  {
-    "slug": "kubernetes-homelab-platform",
-    "title": "Kubernetes Homelab Platform",
-    "shortDescription": "Multi-node Kubernetes cluster provisioned from scratch with Vagrant and VirtualBox — CKA preparation with production-grade operational practices.",
-    "longDescription": "Multi-node K8s cluster built from scratch to develop production-grade operational skills. Covers CNI configuration, RBAC, scheduling, persistent storage, and pod lifecycle management.",
-    "category": "Kubernetes",
-    "status": "active",
-    "featured": true,
-    "displayOrder": 2,
-    "github": {
-      "owner": "Rafagross",
-      "repo": "kubernetes-homelab-platform",
-      "url": "https://github.com/Rafagross/kubernetes-homelab-platform"
-    },
-    "techStack": {
-      "orchestration": ["Kubernetes", "k3s"],
-      "virtualization": ["Vagrant", "VirtualBox", "Proxmox"],
-      "networking": ["CNI", "Flannel", "Calico"],
-      "storage": ["Persistent Volumes", "StorageClass"],
-      "languages": ["Bash", "YAML"]
-    },
-    "awsServices": [],
-    "gcpServices": [],
-    "architecture": {
-      "summary": "Multi-node cluster with dedicated control plane and worker nodes. CNI configured for pod networking, RBAC enforced from day one, persistent storage via hostPath and NFS.",
-      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
-      "diagramAlt": null
-    },
-    "operationalValue": {
-      "problemSolved": "Hands-on platform for developing production Kubernetes skills without cloud cost.",
-      "outcomes": [
-        "Full cluster lifecycle management experience",
-        "CKA exam preparation with real workloads",
-        "Operational runbooks tested against real failure scenarios"
-      ],
-      "metrics": {
-        "costImpact": "$0/month vs EKS equivalent",
-        "reliabilityImpact": null
-      }
-    },
-    "links": {
-      "readme": "https://github.com/Rafagross/kubernetes-homelab-platform#readme",
-      "runbook": "/runbooks/eks-pod-stuck-pending",
-      "diagram": null,
-      "demo": null
-    },
-    "screenshots": [],
-    "tags": ["kubernetes", "k3s", "homelab", "vagrant", "cni", "rbac", "cka"],
-    "metadata": {
-      "stars": null,
-      "lastCommit": null,
-      "primaryLanguage": null,
-      "lastEnrichedAt": null
-    },
-    "publishedDate": "2026-01-20",
-    "updatedDate": "2026-03-01"
-  },
-  {
-    "slug": "aws-cloudwatch-observability-stack",
-    "title": "AWS CloudWatch Observability Stack",
-    "shortDescription": "Production CloudWatch observability implementation with custom dashboards, composite alarms, Container Insights for EKS, and log-based alerting.",
-    "longDescription": "End-to-end observability stack built on CloudWatch — custom metrics, composite alarms, Container Insights dashboards for EKS, and log-based alerting. Designed to reduce MTTD for production incidents.",
-    "category": "Observability",
-    "status": "active",
-    "featured": true,
-    "displayOrder": 3,
-    "github": {
-      "owner": "Rafagross",
-      "repo": "aws-cloudwatch-observability-stack",
-      "url": "https://github.com/Rafagross/aws-cloudwatch-observability-stack"
-    },
-    "techStack": {
-      "observability": ["CloudWatch", "Container Insights", "CloudWatch Logs"],
-      "compute": ["EC2", "EKS"],
-      "iac": ["Terraform", "CloudFormation"],
-      "languages": ["Python", "Bash", "HCL"]
-    },
-    "awsServices": ["CloudWatch", "EC2", "EKS", "SNS", "Lambda", "S3"],
-    "gcpServices": [],
-    "architecture": {
-      "summary": "Layered observability: infrastructure metrics → application metrics → log insights → composite alarms → SNS notifications. Container Insights provides EKS cluster and pod-level visibility.",
-      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
-      "diagramAlt": null
-    },
-    "operationalValue": {
-      "problemSolved": "Reduces mean time to detection from hours to minutes by surfacing infrastructure anomalies before they impact end users.",
-      "outcomes": [
-        "Composite alarms reduce alert noise by 60%",
-        "Container Insights provides pod-level resource attribution",
-        "Log Insights queries replace manual log analysis"
-      ],
-      "metrics": {
-        "costImpact": null,
-        "reliabilityImpact": "MTTD reduced from hours to minutes"
-      }
-    },
-    "links": {
-      "readme": "https://github.com/Rafagross/aws-cloudwatch-observability-stack#readme",
       "runbook": null,
       "diagram": null,
       "demo": null
     },
     "screenshots": [],
-    "tags": ["aws", "cloudwatch", "observability", "eks", "container-insights", "alarms", "terraform"],
+    "tags": ["aws", "ec2", "ssm", "vpc", "kms", "terraform", "image-builder", "private-networking", "cloudwatch"],
     "metadata": {
       "stars": null,
       "lastCommit": null,
-      "primaryLanguage": null,
+      "primaryLanguage": "HCL",
       "lastEnrichedAt": null
     },
-    "publishedDate": "2026-02-01",
-    "updatedDate": "2026-03-15"
+    "publishedDate": "2026-01-15",
+    "updatedDate": "2026-05-01"
+  },
+  {
+    "slug": "eks-prometheus-grafana-runbook",
+    "title": "EKS Observability Stack — Prometheus & Grafana",
+    "shortDescription": "End-to-end deployment runbook for a production EKS cluster with kube-prometheus-stack, IRSA-scoped IAM, HA Alertmanager, and ALB Ingress with ACM TLS.",
+    "longDescription": "Production-grade, hardened deployment runbook for Amazon EKS with a fully integrated Prometheus + Grafana observability stack. Corrects the security model most tutorials get wrong: IRSA instead of node IAM roles, HA Alertmanager (2 replicas), PVC-backed storage for Prometheus and Grafana, TLS via ALB + ACM. Includes a deviation log documenting exactly what the reference source got wrong and why.",
+    "category": "Kubernetes",
+    "status": "stable",
+    "featured": true,
+    "displayOrder": 2,
+    "github": {
+      "owner": "Rafagross",
+      "repo": "eks-prometheus-grafana-runbook",
+      "url": "https://github.com/Rafagross/eks-prometheus-grafana-runbook"
+    },
+    "techStack": {
+      "orchestration": ["Amazon EKS", "Kubernetes"],
+      "observability": ["Prometheus Operator", "Grafana", "Alertmanager", "kube-prometheus-stack"],
+      "access": ["IRSA", "AWS Load Balancer Controller"],
+      "networking": ["ALB", "ACM", "Route 53"],
+      "storage": ["EBS gp3"],
+      "iac": ["Helm", "eksctl"],
+      "languages": ["YAML", "Bash"]
+    },
+    "awsServices": ["EKS", "EC2", "ALB", "ACM", "IAM", "EBS", "Route 53", "CloudFormation"],
+    "gcpServices": [],
+    "architecture": {
+      "summary": "EKS managed node groups in private subnets. kube-prometheus-stack via Helm — Prometheus Operator, Grafana (10Gi EBS), Prometheus (50Gi EBS, 15d retention), Alertmanager at 2 replicas. AWS Load Balancer Controller with IRSA service account. Grafana exposed via ALB Ingress with HTTPS-only and ACM certificate. Route 53 ALIAS to ALB.",
+      "diagramUrl": null,
+      "diagramAlt": null
+    },
+    "operationalValue": {
+      "problemSolved": "Most EKS + Prometheus tutorials use node IAM roles (wrong blast radius), single Alertmanager (silent failure point), and no persistent storage. This runbook documents the correct production approach.",
+      "outcomes": [
+        "IRSA scopes ALB Controller permissions to pod level — not the entire node",
+        "HA Alertmanager prevents silent alert loss during pod restarts",
+        "PVC-backed storage survives pod replacement and node rotation",
+        "TLS via ACM — not self-signed"
+      ],
+      "metrics": {
+        "costImpact": "~$200/month in us-west-2 with 2x m5.large on-demand",
+        "reliabilityImpact": "Zero dropped alerts during normal Alertmanager pod lifecycle"
+      }
+    },
+    "links": {
+      "readme": "https://github.com/Rafagross/eks-prometheus-grafana-runbook#readme",
+      "runbook": "/runbooks/eks-prometheus-grafana-stack",
+      "diagram": null,
+      "demo": null
+    },
+    "screenshots": [],
+    "tags": ["eks", "kubernetes", "prometheus", "grafana", "irsa", "alertmanager", "helm", "observability", "alb"],
+    "metadata": {
+      "stars": null,
+      "lastCommit": null,
+      "primaryLanguage": "YAML",
+      "lastEnrichedAt": null
+    },
+    "publishedDate": "2026-05-19",
+    "updatedDate": "2026-05-19"
   },
   {
     "slug": "container-runtime-runbooks-homelabs",
     "title": "Container Runtime Runbooks — Homelabs",
-    "shortDescription": "Operational runbooks for container runtime troubleshooting in homelab Kubernetes environments — covering containerd, CRI-O, Docker, and pod lifecycle failures.",
-    "longDescription": "A collection of production-grade runbooks for diagnosing and resolving container runtime issues in Kubernetes homelabs. Covers containerd crashes, image pull failures, CRI socket errors, OOMKill debugging, and node-level runtime recovery.",
+    "shortDescription": "Production-minded runbooks for installing and configuring container runtimes on real hardware — CRI-O, crictl, LXD, and Podman across amd64 and arm64.",
+    "longDescription": "Step-by-step runbooks for deploying container runtimes in homelab environments, executed and validated on physical hardware. Documents the gaps in upstream documentation for specific OS/architecture combinations — CRI-O on Linux Mint 20.2, Podman on arm64 Ubuntu. Every procedure includes root cause explanations for deviations from official docs. CKA preparation at the runtime level.",
     "category": "Kubernetes",
     "status": "active",
-    "featured": false,
-    "displayOrder": 4,
+    "featured": true,
+    "displayOrder": 3,
     "github": {
       "owner": "Rafagross",
       "repo": "container-runtime-runbooks-homelabs",
       "url": "https://github.com/Rafagross/container-runtime-runbooks-homelabs"
     },
     "techStack": {
-      "orchestration": ["Kubernetes"],
-      "runtime": ["containerd", "CRI-O", "Docker"],
-      "tooling": ["crictl", "kubectl", "journalctl"],
+      "runtimes": ["CRI-O", "crictl", "LXD", "Podman"],
+      "platforms": ["Linux Mint 20.2", "Ubuntu Server 24.04"],
+      "architectures": ["amd64", "arm64"],
       "languages": ["Bash", "YAML"]
     },
     "awsServices": [],
     "gcpServices": [],
     "architecture": {
-      "summary": "Runbook library organized by failure domain: runtime crashes, image pull errors, CRI socket issues, OOMKill events, and node recovery procedures.",
-      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
+      "summary": "Two physical machines with different architectures (amd64 and arm64) and different Linux distributions. Architecture diversity is intentional — surfaces package and driver issues that homogeneous environments hide.",
+      "diagramUrl": null,
       "diagramAlt": null
     },
     "operationalValue": {
-      "problemSolved": "Eliminates time spent rediscovering container runtime diagnostics during homelab incidents.",
+      "problemSolved": "CKA requires runtime-level knowledge that EKS abstracts away. This lab provides hands-on crictl and CRI-O experience at the level the exam and production incidents demand.",
       "outcomes": [
-        "Structured runbooks for 10+ common runtime failure scenarios",
-        "Consistent diagnostic approach across containerd, CRI-O, and Docker",
-        "CKA exam preparation through real operational documentation"
+        "CRI-O installed and validated on 4 OS/architecture combinations",
+        "crictl workflow documented for CKA runtime troubleshooting scenarios",
+        "Upstream documentation gaps corrected with root cause explanations"
       ],
       "metrics": {
-        "costImpact": null,
+        "costImpact": "$0/month — physical hardware only",
         "reliabilityImpact": null
       }
     },
     "links": {
       "readme": "https://github.com/Rafagross/container-runtime-runbooks-homelabs#readme",
-      "runbook": "/runbooks/eks-pod-stuck-pending",
+      "runbook": null,
       "diagram": null,
       "demo": null
     },
     "screenshots": [],
-    "tags": ["kubernetes", "containerd", "cri-o", "docker", "runbooks", "homelab", "troubleshooting"],
+    "tags": ["kubernetes", "cri-o", "crictl", "podman", "lxd", "homelab", "arm64", "cka", "runbooks"],
     "metadata": {
       "stars": null,
       "lastCommit": null,
-      "primaryLanguage": null,
+      "primaryLanguage": "Bash",
       "lastEnrichedAt": null
     },
     "publishedDate": "2026-03-01",

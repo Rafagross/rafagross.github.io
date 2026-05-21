@@ -3,51 +3,51 @@
     {
       "name": "Cloud Platforms",
       "skills": [
-        { "name": "AWS", "level": "advanced", "note": "EC2, SSM, CloudWatch, VPC, IAM, Lambda, EventBridge, S3, EKS, RDS" },
-        { "name": "GCP", "level": "advanced", "note": "Compute Engine, GKE, Cloud Run, Cloud Functions, Cloud Monitoring, IAM" }
+        { "name": "AWS", "level": "advanced", "note": "EC2, SSM, CloudWatch, VPC, IAM, EKS, ALB, EBS, ACM, Route 53, CloudFormation — production use at IGT" },
+        { "name": "GCP", "level": "intermediate", "note": "Cloud Run, Pub/Sub, BigQuery, Cloud Functions, IAM — pre-sales architecture and PoCs at CODESA" }
       ]
     },
     {
       "name": "Infrastructure & Orchestration",
       "skills": [
-        { "name": "Kubernetes", "level": "advanced", "note": "k3s, EKS, workload management, RBAC, networking" },
-        { "name": "Terraform", "level": "advanced", "note": "Module design, state management, workspace strategies" },
-        { "name": "Ansible", "level": "intermediate", "note": "OS provisioning, patching, configuration management" },
-        { "name": "Helm", "level": "intermediate", "note": "Chart authoring, values management, lifecycle hooks" },
+        { "name": "Kubernetes", "level": "advanced", "note": "EKS production upgrades, drain/cordon workflows, k3s homelab, Helm, kube-prometheus-stack" },
+        { "name": "Terraform", "level": "intermediate", "note": "Module structure, VPC labs, EC2 platform IaC — not yet at large stateful multi-account scale" },
+        { "name": "Helm", "level": "intermediate", "note": "Chart deployment and values management — kube-prometheus-stack, AWS Load Balancer Controller" },
+        { "name": "Ansible", "level": "intermediate", "note": "OS provisioning and configuration management" },
         { "name": "Proxmox VE", "level": "intermediate", "note": "Hypervisor administration, VM and LXC management" }
       ]
     },
     {
       "name": "Observability",
       "skills": [
-        { "name": "CloudWatch", "level": "advanced", "note": "Agent, Logs, Insights, Alarms, Dashboards, Composite Alarms" },
-        { "name": "Prometheus", "level": "intermediate", "note": "PromQL, scrape configuration, alerting rules" },
-        { "name": "Grafana", "level": "intermediate", "note": "Dashboard design, data source integration, alerting" }
+        { "name": "CloudWatch", "level": "advanced", "note": "Agent, Logs, Insights, composite alarms, Container Insights for EKS — production tuning at IGT" },
+        { "name": "Prometheus", "level": "intermediate", "note": "kube-prometheus-stack deployment, Prometheus Operator, PromQL basics" },
+        { "name": "Grafana", "level": "intermediate", "note": "Dashboard setup, data source integration, EKS observability stack" }
       ]
     },
     {
       "name": "Automation & Scripting",
       "skills": [
+        { "name": "AWS Systems Manager", "level": "advanced", "note": "Session Manager, Run Command, Patch Manager, Documents — primary ops tool at IGT" },
         { "name": "Bash / Shell", "level": "advanced", "note": "Operational scripts, automation, SSM Run Commands" },
-        { "name": "Python", "level": "intermediate", "note": "Lambda functions, automation scripts, AWS SDK (boto3)" },
-        { "name": "AWS Systems Manager", "level": "advanced", "note": "Session Manager, Run Command, Patch Manager, Documents" },
+        { "name": "Python", "level": "intermediate", "note": "Lambda functions, automation scripts, boto3" },
         { "name": "GitHub Actions", "level": "intermediate", "note": "CI/CD pipelines, workflow automation" }
       ]
     },
     {
       "name": "Networking & Security",
       "skills": [
-        { "name": "AWS VPC", "level": "advanced", "note": "Subnet design, routing tables, VPC endpoints, peering, TGW" },
-        { "name": "IAM", "level": "advanced", "note": "Least-privilege policy design, roles, permission boundaries" },
-        { "name": "Linux", "level": "advanced", "note": "Amazon Linux 2/2023, RHEL, Ubuntu — systemd, networking, storage" }
+        { "name": "AWS VPC", "level": "advanced", "note": "Subnet design, routing tables, VPC endpoints, private networking patterns" },
+        { "name": "IAM", "level": "advanced", "note": "Least-privilege policy design, roles, IRSA, permission boundaries" },
+        { "name": "Linux", "level": "advanced", "note": "Amazon Linux 2/2023, Ubuntu — systemd, networking, storage, troubleshooting" }
       ]
     },
     {
-      "name": "GitOps & Developer Tooling",
+      "name": "Containers & Runtimes",
       "skills": [
-        { "name": "Git", "level": "advanced", "note": "Branching strategies, workflows, code review" },
-        { "name": "ArgoCD", "level": "intermediate", "note": "App of apps pattern, sync policies, RBAC" },
-        { "name": "Docker", "level": "intermediate", "note": "Image builds, multi-stage, Compose for local development" }
+        { "name": "Docker", "level": "intermediate", "note": "Image builds, multi-stage, container lifecycle" },
+        { "name": "CRI-O", "level": "intermediate", "note": "Installation and configuration on amd64 and arm64 — homelab CKA prep" },
+        { "name": "crictl", "level": "intermediate", "note": "Container runtime debugging, CKA exam tooling" }
       ]
     }
   ]
