@@ -12,16 +12,23 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
-  class="sticky top-0 z-50 backdrop-blur-sm"
+  class="sticky top-0 z-50 backdrop-blur-md"
   style="background:var(--color-nav-bg); border-bottom:1px solid var(--color-border)"
+  transition:persist
 >
   <div class="container">
     <div class="flex items-center justify-between h-16">
-      <!-- Wordmark -->
+      <!-- Wordmark with monogram badge -->
       <a href="/" class="flex items-center gap-3 font-semibold text-base hover:opacity-80 transition-opacity" style="color:var(--color-text-primary)">
-        <span class="font-mono text-sm px-2 py-0.5 rounded" style="background:var(--color-accent); color:white">RG</span>
-        <span>Rafael Gross</span>
-        <span class="hidden sm:inline text-sm font-normal" style="color:var(--color-text-muted)">· CloudOps</span>
+        <span
+          class="font-mono text-xs font-semibold px-2 py-1 rounded inline-flex items-center justify-center"
+          style="background:var(--color-text-primary); color:var(--color-bg); min-width:28px"
+          aria-hidden="true"
+        >
+          RG
+        </span>
+        <span class="hidden sm:inline">Rafael Gross</span>
+        <span class="hidden md:inline text-sm font-mono font-normal" style="color:var(--color-text-muted)">/ CloudOps</span>
       </a>
 
       <!-- Desktop nav -->
@@ -34,12 +41,10 @@ const currentPath = Astro.url.pathname;
             <a
               href={href}
               class={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                isActive
-                  ? 'font-semibold'
-                  : 'hover:opacity-80'
+                isActive ? 'font-semibold' : 'hover:opacity-80'
               }`}
               style={isActive
-                ? 'background:var(--color-accent-muted); color:var(--color-accent)'
+                ? 'background:var(--color-surface-raised); color:var(--color-text-primary)'
                 : 'color:var(--color-text-secondary)'}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -51,7 +56,6 @@ const currentPath = Astro.url.pathname;
 
       <!-- Actions -->
       <div class="flex items-center gap-2">
-        <!-- Theme toggle -->
         <button
           id="theme-toggle"
           class="p-2 rounded-md transition-colors hover:opacity-70"
@@ -59,17 +63,14 @@ const currentPath = Astro.url.pathname;
           aria-label="Toggle dark mode"
           title="Toggle light/dark mode"
         >
-          <!-- Sun icon (shown in dark mode) -->
           <svg class="hidden dark:block w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
-          <!-- Moon icon (shown in light mode) -->
           <svg class="block dark:hidden w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
           </svg>
         </button>
 
-        <!-- Mobile menu button -->
         <button
           id="mobile-menu-btn"
           class="md:hidden p-2 rounded-md transition-colors hover:opacity-70"
@@ -89,7 +90,6 @@ const currentPath = Astro.url.pathname;
     </div>
   </div>
 
-  <!-- Mobile menu -->
   <div
     id="mobile-menu"
     class="hidden md:hidden"
@@ -105,7 +105,7 @@ const currentPath = Astro.url.pathname;
             href={href}
             class={`px-3 py-2 rounded text-sm font-medium transition-colors ${isActive ? 'font-semibold' : ''}`}
             style={isActive
-              ? 'background:var(--color-accent-muted); color:var(--color-accent)'
+              ? 'background:var(--color-surface-raised); color:var(--color-text-primary)'
               : 'color:var(--color-text-secondary)'}
             aria-current={isActive ? 'page' : undefined}
           >
@@ -118,23 +118,27 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
-  // Theme toggle
-  const btn = document.getElementById('theme-toggle');
-  btn?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
+  function setupHeader() {
+    const btn = document.getElementById('theme-toggle');
+    btn?.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 
-  // Mobile menu
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
 
-  mobileBtn?.addEventListener('click', () => {
-    const isOpen = mobileMenu?.classList.toggle('hidden') === false;
-    mobileBtn.setAttribute('aria-expanded', String(!mobileMenu?.classList.contains('hidden')));
-    menuIcon?.classList.toggle('hidden', !mobileMenu?.classList.contains('hidden'));
-    closeIcon?.classList.toggle('hidden', mobileMenu?.classList.contains('hidden'));
-  });
+    mobileBtn?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+      const isOpen = !mobileMenu?.classList.contains('hidden');
+      mobileBtn.setAttribute('aria-expanded', String(isOpen));
+      menuIcon?.classList.toggle('hidden', isOpen);
+      closeIcon?.classList.toggle('hidden', !isOpen);
+    });
+  }
+
+  setupHeader();
+  document.addEventListener('astro:page-load', setupHeader);
 </script>

@@ -6,6 +6,7 @@ import Tag from '../components/ui/Tag.astro';
 import { getCollection } from 'astro:content';
 import projectsData from '../data/projects.json';
 import skillsData from '../data/skills.json';
+import certsData from '../data/certifications.json';
 
 const runbooks = await getCollection('runbooks', ({ data }) => !data.draft);
 const writing = await getCollection('writing', ({ data }) => !data.draft);
@@ -22,21 +23,30 @@ const featuredProjects = projectsData
   .filter((p) => p.featured)
   .sort((a, b) => a.displayOrder - b.displayOrder);
 
-const topSkills = skillsData.categories
-  .flatMap((cat) => cat.skills.filter((s) => s.level === 'advanced'))
-  .slice(0, 10);
+// Stats for hero
+const activeCerts = certsData.certifications.filter((c) => c.status === 'active').length;
+const totalProjects = projectsData.length;
+const totalRunbooks = runbooks.length;
 ---
 
 <BaseLayout title="Home">
 
   <!-- Hero -->
-  <section class="py-20 md:py-32" style="border-bottom:1px solid var(--color-border)">
-    <div class="container" style="max-width:800px">
-      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10 mb-8">
+  <section class="relative py-20 md:py-28 overflow-hidden" style="border-bottom:1px solid var(--color-border)">
+    <!-- Subtle grid pattern background -->
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px); background-size: 64px 64px; opacity:0.4; mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%);"
+      aria-hidden="true"
+    ></div>
 
-        <!-- Text — hero-sequence triggers staggered fade-in on load -->
+    <div class="container relative" style="max-width:900px">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10">
+
+        <!-- Text -->
         <div class="flex-1 hero-sequence">
 
+          <!-- Status -->
           <div class="flex items-center gap-2 mb-7">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background:var(--color-status-active)"></span>
@@ -45,51 +55,75 @@ const topSkills = skillsData.categories
             <span class="text-xs font-medium font-mono tracking-wide" style="color:var(--color-text-muted)">Available for new roles</span>
           </div>
 
-          <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.03em">
+          <!-- Name -->
+          <h1 class="text-4xl md:text-5xl font-semibold mb-3 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.03em">
             Elvis Rafael Gross
           </h1>
 
-          <p class="text-lg md:text-xl font-medium mb-5" style="color:var(--color-text-secondary)">
-            CloudOps Engineer · Platform Engineer · SRE
+          <!-- Differentiated tagline -->
+          <p class="text-lg md:text-xl font-medium mb-6" style="color:var(--color-text-secondary)">
+            CloudOps engineer building <span style="color:var(--color-text-primary)">secure AWS operations platforms</span> —
+            <span class="font-mono text-base" style="color:var(--color-text-muted)">no SSH, no bastion, SSM-first.</span>
           </p>
 
-          <p class="text-base leading-relaxed mb-10 max-w-xl" style="color:var(--color-text-secondary)">
-            I build and operate cloud infrastructure at scale — AWS EC2 fleets, Kubernetes platforms,
-            hybrid architectures, and the observability that keeps them running.
+          <!-- Stack chips -->
+          <div class="flex flex-wrap gap-2 mb-6 font-mono text-xs">
+            <span class="px-2.5 py-1 rounded" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">Private EC2</span>
+            <span class="px-2.5 py-1 rounded" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">SSM</span>
+            <span class="px-2.5 py-1 rounded" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">EKS</span>
+            <span class="px-2.5 py-1 rounded" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">CloudWatch</span>
+            <span class="px-2.5 py-1 rounded" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">Terraform</span>
+          </div>
+
+          <p class="text-base leading-relaxed mb-8 max-w-xl" style="color:var(--color-text-secondary)">
+            Production AWS at IGT — gaming infrastructure under Nevada Gaming Commission compliance.
             This portfolio documents real projects, operational runbooks, and the engineering decisions behind them.
           </p>
 
+          <!-- Buttons — clear hierarchy: 1 primary, 2 secondary -->
           <div class="flex flex-wrap gap-3 mb-10">
             <a
               href="/projects"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80 active:scale-95"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold transition-all hover:opacity-80 active:scale-95"
               style="background:var(--color-text-primary); color:var(--color-bg)"
             >
               View Projects →
             </a>
             <a
               href="/runbooks"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80"
-              style="background:transparent; color:var(--color-text-primary); border:1px solid var(--color-border)"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-opacity hover:opacity-70"
+              style="color:var(--color-text-secondary)"
             >
               Runbooks
             </a>
             <a
               href="/contact"
-              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all hover:opacity-80"
-              style="background:transparent; color:var(--color-text-secondary); border:1px solid var(--color-border)"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-opacity hover:opacity-70"
+              style="color:var(--color-text-secondary)"
             >
               Contact
             </a>
           </div>
 
-          <div class="flex flex-wrap gap-2">
-            {topSkills.map((s) => <Tag>{s.name}</Tag>)}
+          <!-- Stats row — numeric anchors -->
+          <div class="grid grid-cols-3 gap-6 max-w-md pt-6" style="border-top:1px solid var(--color-border)">
+            <div>
+              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{activeCerts}</p>
+              <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Active certs</p>
+            </div>
+            <div>
+              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{totalProjects}</p>
+              <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Public projects</p>
+            </div>
+            <div>
+              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{totalRunbooks}</p>
+              <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Runbooks</p>
+            </div>
           </div>
         </div>
 
         <!-- Profile photo -->
-        <div class="flex-shrink-0 flex justify-center sm:justify-end">
+        <div class="flex-shrink-0 flex justify-center sm:justify-end hero-sequence">
           <div class="relative">
             <div
               class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden"
@@ -128,22 +162,20 @@ const topSkills = skillsData.categories
       {featuredProjects.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
           {featuredProjects.map((project) => (
-            <div class="card-interactive rounded-lg" style="border:1px solid var(--color-border)">
-              <ProjectCard
-                slug={project.slug}
-                title={project.title}
-                shortDescription={project.shortDescription}
-                category={project.category}
-                status={project.status}
-                tags={project.tags}
-                techStack={project.techStack}
-                awsServices={project.awsServices}
-                featured={project.featured}
-                stars={project.metadata.stars}
-                primaryLanguage={project.metadata.primaryLanguage}
-                githubUrl={project.github.url}
-              />
-            </div>
+            <ProjectCard
+              slug={project.slug}
+              title={project.title}
+              shortDescription={project.shortDescription}
+              category={project.category}
+              status={project.status}
+              tags={project.tags}
+              techStack={project.techStack}
+              awsServices={project.awsServices}
+              featured={project.featured}
+              stars={project.metadata.stars}
+              primaryLanguage={project.metadata.primaryLanguage}
+              githubUrl={project.github.url}
+            />
           ))}
         </div>
       ) : (
@@ -172,21 +204,19 @@ const topSkills = skillsData.categories
       {recentRunbooks.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger">
           {recentRunbooks.map((rb) => (
-            <div class="card-interactive rounded-lg" style="border:1px solid var(--color-border)">
-              <RunbookCard
-                slug={rb.id}
-                title={rb.data.title}
-                description={rb.data.description}
-                category={rb.data.category}
-                severity={rb.data.severity}
-                estimatedTime={rb.data.estimatedTime}
-                status={rb.data.status}
-                tags={rb.data.tags}
-                awsServices={rb.data.awsServices ?? []}
-                publishedDate={rb.data.publishedDate}
-                updatedDate={rb.data.updatedDate}
-              />
-            </div>
+            <RunbookCard
+              slug={rb.id}
+              title={rb.data.title}
+              description={rb.data.description}
+              category={rb.data.category}
+              severity={rb.data.severity}
+              estimatedTime={rb.data.estimatedTime}
+              status={rb.data.status}
+              tags={rb.data.tags}
+              awsServices={rb.data.awsServices ?? []}
+              publishedDate={rb.data.publishedDate}
+              updatedDate={rb.data.updatedDate}
+            />
           ))}
         </div>
       ) : (

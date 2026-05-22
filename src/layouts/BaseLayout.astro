@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -33,13 +34,11 @@ const fullTitle = title === 'Home'
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Primary Meta -->
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -47,16 +46,13 @@ const fullTitle = title === 'Home'
     <meta property="og:image" content={`${siteUrl}${ogImage}`} />
     <meta property="og:site_name" content="Rafael Gross — CloudOps Portfolio" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- RSS Feed -->
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -64,7 +60,6 @@ const fullTitle = title === 'Home'
       href="/rss.xml"
     />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -72,7 +67,6 @@ const fullTitle = title === 'Home'
       rel="stylesheet"
     />
 
-    <!-- Theme init — runs before paint to prevent FOUC -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('theme');
@@ -81,6 +75,8 @@ const fullTitle = title === 'Home'
         document.documentElement.classList.toggle('dark', theme === 'dark');
       })();
     </script>
+
+    <ClientRouter />
   </head>
   <body>
     <script is:inline>
@@ -93,12 +89,12 @@ const fullTitle = title === 'Home'
     </main>
     <Footer />
 
-    <!-- Scroll animation observer — wires .reveal and .reveal-stagger classes -->
-    <script is:inline>
-      (function () {
-        var observer = new IntersectionObserver(
-          function (entries) {
-            entries.forEach(function (entry) {
+    <!-- Scroll animation observer — re-runs on every page transition -->
+    <script>
+      function setupReveal() {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 observer.unobserve(entry.target);
@@ -108,18 +104,20 @@ const fullTitle = title === 'Home'
           { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
         );
 
-        function observe() {
-          document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
-            observer.observe(el);
-          });
-        }
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
+          observer.observe(el);
+        });
+      }
 
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', observe);
-        } else {
-          observe();
-        }
-      })();
+      // Initial page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupReveal);
+      } else {
+        setupReveal();
+      }
+
+      // Re-run after every Astro view transition
+      document.addEventListener('astro:page-load', setupReveal);
     </script>
   </body>
 </html>
