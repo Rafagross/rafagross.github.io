@@ -39,6 +39,9 @@ const totalRunbooks = runbooks.length;
       style="background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px); background-size: 64px 64px; opacity:0.4; mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%);"
       aria-hidden="true"
     ></div>
+    <!-- Gradient orbs -->
+    <div class="orb orb-primary" aria-hidden="true"></div>
+    <div class="orb orb-secondary" aria-hidden="true"></div>
 
     <div class="container relative" style="max-width:900px">
       <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10">
@@ -62,8 +65,8 @@ const totalRunbooks = runbooks.length;
 
           <!-- Differentiated tagline -->
           <p class="text-lg md:text-xl font-medium mb-6" style="color:var(--color-text-secondary)">
-            CloudOps engineer building <span style="color:var(--color-text-primary)">secure AWS operations platforms</span> —
-            <span class="font-mono text-base" style="color:var(--color-text-muted)">no SSH, no bastion, SSM-first.</span>
+            CloudOps engineer building <span class="gradient-text">secure AWS operations platforms</span> —
+            <span class="font-mono text-base terminal-cursor" style="color:var(--color-text-muted)">no SSH, no bastion, SSM-first.</span>
           </p>
 
           <!-- Stack chips -->
@@ -108,15 +111,15 @@ const totalRunbooks = runbooks.length;
           <!-- Stats row — numeric anchors -->
           <div class="grid grid-cols-3 gap-6 max-w-md pt-6" style="border-top:1px solid var(--color-border)">
             <div>
-              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{activeCerts}</p>
+              <p class="text-2xl font-semibold font-mono stat-count" style="color:var(--color-text-primary)" data-count={activeCerts}>{activeCerts}</p>
               <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Active certs</p>
             </div>
             <div>
-              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{totalProjects}</p>
+              <p class="text-2xl font-semibold font-mono stat-count" style="color:var(--color-text-primary)" data-count={totalProjects}>{totalProjects}</p>
               <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Public projects</p>
             </div>
             <div>
-              <p class="text-2xl font-semibold font-mono" style="color:var(--color-text-primary)">{totalRunbooks}</p>
+              <p class="text-2xl font-semibold font-mono stat-count" style="color:var(--color-text-primary)" data-count={totalRunbooks}>{totalRunbooks}</p>
               <p class="text-xs font-mono mt-1" style="color:var(--color-text-muted)">Runbooks</p>
             </div>
           </div>
@@ -282,3 +285,28 @@ const totalRunbooks = runbooks.length;
     z-index: 1;
   }
 </style>
+
+<script>
+  function setupCounters() {
+    document.querySelectorAll<HTMLElement>('.stat-count[data-count]').forEach((el) => {
+      const target = parseInt(el.dataset.count ?? '0');
+      if (isNaN(target) || target === 0) return;
+      const duration = 1000;
+      const start = performance.now();
+      const animate = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = String(Math.round(eased * target));
+        if (progress < 1) requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCounters);
+  } else {
+    setupCounters();
+  }
+  document.addEventListener('astro:page-load', setupCounters);
+</script>

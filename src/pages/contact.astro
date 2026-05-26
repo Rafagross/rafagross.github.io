@@ -9,7 +9,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="py-12 md:py-16">
     <div class="container" style="max-width:600px">
       <header class="mb-12">
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Contact</p>
+        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent-electric)">Contact</p>
         <h1 class="text-3xl md:text-4xl font-semibold mb-4" style="color:var(--color-text-primary); letter-spacing:-0.02em">Get in Touch</h1>
         <p class="text-lg leading-relaxed" style="color:var(--color-text-secondary)">
           Open to CloudOps, Platform Engineering, and SRE opportunities.
@@ -18,20 +18,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </header>
 
       <div class="space-y-4 mb-12">
-        <!-- Email -->
+        <!-- Email — display text built by JS to deter scrapers -->
         <a
-          href="mailto:rafagross15@gmail.com"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
+          id="contact-email-link"
+          href="#"
+          class="flex items-start gap-4 p-5 rounded-lg card-interactive"
           style="background:var(--color-surface); border:1px solid var(--color-border)"
         >
-          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-accent-muted)">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--color-accent)">
+          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-accent-electric-subtle)">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--color-accent-electric)">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
             <p class="text-sm font-medium mb-0.5" style="color:var(--color-text-primary)">Email</p>
-            <p class="text-sm" style="color:var(--color-accent)">rafagross15@gmail.com</p>
+            <p class="text-sm" style="color:var(--color-accent-electric)">
+              <span id="contact-email-display" data-u="rafagross15" data-d="gmail.com" aria-label="Email address">&#114;&#97;&#102;&#97;&#103;&#114;&#111;&#115;&#115;&#49;&#53;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</span>
+            </p>
             <p class="text-xs mt-1" style="color:var(--color-text-muted)">Best for professional inquiries and opportunities</p>
           </div>
         </a>
@@ -41,7 +44,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://www.linkedin.com/in/erafael-gross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
+          class="flex items-start gap-4 p-5 rounded-lg card-interactive"
           style="background:var(--color-surface); border:1px solid var(--color-border)"
         >
           <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
@@ -61,7 +64,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://github.com/Rafagross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
+          class="flex items-start gap-4 p-5 rounded-lg card-interactive"
           style="background:var(--color-surface); border:1px solid var(--color-border)"
         >
           <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
@@ -81,7 +84,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://www.credly.com/users/rafa-gross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
+          class="flex items-start gap-4 p-5 rounded-lg card-interactive"
           style="background:var(--color-surface); border:1px solid var(--color-border)"
         >
           <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
@@ -102,4 +105,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
   </section>
+
+  <script>
+    const el = document.getElementById('contact-email-display');
+    const link = document.getElementById('contact-email-link');
+    if (el && link) {
+      const email = (el.dataset.u ?? '') + '@' + (el.dataset.d ?? '');
+      el.textContent = email;
+      (link as HTMLAnchorElement).href = 'mailto:' + email;
+    }
+    document.addEventListener('astro:page-load', () => {
+      const el2 = document.getElementById('contact-email-display');
+      const link2 = document.getElementById('contact-email-link');
+      if (el2 && link2) {
+        const email = (el2.dataset.u ?? '') + '@' + (el2.dataset.d ?? '');
+        el2.textContent = email;
+        (link2 as HTMLAnchorElement).href = 'mailto:' + email;
+      }
+    });
+  </script>
 </BaseLayout>

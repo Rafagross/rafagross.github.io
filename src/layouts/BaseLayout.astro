@@ -15,7 +15,7 @@ interface Props {
 const {
   title,
   description = 'Elvis Rafael Gross — CloudOps Engineer, Platform Engineer, SRE. AWS, Kubernetes, observability, and operational excellence.',
-  ogImage = '/og-default.png',
+  ogImage,
   canonicalUrl,
   noIndex = false,
 } = Astro.props;
@@ -25,6 +25,7 @@ const canonical = canonicalUrl ?? new URL(Astro.url.pathname, siteUrl).href;
 const fullTitle = title === 'Home'
   ? 'Elvis Rafael Gross — CloudOps & Platform Engineer'
   : `${title} | Rafael Gross`;
+const ogImageUrl = ogImage ? `${siteUrl}${ogImage}` : null;
 ---
 
 <!doctype html>
@@ -39,17 +40,23 @@ const fullTitle = title === 'Home'
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
 
+    <!-- Security -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; form-action 'self'" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
     <meta property="og:site_name" content="Rafael Gross — CloudOps Portfolio" />
 
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -83,13 +90,14 @@ const fullTitle = title === 'Home'
       document.documentElement.classList.remove('no-transition');
     </script>
 
+    <div id="scroll-progress" aria-hidden="true"></div>
+
     <Header />
     <main id="main-content">
       <slot />
     </main>
     <Footer />
 
-    <!-- Scroll animation observer — re-runs on every page transition -->
     <script>
       function setupReveal() {
         const observer = new IntersectionObserver(
@@ -109,15 +117,29 @@ const fullTitle = title === 'Home'
         });
       }
 
-      // Initial page load
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupReveal);
-      } else {
-        setupReveal();
+      function setupScrollProgress() {
+        const bar = document.getElementById('scroll-progress');
+        if (!bar) return;
+        const update = () => {
+          const total = document.documentElement.scrollHeight - window.innerHeight;
+          bar.style.width = total > 0 ? (window.scrollY / total) * 100 + '%' : '0%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
       }
 
-      // Re-run after every Astro view transition
-      document.addEventListener('astro:page-load', setupReveal);
+      function setupAll() {
+        setupReveal();
+        setupScrollProgress();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupAll);
+      } else {
+        setupAll();
+      }
+
+      document.addEventListener('astro:page-load', setupAll);
     </script>
   </body>
 </html>

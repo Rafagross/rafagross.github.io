@@ -137,6 +137,13 @@ const currentPath = Astro.url.pathname;
       menuIcon?.classList.toggle('hidden', isOpen);
       closeIcon?.classList.toggle('hidden', !isOpen);
     });
+
+    const header = document.querySelector('header');
+    const updateScrolled = () => {
+      header?.setAttribute('data-scrolled', window.scrollY > 10 ? 'true' : 'false');
+    };
+    window.addEventListener('scroll', updateScrolled, { passive: true });
+    updateScrolled();
   }
 
   setupHeader();
