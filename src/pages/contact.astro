@@ -117,47 +117,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    (function (C, A, L) {
+      var p = function (a, ar) { a.q.push(ar); };
+      var d = C.document;
+      C.Cal = C.Cal || function () {
+        var cal = C.Cal; var ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {}; cal.q = cal.q || [];
+          d.head.appendChild(d.createElement("script")).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          var api = function () { p(api, arguments); };
+          var namespace = ar[1];
+          api.q = api.q || [];
+          typeof namespace === "string"
+            ? (cal.ns[namespace] = api) && p(api, ar)
+            : p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+
+    Cal("init", { origin: "https://cal.com" });
+
+    function getCalConfig() {
+      var dark = document.documentElement.classList.contains("dark");
+      return {
+        theme: dark ? "dark" : "light",
+        brandColor: dark ? "#22d3ee" : "#0e7490",
+      };
+    }
+
+    Cal("inline", {
+      elementOrSelector: "#my-cal-inline",
+      calLink: "rafael-gross/30min",
+      layout: "month_view",
+      config: getCalConfig(),
+    });
+
+    new MutationObserver(function () {
+      Cal("ui", getCalConfig());
+    }).observe(document.documentElement, { attributeFilter: ["class"] });
+  </script>
 </BaseLayout>
-
-<script is:inline>
-  (function (C, A, L) {
-    var p = function (a, ar) { a.q.push(ar); };
-    var d = C.document;
-    C.Cal = C.Cal || function () {
-      var cal = C.Cal; var ar = arguments;
-      if (!cal.loaded) {
-        cal.ns = {}; cal.q = cal.q || [];
-        d.head.appendChild(d.createElement("script")).src = A;
-        cal.loaded = true;
-      }
-      if (ar[0] === L) {
-        var api = function () { p(api, arguments); };
-        var namespace = ar[1];
-        api.q = api.q || [];
-        typeof namespace === "string"
-          ? (cal.ns[namespace] = api) && p(api, ar)
-          : p(cal, ar);
-        return;
-      }
-      p(cal, ar);
-    };
-  })(window, "https://app.cal.com/embed/embed.js", "init");
-
-  Cal("init", { origin: "https://cal.com" });
-
-  function getTheme() {
-    return document.documentElement.classList.contains("dark") ? "dark" : "light";
-  }
-
-  Cal("inline", {
-    elementOrSelector: "#my-cal-inline",
-    calLink: "rafael-gross/30min",
-    layout: "month_view",
-    config: { theme: getTheme() },
-  });
-
-  // Keep Cal.com theme in sync when user toggles dark/light mode
-  new MutationObserver(function () {
-    Cal("ui", { theme: getTheme() });
-  }).observe(document.documentElement, { attributeFilter: ["class"] });
-</script>
