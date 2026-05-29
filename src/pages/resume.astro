@@ -2,6 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import skillsData from '../data/skills.json';
 import certsData from '../data/certifications.json';
+
+const certs = certsData.certifications.filter(
+  (c) => c.issuer !== 'State of Nevada, Gaming Control Board'
+);
+const licenses = certsData.certifications.filter(
+  (c) => c.issuer === 'State of Nevada, Gaming Control Board'
+);
 ---
 
 <BaseLayout
@@ -10,6 +17,7 @@ import certsData from '../data/certifications.json';
 >
   <section class="py-12 md:py-16">
     <div class="container" style="max-width:800px">
+
       <!-- Actions bar -->
       <div class="flex items-center justify-between mb-10 pb-6" style="border-bottom:1px solid var(--color-border)">
         <div>
@@ -51,30 +59,50 @@ import certsData from '../data/certifications.json';
           </p>
           <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-muted)">
             <span>Las Vegas, NV</span>
+            <span>+1 702-523-9261</span>
             <a href="mailto:rafagross15@gmail.com" class="hover:underline" style="color:var(--color-accent)">rafagross15@gmail.com</a>
             <a href="https://www.linkedin.com/in/erafael-gross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">linkedin.com/in/erafael-gross</a>
-            <a href="https://www.credly.com/users/rafa-gross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">credly.com/users/rafa-gross</a>
+            <a href="https://rafagross.github.io" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">rafagross.github.io</a>
           </div>
         </header>
 
         <!-- Summary -->
         <section>
           <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
-            Summary
+            Professional Summary
           </h2>
           <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">
-            Cloud Operations Engineer with production experience in AWS and GCP, focused on infrastructure reliability,
-            automation, and observability at enterprise scale. Delivered EKS operations, SSM-based patch management,
-            and disaster recovery strategies across multi-account AWS environments supporting mission-critical workloads.
-            Holds five active cloud and security certifications — AWS CloudOps, GCP PCA, GCP ACE, CompTIA Cloud+, and ISC2 CC —
-            with CKA in progress. Nevada Gaming License holder.
+            Cloud Operations Engineer with 7+ years of experience delivering reliable, automated, and observable infrastructure
+            across AWS and GCP at enterprise scale. Proven track record managing mission-critical production environments at
+            International Game Technology (IGT), supporting gaming workloads serving millions of end users. Combines deep AWS
+            operations expertise — EKS, SSM, CloudWatch, DR planning — with GCP architecture background and a production-grade
+            homelab running hybrid cloud workloads. Holds five active certifications with CKA in progress. Focused on building
+            systems that scale under pressure, fail gracefully, and recover fast.
           </p>
+        </section>
+
+        <!-- Core Competencies -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Core Competencies
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {[
+              'AWS Cloud Operations', 'Kubernetes (EKS + Bare-Metal)', 'Terraform & IaC', 'Incident Response',
+              'CloudWatch Observability', 'SSM Patch Automation', 'DR Planning (RTO/RPO)', 'GCP Architecture',
+              'GitOps & CI/CD Pipelines', 'FinOps & Cost Optimization', 'NIST CSF & Security Posture', 'Secrets Management'
+            ].map((comp) => (
+              <span class="text-xs px-2.5 py-1 rounded-md font-medium" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">
+                {comp}
+              </span>
+            ))}
+          </div>
         </section>
 
         <!-- Experience -->
         <section>
           <h2 class="text-xs font-semibold uppercase tracking-widest mb-6 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
-            Experience
+            Professional Experience
           </h2>
           <div class="space-y-8">
 
@@ -90,23 +118,31 @@ import certsData from '../data/certifications.json';
               <ul class="space-y-2">
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Managed multi-account AWS environments supporting mission-critical gaming infrastructure across production workloads serving millions of end users.</span>
+                  <span>Managed multi-account AWS environments supporting mission-critical gaming infrastructure serving millions of end users, maintaining 99.9%+ availability through proactive monitoring and rapid incident response.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Led EKS cluster version upgrades in production using a Golden AMI strategy — zero-downtime node rotations via controlled drain/cordon workflows.</span>
+                  <span>Automated patch compliance across 200+ Linux and Windows EC2 instances using SSM Patch Manager, reducing patching cycle time by ~40% while maintaining full audit trails.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Designed SSM Patch Manager workflows across 200+ Linux and Windows EC2 instances, enforcing compliance and reducing manual intervention.</span>
+                  <span>Led zero-downtime EKS cluster version upgrades in production using a Golden AMI strategy — pre-hardened node images, controlled drain/cordon rotations, and post-upgrade validation via CloudWatch Container Insights.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Implemented CloudWatch alarms, custom metrics, and log-based alerting — reduced mean time to detection (MTTD) for production incidents.</span>
+                  <span>Reduced MTTD for production incidents by implementing CloudWatch custom alarms, log-based alerting, and Container Insights dashboards enabling proactive anomaly detection before user impact.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Owned DR strategy aligned to defined RTO/RPO targets, including DR testing cycles and runbook documentation ensuring repeatable recovery procedures.</span>
+                  <span>Designed and validated DR strategies achieving defined RTO/RPO targets, including quarterly DR testing cycles and runbook documentation ensuring team-independent recovery procedures.</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span>Conducted AWS Well-Architected Framework reviews across 2 HRI lenses and 3 workload assessments — identifying and remediating 6 critical gaps including missing backups, overly permissive IAM policies, unencrypted data at rest, and absent tagging strategy. Delivered improvement plans reducing risk exposure across reliability and security pillars.</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span>Eliminated manual server-by-server operations by standardizing 5–10 recurring tasks through SSM Automation Documents and Run Command — reducing execution time from hours to minutes across instance fleets.</span>
                 </li>
               </ul>
             </div>
@@ -116,25 +152,51 @@ import certsData from '../data/certifications.json';
               <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
                 <div>
                   <h3 class="text-sm font-semibold" style="color:var(--color-text-primary)">Pre-Sales Cloud Engineer</h3>
-                  <p class="text-sm" style="color:var(--color-text-secondary)">CODESA (Google Cloud Partner) · Lima, Peru</p>
+                  <p class="text-sm" style="color:var(--color-text-secondary)">CODESA (IT & Cloud Consulting) · Lima, Peru</p>
                 </div>
                 <span class="text-xs font-mono flex-shrink-0" style="color:var(--color-text-muted)">Apr 2021 – Nov 2024</span>
               </div>
               <ul class="space-y-2">
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Architected production-ready GCP solutions for enterprise clients using Cloud Run, Pub/Sub, BigQuery, Cloud Functions, and IAM.</span>
+                  <span>Architected and delivered production-ready GCP solutions for enterprise clients using Cloud Run, Pub/Sub, BigQuery, Cloud Functions, IAM, and Cloud Storage — directly contributing to technical wins across the sales cycle.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Built end-to-end PoCs for serverless and real-time data pipeline architectures, accelerating client cloud adoption and reducing technical evaluation cycles.</span>
+                  <span>Reduced time-to-close on technical evaluations by ~30% by building end-to-end PoCs validating serverless and real-time data pipeline architectures.</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
                   <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
-                  <span>Delivered live technical workshops and architecture demos to executive stakeholders, translating complex GCP capabilities into clear business value.</span>
+                  <span>Designed secure IAM frameworks and real-time data pipeline architectures (Pub/Sub + BigQuery) as core components of enterprise proposals.</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span>Delivered live technical workshops and architecture demos to C-level and technical stakeholders, translating complex GCP capabilities into clear business value.</span>
                 </li>
               </ul>
             </div>
+
+            <!-- Zeta Ltd -->
+            <div>
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-sm font-semibold" style="color:var(--color-text-primary)">Cloud Support Engineer</h3>
+                  <p class="text-sm" style="color:var(--color-text-secondary)">Zeta Ltd · Lima, Peru</p>
+                </div>
+                <span class="text-xs font-mono flex-shrink-0" style="color:var(--color-text-muted)">2019 – 2021</span>
+              </div>
+              <ul class="space-y-2">
+                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span>Monitored cloud infrastructure health using observability and logging platforms, triaging and resolving incidents across compute, networking, and IAM layers.</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
+                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                  <span>Managed access provisioning and security posture reviews, enforcing least-privilege principles across cloud environments.</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </section>
 
@@ -146,7 +208,7 @@ import certsData from '../data/certifications.json';
           <div class="space-y-3">
             {skillsData.categories.map((cat) => (
               <div class="flex gap-4 text-sm">
-                <span class="flex-shrink-0 w-40 font-medium" style="color:var(--color-text-primary)">{cat.name}</span>
+                <span class="flex-shrink-0 w-44 font-medium" style="color:var(--color-text-primary)">{cat.name}</span>
                 <span style="color:var(--color-text-secondary)">
                   {cat.skills.map((s) => s.name).join(' · ')}
                 </span>
@@ -161,7 +223,7 @@ import certsData from '../data/certifications.json';
             Certifications
           </h2>
           <div class="space-y-2">
-            {certsData.certifications.map((cert) => (
+            {certs.map((cert) => (
               <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
                   <span style="color:var(--color-text-primary)">{cert.name}</span>
@@ -172,7 +234,7 @@ import certsData from '../data/certifications.json';
                       ? 'text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30'
                       : 'text-gray-500 bg-gray-100 dark:bg-gray-800'
                   }`}>
-                    {cert.status === 'target' ? 'In Progress' : cert.status}
+                    {cert.status === 'target' ? 'In Progress' : cert.issuer}
                   </span>
                 </div>
                 {cert.credentialUrl && (
@@ -186,15 +248,81 @@ import certsData from '../data/certifications.json';
           </div>
         </section>
 
-        <!-- Projects -->
+        <!-- Licenses -->
         <section>
           <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
-            Selected Projects
+            Licenses
           </h2>
-          <p class="text-sm mb-3" style="color:var(--color-text-secondary)">
-            Full project details including architecture diagrams, operational value, and linked runbooks:
+          <div class="space-y-2">
+            {licenses.map((lic) => (
+              <div class="flex items-center gap-2 text-sm">
+                <span style="color:var(--color-text-primary)">{lic.name}</span>
+                <span class="text-xs px-2 py-0.5 rounded text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30">
+                  {lic.issuer}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Selected Projects -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Technical Projects
+          </h2>
+          <div class="space-y-4">
+            {[
+              {
+                title: 'Production-Grade Homelab — Hybrid Cloud Environment',
+                desc: 'Self-hosted bare-metal Kubernetes cluster on physical nodes managed with Proxmox. GitOps delivery via ArgoCD integrated with Jenkins CI/CD and GitHub self-hosted runners. Configuration management with Ansible + Ansible Vault. Secrets via HashiCorp Vault. Observability stack: Prometheus, Grafana, and Loki. Event-driven autoscaling with KEDA. Deployed a Go-based load testing application across bare-metal nodes and AWS EC2 via secure hybrid tunnel. Security posture managed with Wiz.'
+              },
+              {
+                title: 'AWS CloudOps Private EC2 Operations Platform',
+                desc: 'Secure platform for managing private EC2 instances without public exposure using SSM Session Manager via VPC endpoints, CloudWatch monitoring, encrypted backups via AWS Backup, and hardened Golden AMIs with least-privilege IAM.'
+              },
+              {
+                title: 'Rocky Linux Custom AMI — AWS VM Import Pipeline',
+                desc: 'Imported custom Rocky Linux image into AWS EC2 via S3 VM Import/Export, configured CloudWatch Agent, and automated agent deployment through a bastion host — simulating an enterprise Golden AMI pipeline for non-marketplace OS images.'
+              },
+              {
+                title: 'Windows LAPS 2024+ Proof of Concept on AWS',
+                desc: 'Designed and tested Windows LAPS implementation on AWS EC2 with AWS Systems Manager Parameter Store integration for centralized password management and audit trail logging.'
+              }
+            ].map((proj) => (
+              <div>
+                <p class="text-sm font-semibold mb-1" style="color:var(--color-text-primary)">{proj.title}</p>
+                <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">{proj.desc}</p>
+              </div>
+            ))}
+          </div>
+          <p class="text-sm mt-4" style="color:var(--color-text-muted)">
+            Architecture diagrams and linked runbooks: <a href="/projects" class="hover:underline" style="color:var(--color-accent)">rafagross.github.io/projects →</a>
           </p>
-          <a href="/projects" class="text-sm hover:underline" style="color:var(--color-accent)">rafagross.github.io/projects →</a>
+        </section>
+
+        <!-- Education -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Education
+          </h2>
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2">
+              <span style="color:var(--color-text-primary)">High School Equivalency (HSE) — HiSET Examination</span>
+              <span class="text-xs px-2 py-0.5 rounded text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30">In Progress</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Languages -->
+        <section>
+          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+            Languages
+          </h2>
+          <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-secondary)">
+            <span><span class="font-medium" style="color:var(--color-text-primary)">Spanish</span> — Native</span>
+            <span><span class="font-medium" style="color:var(--color-text-primary)">English</span> — Full Professional</span>
+            <span><span class="font-medium" style="color:var(--color-text-primary)">French</span> — Intermediate</span>
+          </div>
         </section>
 
       </div>

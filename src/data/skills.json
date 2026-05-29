@@ -3,51 +3,66 @@
     {
       "name": "Cloud Platforms",
       "skills": [
-        { "name": "AWS", "level": "advanced", "note": "EC2, SSM, CloudWatch, VPC, IAM, Lambda, EventBridge, S3, EKS, RDS" },
-        { "name": "GCP", "level": "advanced", "note": "Compute Engine, GKE, Cloud Run, Cloud Functions, Cloud Monitoring, IAM" }
+        { "name": "AWS", "level": "advanced", "note": "EC2, EKS, SSM, CloudWatch, IAM, S3, RDS, CloudFormation, Auto Scaling" },
+        { "name": "GCP", "level": "advanced", "note": "Cloud Run, BigQuery, Pub/Sub, Cloud Storage, Cloud Functions, IAM, CloudSQL" }
       ]
     },
     {
-      "name": "Infrastructure & Orchestration",
+      "name": "DevOps & Infrastructure",
       "skills": [
-        { "name": "Kubernetes", "level": "advanced", "note": "k3s, EKS, workload management, RBAC, networking" },
         { "name": "Terraform", "level": "advanced", "note": "Module design, state management, workspace strategies" },
+        { "name": "Kubernetes", "level": "advanced", "note": "EKS, bare-metal, RBAC, networking, workload management" },
+        { "name": "Docker", "level": "intermediate", "note": "Image builds, multi-stage, Compose" },
         { "name": "Ansible", "level": "intermediate", "note": "OS provisioning, patching, configuration management" },
-        { "name": "Helm", "level": "intermediate", "note": "Chart authoring, values management, lifecycle hooks" },
-        { "name": "Proxmox VE", "level": "intermediate", "note": "Hypervisor administration, VM and LXC management" }
+        { "name": "Jenkins", "level": "intermediate", "note": "CI/CD pipelines, self-hosted runners" },
+        { "name": "ArgoCD", "level": "intermediate", "note": "App of apps pattern, sync policies, RBAC" },
+        { "name": "GitHub Actions", "level": "intermediate", "note": "CI/CD workflows, automation" },
+        { "name": "Proxmox", "level": "intermediate", "note": "Hypervisor administration, VM and LXC management" },
+        { "name": "KEDA", "level": "intermediate", "note": "Event-driven autoscaling for Kubernetes workloads" },
+        { "name": "Istio", "level": "intermediate", "note": "Service mesh, traffic management" },
+        { "name": "Golden AMI Pipelines", "level": "advanced", "note": "Pre-hardened node images, validation, enterprise pipelines" }
       ]
     },
     {
-      "name": "Observability",
+      "name": "Monitoring & Observability",
       "skills": [
-        { "name": "CloudWatch", "level": "advanced", "note": "Agent, Logs, Insights, Alarms, Dashboards, Composite Alarms" },
+        { "name": "CloudWatch", "level": "advanced", "note": "Metrics, Alarms, Dashboards, Log Insights, Container Insights" },
         { "name": "Prometheus", "level": "intermediate", "note": "PromQL, scrape configuration, alerting rules" },
-        { "name": "Grafana", "level": "intermediate", "note": "Dashboard design, data source integration, alerting" }
+        { "name": "Grafana", "level": "intermediate", "note": "Dashboard design, data source integration, alerting" },
+        { "name": "Loki", "level": "intermediate", "note": "Log aggregation, label-based querying" },
+        { "name": "LogicMonitor", "level": "intermediate", "note": "Infrastructure monitoring, alert management" },
+        { "name": "Wiz", "level": "intermediate", "note": "Cloud security posture management" }
       ]
     },
     {
       "name": "Automation & Scripting",
       "skills": [
-        { "name": "Bash / Shell", "level": "advanced", "note": "Operational scripts, automation, SSM Run Commands" },
-        { "name": "Python", "level": "intermediate", "note": "Lambda functions, automation scripts, AWS SDK (boto3)" },
-        { "name": "AWS Systems Manager", "level": "advanced", "note": "Session Manager, Run Command, Patch Manager, Documents" },
-        { "name": "GitHub Actions", "level": "intermediate", "note": "CI/CD pipelines, workflow automation" }
+        { "name": "Bash", "level": "advanced", "note": "Operational scripts, automation, SSM Run Commands" },
+        { "name": "Python", "level": "intermediate", "note": "Lambda functions, automation scripts, boto3" },
+        { "name": "AWS Systems Manager", "level": "advanced", "note": "Session Manager, Run Command, Patch Manager, Automation Documents" },
+        { "name": "HashiCorp Vault", "level": "intermediate", "note": "Secrets management, dynamic credentials" },
+        { "name": "Ansible Vault", "level": "intermediate", "note": "Encrypted secrets in configuration management" },
+        { "name": "AWS CLI", "level": "advanced", "note": "Scripting, automation, multi-account operations" }
       ]
     },
     {
-      "name": "Networking & Security",
+      "name": "Operations & Frameworks",
       "skills": [
-        { "name": "AWS VPC", "level": "advanced", "note": "Subnet design, routing tables, VPC endpoints, peering, TGW" },
-        { "name": "IAM", "level": "advanced", "note": "Least-privilege policy design, roles, permission boundaries" },
-        { "name": "Linux", "level": "advanced", "note": "Amazon Linux 2/2023, RHEL, Ubuntu — systemd, networking, storage" }
+        { "name": "Patch Management", "level": "advanced", "note": "SSM Patch Manager, compliance reporting, audit trails" },
+        { "name": "Incident Response", "level": "advanced", "note": "MTTD/MTTR reduction, runbook-driven recovery" },
+        { "name": "DR Planning", "level": "advanced", "note": "RTO/RPO definition, quarterly DR testing cycles" },
+        { "name": "FinOps", "level": "intermediate", "note": "Cost optimization, tagging strategy, rightsizing" },
+        { "name": "AWS Well-Architected Framework", "level": "advanced", "note": "HRI lens reviews, gap remediation" },
+        { "name": "NIST CSF", "level": "intermediate", "note": "Security posture assessment and improvement" }
       ]
     },
     {
-      "name": "GitOps & Developer Tooling",
+      "name": "Databases & OS",
       "skills": [
-        { "name": "Git", "level": "advanced", "note": "Branching strategies, workflows, code review" },
-        { "name": "ArgoCD", "level": "intermediate", "note": "App of apps pattern, sync policies, RBAC" },
-        { "name": "Docker", "level": "intermediate", "note": "Image builds, multi-stage, Compose for local development" }
+        { "name": "Amazon RDS", "level": "intermediate", "note": "Multi-AZ, snapshots, parameter groups" },
+        { "name": "CloudSQL", "level": "intermediate", "note": "Managed PostgreSQL/MySQL on GCP" },
+        { "name": "Linux", "level": "advanced", "note": "RHEL, Rocky, Ubuntu — systemd, networking, storage" },
+        { "name": "Windows Server", "level": "intermediate", "note": "EC2 Windows, LAPS, patch management" }
       ]
     }
   ]
