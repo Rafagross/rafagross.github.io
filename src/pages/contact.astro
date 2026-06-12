@@ -150,7 +150,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var dark = document.documentElement.classList.contains("dark");
       return {
         theme: dark ? "dark" : "light",
-        brandColor: "#3fb950",
+        brandColor: dark ? "#ffffff" : "#0a0a0a",
       };
     }
 
