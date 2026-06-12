@@ -129,7 +129,7 @@ function CloudIcon() {
   }, []);
 
   return (
-    <div aria-hidden="true" style={{
+    <div aria-hidden="true" data-cloud style={{
       position:'absolute',
       right:'clamp(40px, 5vw, 72px)',
       top:'clamp(88px, 13vw, 148px)',
@@ -173,7 +173,7 @@ function CloudIcon() {
           d={CLOUD_COMBINED} fill="none"
           stroke="white" strokeWidth="0.5"
           strokeLinecap="round" strokeLinejoin="round"
-          style={{filter:'drop-shadow(0 0 6px rgba(255,255,255,1)) drop-shadow(0 0 2px rgba(200,240,255,0.9))'}}/>
+          style={{filter:'drop-shadow(0 0 6px rgba(255,255,255,1)) drop-shadow(0 0 2px rgba(255,255,255,0.9))'}}/>
       </svg>
 
       <style>{`
@@ -273,10 +273,11 @@ export default function Hero() {
   useEffect(function(){
     if(pr) return;
     const refs=[r0,r1,r2,r3,r4,r5], delays=[0,80,160,240,300,360];
-    refs.forEach(function(ref,i){
-      const el = ref.current; if(!el) return;
-      setTimeout(function(){ if(el){ el.style.opacity='1'; el.style.transform='none'; } }, delays[i]);
+    const timers = refs.map(function(ref,i){
+      const el = ref.current; if(!el) return null;
+      return setTimeout(function(){ if(el){ el.style.opacity='1'; el.style.transform='none'; } }, delays[i]);
     });
+    return function(){ timers.forEach(function(id){ if(id) clearTimeout(id); }); };
   }, []);
 
   const ini = pr ? {opacity:1} : {opacity:0, transform:'translateY(22px)'};
