@@ -1,0 +1,13 @@
+---
+interface Props { href: string; variant?: 'primary' | 'secondary'; }
+const { href, variant = 'primary' } = Astro.props;
+const primary = variant === 'primary';
+---
+<a
+  href={href}
+  class="ds-btn"
+  data-variant={variant}
+  style={`display:inline-flex;align-items:center;text-decoration:none;font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;letter-spacing:var(--tracking-tight);padding:9px 20px;border-radius:var(--radius-sm);border:1px solid;background:${primary ? 'var(--accent)' : 'transparent'};color:${primary ? 'var(--accent-text)' : 'var(--text)'};border-color:${primary ? 'var(--accent)' : 'var(--border-strong)'};transition:var(--transition-color),transform var(--duration-fast) var(--ease-default)`}
+>
+  <slot />
+</a>

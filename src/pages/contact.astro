@@ -6,33 +6,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Contact"
   description="Get in touch with Elvis Rafael Gross — CloudOps Engineer available for new opportunities."
 >
-  <section class="py-12 md:py-16">
-    <div class="container" style="max-width:600px">
-      <header class="mb-12">
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Contact</p>
-        <h1 class="text-3xl md:text-4xl font-semibold mb-4" style="color:var(--color-text-primary); letter-spacing:-0.02em">Get in Touch</h1>
-        <p class="text-lg leading-relaxed" style="color:var(--color-text-secondary)">
+  <section style="padding:var(--section-gap) clamp(20px,4vw,48px)">
+    <div style="max-width:600px;margin:0 auto">
+
+      <!-- Header -->
+      <header style="margin-bottom:48px">
+        <p style="font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">Contact</p>
+        <h1 style="font-family:var(--font-display);font-size:var(--text-h1);font-weight:700;letter-spacing:var(--tracking-display);color:var(--text);margin-bottom:16px;line-height:var(--leading-tight,1.1)">Get in Touch</h1>
+        <p style="font-size:var(--text-lg,1.125rem);color:var(--text-muted);line-height:var(--leading-relaxed);font-family:var(--font-sans)">
           Open to CloudOps, Platform Engineering, and SRE opportunities.
           Also happy to connect on AWS operations, Kubernetes, or infrastructure topics.
         </p>
       </header>
 
-      <div class="space-y-4 mb-12">
+      <!-- Contact cards -->
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:48px">
+
         <!-- Email -->
         <a
           href="mailto:rafagross15@gmail.com"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
-          style="background:var(--color-surface); border:1px solid var(--color-border)"
+          class="ds-link"
+          style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit;transition:border-color var(--duration-fast,150ms) ease"
         >
-          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-accent-muted)">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--color-accent)">
+          <div style="padding:8px;border-radius:var(--radius-sm);background:var(--bg-subtle);flex-shrink:0">
+            <svg style="width:20px;height:20px;color:var(--text-muted)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-medium mb-0.5" style="color:var(--color-text-primary)">Email</p>
-            <p class="text-sm" style="color:var(--color-accent)">rafagross15@gmail.com</p>
-            <p class="text-xs mt-1" style="color:var(--color-text-muted)">Best for professional inquiries and opportunities</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--text);margin-bottom:2px">Email</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-muted)">rafagross15@gmail.com</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);margin-top:4px">Best for professional inquiries and opportunities</p>
           </div>
         </a>
 
@@ -41,18 +45,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://www.linkedin.com/in/erafael-gross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
-          style="background:var(--color-surface); border:1px solid var(--color-border)"
+          style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit"
         >
-          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" style="color:var(--color-text-secondary)">
+          <div style="padding:8px;border-radius:var(--radius-sm);background:var(--bg-subtle);flex-shrink:0">
+            <svg style="width:20px;height:20px;color:var(--text-muted)" fill="currentColor" viewBox="0 0 24 24">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-medium mb-0.5" style="color:var(--color-text-primary)">LinkedIn</p>
-            <p class="text-sm" style="color:var(--color-accent)">linkedin.com/in/erafael-gross ↗</p>
-            <p class="text-xs mt-1" style="color:var(--color-text-muted)">Professional background and experience</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--text);margin-bottom:2px">LinkedIn</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-muted)">linkedin.com/in/erafael-gross ↗</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);margin-top:4px">Professional background and experience</p>
           </div>
         </a>
 
@@ -61,18 +64,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://github.com/Rafagross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
-          style="background:var(--color-surface); border:1px solid var(--color-border)"
+          style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit"
         >
-          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" style="color:var(--color-text-secondary)">
+          <div style="padding:8px;border-radius:var(--radius-sm);background:var(--bg-subtle);flex-shrink:0">
+            <svg style="width:20px;height:20px;color:var(--text-muted)" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-medium mb-0.5" style="color:var(--color-text-primary)">GitHub</p>
-            <p class="text-sm" style="color:var(--color-accent)">github.com/Rafagross ↗</p>
-            <p class="text-xs mt-1" style="color:var(--color-text-muted)">Projects, runbooks, and code</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--text);margin-bottom:2px">GitHub</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-muted)">github.com/Rafagross ↗</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);margin-top:4px">Projects, runbooks, and code</p>
           </div>
         </a>
 
@@ -81,37 +83,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           href="https://www.credly.com/users/rafa-gross"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-start gap-4 p-5 rounded-lg transition-shadow hover:shadow-lg"
-          style="background:var(--color-surface); border:1px solid var(--color-border)"
+          style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);text-decoration:none;color:inherit"
         >
-          <div class="p-2 rounded-md flex-shrink-0" style="background:var(--color-surface-raised)">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--color-text-secondary)">
+          <div style="padding:8px;border-radius:var(--radius-sm);background:var(--bg-subtle);flex-shrink:0">
+            <svg style="width:20px;height:20px;color:var(--text-muted)" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-medium mb-0.5" style="color:var(--color-text-primary)">Credly</p>
-            <p class="text-sm" style="color:var(--color-accent)">credly.com/users/rafa-gross ↗</p>
-            <p class="text-xs mt-1" style="color:var(--color-text-muted)">Verified certifications and badges</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--text);margin-bottom:2px">Credly</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-muted)">credly.com/users/rafa-gross ↗</p>
+            <p style="font-family:var(--font-sans);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);margin-top:4px">Verified certifications and badges</p>
           </div>
         </a>
+
       </div>
 
-      <div class="p-4 rounded-lg text-sm" style="background:var(--color-surface-raised); border:1px solid var(--color-border); color:var(--color-text-muted)">
+      <div style="padding:16px;border-radius:var(--radius);background:var(--bg-subtle);border:1px solid var(--border);font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
         Currently exploring CloudOps and SRE roles. Response time is typically within 48 hours.
       </div>
     </div>
 
     <!-- Schedule a Call -->
-    <div class="container mt-16 pb-16" style="max-width:780px">
-      <div class="pt-10" style="border-top:1px solid var(--color-border)">
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Availability</p>
-        <h2 class="text-2xl font-semibold mb-3" style="color:var(--color-text-primary); letter-spacing:-0.02em">Schedule a Call</h2>
-        <p class="text-base mb-8" style="color:var(--color-text-secondary)">
+    <div style="max-width:780px;margin:64px auto 0;padding:0 clamp(20px,4vw,48px)">
+      <div style="padding-top:40px;border-top:1px solid var(--border)">
+        <p style="font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">Availability</p>
+        <h2 style="font-family:var(--font-display);font-size:var(--text-h2);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:12px">Schedule a Call</h2>
+        <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-muted);margin-bottom:32px">
           Pick a time that works for you — book directly without leaving this page.
         </p>
 
-        <div class="rounded-xl overflow-hidden" style="border:1px solid var(--color-border)">
+        <div style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
           <div id="my-cal-inline" style="width:100%;height:660px;overflow:scroll"></div>
         </div>
       </div>
@@ -148,7 +150,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var dark = document.documentElement.classList.contains("dark");
       return {
         theme: dark ? "dark" : "light",
-        brandColor: dark ? "#22d3ee" : "#0e7490",
+        brandColor: dark ? "#ffffff" : "#0a0a0a",
       };
     }
 

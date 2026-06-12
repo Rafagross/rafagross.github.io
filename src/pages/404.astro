@@ -1,22 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ds/Button.astro';
 ---
 
 <BaseLayout title="404 — Page Not Found" noIndex={true}>
-  <section class="py-24 md:py-32">
-    <div class="container text-center" style="max-width:500px">
-      <p class="font-mono text-6xl font-bold mb-6" style="color:var(--color-accent)">404</p>
-      <h1 class="text-2xl font-semibold mb-4" style="color:var(--color-text-primary)">Page not found</h1>
-      <p class="text-base mb-8" style="color:var(--color-text-secondary)">
+  <section style="padding:var(--section-gap) clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:center;min-height:60vh">
+    <div style="max-width:500px;margin:0 auto;text-align:center">
+      <p style="font-family:var(--font-mono);font-size:4rem;font-weight:700;color:var(--text-faint);margin-bottom:24px;letter-spacing:var(--tracking-display)">404</p>
+      <h1 style="font-family:var(--font-display);font-size:var(--text-h2);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:16px">Page not found</h1>
+      <p style="font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-muted);line-height:var(--leading-relaxed);margin-bottom:32px">
         This route doesn't exist. The resource may have moved or the URL may be incorrect.
       </p>
-      <div class="flex flex-wrap justify-center gap-3">
-        <a href="/" class="px-4 py-2 rounded-md text-sm font-medium hover:opacity-80"
-          style="background:var(--color-accent); color:white">← Home</a>
-        <a href="/projects" class="px-4 py-2 rounded-md text-sm font-medium hover:opacity-80"
-          style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)">Projects</a>
-        <a href="/runbooks" class="px-4 py-2 rounded-md text-sm font-medium hover:opacity-80"
-          style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)">Runbooks</a>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px">
+        <Button href="/" variant="primary">← Home</Button>
+        <Button href="/projects" variant="secondary">Projects</Button>
+        <Button href="/runbooks" variant="secondary">Runbooks</Button>
       </div>
     </div>
   </section>

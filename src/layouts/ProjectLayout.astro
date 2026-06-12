@@ -1,7 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Tag from '../components/ui/Tag.astro';
-import { getStatusClasses, formatDate } from '../lib/filters';
+import Tag from '../components/ds/Tag.astro';
+import Badge from '../components/ds/Badge.astro';
+import { formatDate } from '../lib/filters';
 
 interface TechStack {
   [key: string]: string[];
@@ -58,21 +59,20 @@ const {
   updatedDate,
 } = Astro.props;
 
-const statusClasses = getStatusClasses(status);
 const published = formatDate(new Date(publishedDate));
 const updated = updatedDate ? formatDate(new Date(updatedDate)) : null;
 const allCloudServices = [...awsServices, ...gcpServices];
 ---
 
 <BaseLayout title={title} description={shortDescription}>
-  <article class="py-12 md:py-16">
-    <div class="container" style="max-width:1200px">
+  <article style="padding:3rem 0 4rem">
+    <div style="width:100%;max-width:var(--max-width);margin-left:auto;margin-right:auto;padding-left:1.5rem;padding-right:1.5rem">
       <!-- Breadcrumb -->
-      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
-          <li><a href="/projects" class="hover:underline" style="color:var(--color-accent)">Projects</a></li>
+      <nav class="mb-8" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">
+          <li><a href="/projects" class="ds-link" style="color:var(--text-muted)">Projects</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page" style="color:var(--color-text-secondary)">{title}</li>
+          <li aria-current="page" style="color:var(--text-faint)">{title}</li>
         </ol>
       </nav>
 
@@ -82,15 +82,13 @@ const allCloudServices = [...awsServices, ...gcpServices];
           <!-- Header -->
           <header class="mb-10">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-              <span class={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${statusClasses}`}>
-                {status}
-              </span>
-              <span class="text-sm" style="color:var(--color-text-muted)">{category}</span>
+              <Badge variant="muted">{status}</Badge>
+              <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">{category}</span>
             </div>
-            <h1 class="text-3xl md:text-4xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.02em">
+            <h1 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h1);letter-spacing:var(--tracking-display);color:var(--text);line-height:var(--leading-tight);margin-bottom:1rem">
               {title}
             </h1>
-            <p class="text-lg leading-relaxed mb-6" style="color:var(--color-text-secondary)">
+            <p style="font-size:var(--text-lg);line-height:var(--leading-relaxed);color:var(--text-muted);margin-bottom:1.5rem">
               {longDescription}
             </p>
             <div class="flex flex-wrap gap-2">
@@ -100,28 +98,28 @@ const allCloudServices = [...awsServices, ...gcpServices];
 
           <!-- Architecture -->
           <section class="mb-10">
-            <h2 class="text-xl font-semibold mb-4" style="color:var(--color-text-primary); border-bottom:1px solid var(--color-border); padding-bottom:0.5rem">
+            <h2 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h2);letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">
               Architecture
             </h2>
-            <p class="mb-6 leading-relaxed" style="color:var(--color-text-secondary)">{architecture.summary}</p>
+            <p style="margin-bottom:1.5rem;line-height:var(--leading-relaxed);color:var(--text-muted)">{architecture.summary}</p>
 
             {architecture.diagramUrl && (
-              <div class="rounded-lg overflow-hidden" style="border:1px solid var(--color-border); background:var(--color-surface)">
+              <div style="border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden">
                 <!-- Diagram toolbar -->
-                <div class="flex items-center justify-between px-4 py-2" style="border-bottom:1px solid var(--color-border); background:var(--color-surface-raised)">
-                  <span class="text-xs font-mono" style="color:var(--color-text-muted)">Architecture Diagram</span>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-subtle)">
+                  <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">Architecture Diagram</span>
                   <a
                     href={architecture.diagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-xs hover:underline flex items-center gap-1"
-                    style="color:var(--color-accent)"
+                    class="ds-link"
+                    style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted)"
                   >
                     Open full size ↗
                   </a>
                 </div>
                 <!-- SVG diagram -->
-                <div class="p-4 overflow-x-auto">
+                <div style="padding:1rem;overflow-x:auto">
                   <img
                     src={architecture.diagramUrl}
                     alt={architecture.diagramAlt ?? `${title} architecture diagram`}
@@ -136,33 +134,33 @@ const allCloudServices = [...awsServices, ...gcpServices];
 
           <!-- Operational Value -->
           <section class="mb-10">
-            <h2 class="text-xl font-semibold mb-4" style="color:var(--color-text-primary); border-bottom:1px solid var(--color-border); padding-bottom:0.5rem">
+            <h2 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h2);letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">
               Operational Value
             </h2>
-            <div class="mb-4 p-4 rounded-lg" style="background:var(--color-accent-muted); border-left:3px solid var(--color-accent)">
-              <p class="font-medium mb-1" style="color:var(--color-text-primary)">Problem Solved</p>
-              <p style="color:var(--color-text-secondary)">{operationalValue.problemSolved}</p>
+            <div style="margin-bottom:1rem;padding:1rem;border-radius:var(--radius-sm);background:var(--bg-subtle);border-left:3px solid var(--border-strong)">
+              <p style="font-family:var(--font-display);font-weight:600;font-size:var(--text-sm);color:var(--text);margin-bottom:0.25rem">Problem Solved</p>
+              <p style="color:var(--text-muted);line-height:var(--leading-relaxed)">{operationalValue.problemSolved}</p>
             </div>
-            <ul class="space-y-2 mb-6">
+            <ul style="list-style:none;padding:0;margin:0 0 1.5rem">
               {operationalValue.outcomes.map((outcome) => (
-                <li class="flex items-start gap-3">
-                  <span class="mt-1 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold" style="background:var(--color-accent-muted); color:var(--color-accent)">✓</span>
-                  <span style="color:var(--color-text-secondary)">{outcome}</span>
+                <li style="display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:0.5rem">
+                  <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);margin-top:0.2rem;flex-shrink:0">✓</span>
+                  <span style="color:var(--text-muted);line-height:var(--leading-relaxed)">{outcome}</span>
                 </li>
               ))}
             </ul>
             {operationalValue.metrics && (
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {operationalValue.metrics.costImpact && (
-                  <div class="p-4 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                    <p class="text-xs font-semibold uppercase tracking-wide mb-1" style="color:var(--color-text-muted)">Cost Impact</p>
-                    <p class="text-sm" style="color:var(--color-text-primary)">{operationalValue.metrics.costImpact}</p>
+                  <div style="padding:1rem;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border)">
+                    <p style="font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.25rem">Cost Impact</p>
+                    <p style="font-size:var(--text-sm);color:var(--text)">{operationalValue.metrics.costImpact}</p>
                   </div>
                 )}
                 {operationalValue.metrics.reliabilityImpact && (
-                  <div class="p-4 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                    <p class="text-xs font-semibold uppercase tracking-wide mb-1" style="color:var(--color-text-muted)">Reliability Impact</p>
-                    <p class="text-sm" style="color:var(--color-text-primary)">{operationalValue.metrics.reliabilityImpact}</p>
+                  <div style="padding:1rem;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border)">
+                    <p style="font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.25rem">Reliability Impact</p>
+                    <p style="font-size:var(--text-sm);color:var(--text)">{operationalValue.metrics.reliabilityImpact}</p>
                   </div>
                 )}
               </div>
@@ -170,7 +168,7 @@ const allCloudServices = [...awsServices, ...gcpServices];
           </section>
 
           <!-- MDX Content slot -->
-          <section class="prose max-w-none">
+          <section class="prose" style="max-width:var(--max-width-text)">
             <slot />
           </section>
         </div>
@@ -179,49 +177,49 @@ const allCloudServices = [...awsServices, ...gcpServices];
         <aside class="lg:col-span-1">
           <div class="sticky top-24 space-y-6">
             <!-- Links -->
-            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-              <h3 class="text-sm font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Links</h3>
+            <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+              <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:1rem">Links</h3>
               <div class="space-y-2">
                 {links.github && (
                   <a href={links.github} target="_blank" rel="noopener noreferrer"
-                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
-                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
+                    style="display:flex;align-items:center;gap:0.5rem;font-size:var(--text-sm);padding:0.5rem 0.75rem;border-radius:var(--radius-sm);background:var(--bg-subtle);color:var(--text);border:1px solid var(--border);text-decoration:none;transition:border-color 0.12s"
+                    onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
                     ↗ GitHub Repository
                   </a>
                 )}
                 {links.runbook && (
                   <a href={links.runbook}
-                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
-                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    📋 Runbook
+                    style="display:flex;align-items:center;gap:0.5rem;font-size:var(--text-sm);padding:0.5rem 0.75rem;border-radius:var(--radius-sm);background:var(--bg-subtle);color:var(--text);border:1px solid var(--border);text-decoration:none;transition:border-color 0.12s"
+                    onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+                    → Runbook
                   </a>
                 )}
                 {links.readme && (
                   <a href={links.readme} target="_blank" rel="noopener noreferrer"
-                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
-                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    📄 README
+                    style="display:flex;align-items:center;gap:0.5rem;font-size:var(--text-sm);padding:0.5rem 0.75rem;border-radius:var(--radius-sm);background:var(--bg-subtle);color:var(--text);border:1px solid var(--border);text-decoration:none;transition:border-color 0.12s"
+                    onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+                    → README
                   </a>
                 )}
                 {architecture.diagramUrl && (
                   <a href={architecture.diagramUrl} target="_blank" rel="noopener noreferrer"
-                    class="flex items-center gap-2 text-sm py-2 px-3 rounded transition-colors hover:opacity-80"
-                    style="background:var(--color-surface-raised); color:var(--color-text-primary); border:1px solid var(--color-border)">
-                    🗺 Architecture Diagram
+                    style="display:flex;align-items:center;gap:0.5rem;font-size:var(--text-sm);padding:0.5rem 0.75rem;border-radius:var(--radius-sm);background:var(--bg-subtle);color:var(--text);border:1px solid var(--border);text-decoration:none;transition:border-color 0.12s"
+                    onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+                    → Architecture Diagram
                   </a>
                 )}
               </div>
             </div>
 
             <!-- Tech Stack -->
-            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-              <h3 class="text-sm font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Tech Stack</h3>
+            <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+              <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:1rem">Tech Stack</h3>
               <div class="space-y-3">
                 {Object.entries(techStack).map(([group, items]) => (
                   <div>
-                    <p class="text-xs font-medium mb-1.5 capitalize" style="color:var(--color-text-muted)">{group.replace(/([A-Z])/g, ' $1').trim()}</p>
+                    <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);margin-bottom:0.375rem;text-transform:capitalize">{group.replace(/([A-Z])/g, ' $1').trim()}</p>
                     <div class="flex flex-wrap gap-1.5">
-                      {(items as string[]).map((item) => <Tag size="sm">{item}</Tag>)}
+                      {(items as string[]).map((item) => <Tag>{item}</Tag>)}
                     </div>
                   </div>
                 ))}
@@ -230,18 +228,18 @@ const allCloudServices = [...awsServices, ...gcpServices];
 
             <!-- Cloud Services -->
             {allCloudServices.length > 0 && (
-              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                <h3 class="text-sm font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Cloud Services</h3>
+              <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+                <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.75rem">Cloud Services</h3>
                 <div class="flex flex-wrap gap-1.5">
-                  {allCloudServices.map((svc) => <Tag size="sm" variant="accent">{svc}</Tag>)}
+                  {allCloudServices.map((svc) => <Tag>{svc}</Tag>)}
                 </div>
               </div>
             )}
 
             <!-- Metadata -->
-            <div class="text-xs space-y-1" style="color:var(--color-text-muted)">
+            <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);line-height:var(--leading-normal)">
               <p>Published: {published}</p>
-              {updated && <p>Updated: {updated}</p>}
+              {updated && <p style="margin-top:0.25rem">Updated: {updated}</p>}
             </div>
           </div>
         </aside>

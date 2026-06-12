@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Tag from '../components/ui/Tag.astro';
+import Tag from '../components/ds/Tag.astro';
 import { formatDate, categoryToSlug } from '../lib/filters';
 import { estimateReadingTime, formatReadingTime } from '../lib/reading-time';
 
@@ -34,40 +34,38 @@ const readTimeStr = formatReadingTime(readTime);
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="py-12 md:py-16">
-    <div class="container" style="max-width:800px">
+  <article style="padding:3rem 0 4rem">
+    <div style="width:100%;max-width:var(--max-width);margin-left:auto;margin-right:auto;padding-left:1.5rem;padding-right:1.5rem">
       <!-- Breadcrumb -->
-      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
-          <li><a href="/writing" class="hover:underline" style="color:var(--color-accent)">Writing</a></li>
+      <nav class="mb-8" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">
+          <li><a href="/writing" class="ds-link" style="color:var(--text-muted)">Writing</a></li>
           <li aria-hidden="true">/</li>
           <li>
-            <a href={`/writing/category/${catSlug}`} class="hover:underline" style="color:var(--color-accent)">
+            <a href={`/writing/category/${catSlug}`} class="ds-link" style="color:var(--text-muted)">
               {category}
             </a>
           </li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page" style="color:var(--color-text-secondary)">{title}</li>
+          <li aria-current="page" style="color:var(--text-faint)">{title}</li>
         </ol>
       </nav>
 
       <!-- Header -->
-      <header class="mb-10 pb-8" style="border-bottom:1px solid var(--color-border)">
-        <div class="mb-3">
-          <a href={`/writing/category/${catSlug}`}
-            class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium hover:opacity-80"
-            style="background:var(--color-accent-muted); color:var(--color-accent)">
-            {category}
+      <header class="mb-10 pb-8" style="border-bottom:1px solid var(--border);max-width:var(--max-width-text)">
+        <div style="margin-bottom:0.75rem">
+          <a href={`/writing/category/${catSlug}`} class="ds-link">
+            <Tag>{category}</Tag>
           </a>
         </div>
 
-        <h1 class="text-2xl md:text-3xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.015em">
+        <h1 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h1);letter-spacing:var(--tracking-display);color:var(--text);line-height:var(--leading-tight);margin-bottom:1rem">
           {title}
         </h1>
 
-        <p class="text-base leading-relaxed mb-5" style="color:var(--color-text-secondary)">{description}</p>
+        <p style="font-size:var(--text-base);line-height:var(--leading-relaxed);color:var(--text-muted);margin-bottom:1.25rem">{description}</p>
 
-        <div class="flex flex-wrap items-center gap-4 text-sm" style="color:var(--color-text-muted)">
+        <div class="flex flex-wrap items-center gap-4" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">
           <span>{published}</span>
           {updated && updated !== published && <span>· Updated {updated}</span>}
           <span>· {readTimeStr}</span>
@@ -75,17 +73,17 @@ const readTimeStr = formatReadingTime(readTime);
       </header>
 
       <!-- Article Content -->
-      <div class="prose max-w-none">
+      <div class="prose" style="max-width:var(--max-width-text);margin:0 auto 0 0">
         <slot />
       </div>
 
       <!-- Footer tags -->
-      <footer class="mt-12 pt-8" style="border-top:1px solid var(--color-border)">
+      <footer style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);max-width:var(--max-width-text)">
         <div class="flex flex-wrap gap-2">
           {tags.map((tag) => <Tag>{tag}</Tag>)}
         </div>
-        <div class="mt-6">
-          <a href="/writing" style="color:var(--color-accent)" class="text-sm hover:underline">← Back to Writing</a>
+        <div style="margin-top:1.5rem">
+          <a href="/writing" class="ds-link" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted)">← Back to Writing</a>
         </div>
       </footer>
     </div>

@@ -1,0 +1,10 @@
+---
+interface Props { variant?: 'accent' | 'muted'; }
+const { variant = 'muted' } = Astro.props;
+const color = variant === 'accent' ? 'var(--accent)' : 'var(--text-muted)';
+const border = variant === 'accent' ? 'var(--accent)' : 'var(--border)';
+const weight = variant === 'accent' ? 700 : 600;
+---
+<span style={`font-family:var(--font-mono);font-size:10px;font-weight:${weight};letter-spacing:0.14em;text-transform:uppercase;color:${color};border:1px solid ${border};border-radius:var(--radius-sm);padding:2px 7px;display:inline-block`}>
+  <slot />
+</span>

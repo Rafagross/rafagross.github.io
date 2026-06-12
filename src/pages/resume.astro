@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Tag from '../components/ds/Tag.astro';
+import Badge from '../components/ds/Badge.astro';
+import Button from '../components/ds/Button.astro';
 import skillsData from '../data/skills.json';
 import certsData from '../data/certifications.json';
 
@@ -15,63 +18,51 @@ const licenses = certsData.certifications.filter(
   title="Resume"
   description="Elvis Rafael Gross — CloudOps Engineer resume. AWS, Kubernetes, Platform Engineering, SRE."
 >
-  <section class="py-12 md:py-16">
-    <div class="container" style="max-width:800px">
+  <section style="padding:var(--section-gap) clamp(20px,4vw,48px)">
+    <div style="max-width:800px;margin:0 auto">
 
       <!-- Actions bar -->
-      <div class="flex items-center justify-between mb-10 pb-6" style="border-bottom:1px solid var(--color-border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:16px">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest mb-1" style="color:var(--color-accent)">Resume</p>
-          <p class="text-sm" style="color:var(--color-text-muted)">Last updated: May 2026</p>
+          <p style="font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">Resume</p>
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-muted)">Last updated: May 2026</p>
         </div>
-        <div class="flex gap-3">
-          <a
-            href="/cover-letter.pdf"
-            download
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
-            style="background:var(--color-surface); color:var(--color-text-primary); border:1px solid var(--color-border)"
-          >
-            Cover Letter
-          </a>
-          <a
-            href="/resume.pdf"
-            download
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium hover:opacity-80 transition-opacity"
-            style="background:var(--color-accent); color:white"
-          >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <Button href="/cover-letter.pdf" variant="secondary">Cover Letter</Button>
+          <Button href="/resume.pdf" variant="primary">
+            <svg style="width:14px;height:14px;margin-right:6px" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Download PDF
-          </a>
+          </Button>
         </div>
       </div>
 
-      <div id="resume-content" class="space-y-10">
+      <div id="resume-content" style="display:flex;flex-direction:column;gap:40px">
 
         <!-- Header -->
         <header>
-          <h1 class="text-3xl font-semibold mb-1" style="color:var(--color-text-primary); letter-spacing:-0.02em">
+          <h1 style="font-family:var(--font-display);font-size:var(--text-h1);font-weight:700;letter-spacing:var(--tracking-display);color:var(--text);margin-bottom:6px;line-height:var(--leading-tight,1.1)">
             Elvis Rafael Gross Cardero
           </h1>
-          <p class="text-lg mb-3" style="color:var(--color-text-secondary)">
+          <p style="font-family:var(--font-sans);font-size:var(--text-lg,1.125rem);color:var(--text-muted);margin-bottom:12px">
             CloudOps Engineer · Platform Engineer · SRE
           </p>
-          <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-muted)">
+          <div style="display:flex;flex-wrap:wrap;gap:16px;font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-muted)">
             <span>Las Vegas, NV</span>
             <span>+1 702-523-9261</span>
-            <a href="mailto:rafagross15@gmail.com" class="hover:underline" style="color:var(--color-accent)">rafagross15@gmail.com</a>
-            <a href="https://www.linkedin.com/in/erafael-gross" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">linkedin.com/in/erafael-gross</a>
-            <a href="https://rafagross.github.io" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--color-accent)">rafagross.github.io</a>
+            <a href="mailto:rafagross15@gmail.com" class="ds-link">rafagross15@gmail.com</a>
+            <a href="https://www.linkedin.com/in/erafael-gross" target="_blank" rel="noopener noreferrer" class="ds-link">linkedin.com/in/erafael-gross</a>
+            <a href="https://rafagross.github.io" target="_blank" rel="noopener noreferrer" class="ds-link">rafagross.github.io</a>
           </div>
         </header>
 
         <!-- Summary -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Professional Summary
           </h2>
-          <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">
+          <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)">
             Cloud Operations Engineer with 7+ years of experience delivering reliable, automated, and observable infrastructure
             across AWS and GCP at enterprise scale. Proven track record managing mission-critical production environments at
             International Game Technology (IGT), supporting gaming workloads serving millions of end users. Combines deep AWS
@@ -83,65 +74,63 @@ const licenses = certsData.certifications.filter(
 
         <!-- Core Competencies -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Core Competencies
           </h2>
-          <div class="flex flex-wrap gap-2">
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
             {[
               'AWS Cloud Operations', 'Kubernetes (EKS + Bare-Metal)', 'Terraform & IaC', 'Incident Response',
               'CloudWatch Observability', 'SSM Patch Automation', 'DR Planning (RTO/RPO)', 'GCP Architecture',
               'GitOps & CI/CD Pipelines', 'FinOps & Cost Optimization', 'NIST CSF & Security Posture', 'Secrets Management'
             ].map((comp) => (
-              <span class="text-xs px-2.5 py-1 rounded-md font-medium" style="background:var(--color-surface-raised); color:var(--color-text-secondary); border:1px solid var(--color-border)">
-                {comp}
-              </span>
+              <Tag>{comp}</Tag>
             ))}
           </div>
         </section>
 
         <!-- Experience -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-6 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:24px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Professional Experience
           </h2>
-          <div class="space-y-8">
+          <div style="display:flex;flex-direction:column;gap:32px">
 
             <!-- IGT -->
             <div>
-              <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px">
                 <div>
-                  <h3 class="text-sm font-semibold" style="color:var(--color-text-primary)">Cloud Operations Engineer</h3>
-                  <p class="text-sm" style="color:var(--color-text-secondary)">International Game Technology (IGT) · Las Vegas, NV</p>
+                  <h3 style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text)">Cloud Operations Engineer</h3>
+                  <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">International Game Technology (IGT) · Las Vegas, NV</p>
                 </div>
-                <span class="text-xs font-mono flex-shrink-0" style="color:var(--color-text-muted)">Mar 2025 – Apr 2026</span>
+                <span style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);flex-shrink:0">Mar 2025 – Apr 2026</span>
               </div>
-              <ul class="space-y-2">
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+              <ul style="display:flex;flex-direction:column;gap:8px">
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Managed multi-account AWS environments supporting mission-critical gaming infrastructure serving millions of end users, maintaining 99.9%+ availability through proactive monitoring and rapid incident response.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Automated patch compliance across 200+ Linux and Windows EC2 instances using SSM Patch Manager, reducing patching cycle time by ~40% while maintaining full audit trails.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Led zero-downtime EKS cluster version upgrades in production using a Golden AMI strategy — pre-hardened node images, controlled drain/cordon rotations, and post-upgrade validation via CloudWatch Container Insights.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Reduced MTTD for production incidents by implementing CloudWatch custom alarms, log-based alerting, and Container Insights dashboards enabling proactive anomaly detection before user impact.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Designed and validated DR strategies achieving defined RTO/RPO targets, including quarterly DR testing cycles and runbook documentation ensuring team-independent recovery procedures.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Conducted AWS Well-Architected Framework reviews across 2 HRI lenses and 3 workload assessments — identifying and remediating 6 critical gaps including missing backups, overly permissive IAM policies, unencrypted data at rest, and absent tagging strategy. Delivered improvement plans reducing risk exposure across reliability and security pillars.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Eliminated manual server-by-server operations by standardizing 5–10 recurring tasks through SSM Automation Documents and Run Command — reducing execution time from hours to minutes across instance fleets.</span>
                 </li>
               </ul>
@@ -149,28 +138,28 @@ const licenses = certsData.certifications.filter(
 
             <!-- CODESA -->
             <div>
-              <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px">
                 <div>
-                  <h3 class="text-sm font-semibold" style="color:var(--color-text-primary)">Pre-Sales Cloud Engineer</h3>
-                  <p class="text-sm" style="color:var(--color-text-secondary)">CODESA (IT & Cloud Consulting) · Lima, Peru</p>
+                  <h3 style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text)">Pre-Sales Cloud Engineer</h3>
+                  <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">CODESA (IT & Cloud Consulting) · Lima, Peru</p>
                 </div>
-                <span class="text-xs font-mono flex-shrink-0" style="color:var(--color-text-muted)">Apr 2021 – Nov 2024</span>
+                <span style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);flex-shrink:0">Apr 2021 – Nov 2024</span>
               </div>
-              <ul class="space-y-2">
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+              <ul style="display:flex;flex-direction:column;gap:8px">
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Architected and delivered production-ready GCP solutions for enterprise clients using Cloud Run, Pub/Sub, BigQuery, Cloud Functions, IAM, and Cloud Storage — directly contributing to technical wins across the sales cycle.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Reduced time-to-close on technical evaluations by ~30% by building end-to-end PoCs validating serverless and real-time data pipeline architectures.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Designed secure IAM frameworks and real-time data pipeline architectures (Pub/Sub + BigQuery) as core components of enterprise proposals.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Delivered live technical workshops and architecture demos to C-level and technical stakeholders, translating complex GCP capabilities into clear business value.</span>
                 </li>
               </ul>
@@ -178,20 +167,20 @@ const licenses = certsData.certifications.filter(
 
             <!-- Zeta Ltd -->
             <div>
-              <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px">
                 <div>
-                  <h3 class="text-sm font-semibold" style="color:var(--color-text-primary)">Cloud Support Engineer</h3>
-                  <p class="text-sm" style="color:var(--color-text-secondary)">Zeta Ltd · Lima, Peru</p>
+                  <h3 style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text)">Cloud Support Engineer</h3>
+                  <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">Zeta Ltd · Lima, Peru</p>
                 </div>
-                <span class="text-xs font-mono flex-shrink-0" style="color:var(--color-text-muted)">2019 – 2021</span>
+                <span style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-faint);flex-shrink:0">2019 – 2021</span>
               </div>
-              <ul class="space-y-2">
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+              <ul style="display:flex;flex-direction:column;gap:8px">
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Monitored cloud infrastructure health using observability and logging platforms, triaging and resolving incidents across compute, networking, and IAM layers.</span>
                 </li>
-                <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                  <span class="mt-1 flex-shrink-0" style="color:var(--color-accent)">→</span>
+                <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+                  <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
                   <span>Managed access provisioning and security posture reviews, enforcing least-privilege principles across cloud environments.</span>
                 </li>
               </ul>
@@ -202,14 +191,14 @@ const licenses = certsData.certifications.filter(
 
         <!-- Technical Skills -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Technical Skills
           </h2>
-          <div class="space-y-3">
+          <div style="display:flex;flex-direction:column;gap:12px">
             {skillsData.categories.map((cat) => (
-              <div class="flex gap-4 text-sm">
-                <span class="flex-shrink-0 w-44 font-medium" style="color:var(--color-text-primary)">{cat.name}</span>
-                <span style="color:var(--color-text-secondary)">
+              <div style="display:flex;gap:16px;font-size:var(--text-sm)">
+                <span style="flex-shrink:0;width:176px;font-family:var(--font-sans);font-weight:500;color:var(--text)">{cat.name}</span>
+                <span style="font-family:var(--font-sans);color:var(--text-muted)">
                   {cat.skills.map((s) => s.name).join(' · ')}
                 </span>
               </div>
@@ -219,27 +208,21 @@ const licenses = certsData.certifications.filter(
 
         <!-- Certifications -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Certifications
           </h2>
-          <div class="space-y-2">
+          <div style="display:flex;flex-direction:column;gap:8px">
             {certs.map((cert) => (
-              <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center gap-2">
-                  <span style="color:var(--color-text-primary)">{cert.name}</span>
-                  <span class={`text-xs px-2 py-0.5 rounded ${
-                    cert.status === 'active'
-                      ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30'
-                      : cert.status === 'target'
-                      ? 'text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30'
-                      : 'text-gray-500 bg-gray-100 dark:bg-gray-800'
-                  }`}>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:var(--text-sm)">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-family:var(--font-sans);color:var(--text)">{cert.name}</span>
+                  <Badge variant={cert.status === 'active' ? 'accent' : 'muted'}>
                     {cert.status === 'target' ? 'In Progress' : cert.issuer}
-                  </span>
+                  </Badge>
                 </div>
                 {cert.credentialUrl && (
                   <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer"
-                    class="text-xs hover:underline" style="color:var(--color-accent)">
+                    class="ds-link" style="font-size:var(--text-xs,0.8125rem)">
                     Verify ↗
                   </a>
                 )}
@@ -250,16 +233,14 @@ const licenses = certsData.certifications.filter(
 
         <!-- Licenses -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Licenses
           </h2>
-          <div class="space-y-2">
+          <div style="display:flex;flex-direction:column;gap:8px">
             {licenses.map((lic) => (
-              <div class="flex items-center gap-2 text-sm">
-                <span style="color:var(--color-text-primary)">{lic.name}</span>
-                <span class="text-xs px-2 py-0.5 rounded text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/30">
-                  {lic.issuer}
-                </span>
+              <div style="display:flex;align-items:center;gap:8px;font-size:var(--text-sm)">
+                <span style="font-family:var(--font-sans);color:var(--text)">{lic.name}</span>
+                <Badge variant="accent">{lic.issuer}</Badge>
               </div>
             ))}
           </div>
@@ -267,10 +248,10 @@ const licenses = certsData.certifications.filter(
 
         <!-- Selected Projects -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Technical Projects
           </h2>
-          <div class="space-y-4">
+          <div style="display:flex;flex-direction:column;gap:16px">
             {[
               {
                 title: 'Production-Grade Homelab — Hybrid Cloud Environment',
@@ -290,38 +271,38 @@ const licenses = certsData.certifications.filter(
               }
             ].map((proj) => (
               <div>
-                <p class="text-sm font-semibold mb-1" style="color:var(--color-text-primary)">{proj.title}</p>
-                <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">{proj.desc}</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:4px">{proj.title}</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)">{proj.desc}</p>
               </div>
             ))}
           </div>
-          <p class="text-sm mt-4" style="color:var(--color-text-muted)">
-            Architecture diagrams and linked runbooks: <a href="/projects" class="hover:underline" style="color:var(--color-accent)">rafagross.github.io/projects →</a>
+          <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-faint);margin-top:16px">
+            Architecture diagrams and linked runbooks: <a href="/projects" class="ds-link">rafagross.github.io/projects →</a>
           </p>
         </section>
 
         <!-- Education -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Education
           </h2>
-          <div class="flex items-center justify-between text-sm">
-            <div class="flex items-center gap-2">
-              <span style="color:var(--color-text-primary)">High School Equivalency (HSE) — HiSET Examination</span>
-              <span class="text-xs px-2 py-0.5 rounded text-blue-700 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30">In Progress</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:var(--text-sm)">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--font-sans);color:var(--text)">High School Equivalency (HSE) — HiSET Examination</span>
+              <Badge variant="muted">In Progress</Badge>
             </div>
           </div>
         </section>
 
         <!-- Languages -->
         <section>
-          <h2 class="text-xs font-semibold uppercase tracking-widest mb-4 pb-2" style="color:var(--color-text-muted); border-bottom:1px solid var(--color-border)">
+          <h2 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             Languages
           </h2>
-          <div class="flex flex-wrap gap-4 text-sm" style="color:var(--color-text-secondary)">
-            <span><span class="font-medium" style="color:var(--color-text-primary)">Spanish</span> — Native</span>
-            <span><span class="font-medium" style="color:var(--color-text-primary)">English</span> — Full Professional</span>
-            <span><span class="font-medium" style="color:var(--color-text-primary)">French</span> — Intermediate</span>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
+            <span><span style="font-weight:500;color:var(--text)">Spanish</span> — Native</span>
+            <span><span style="font-weight:500;color:var(--text)">English</span> — Full Professional</span>
+            <span><span style="font-weight:500;color:var(--text)">French</span> — Intermediate</span>
           </div>
         </section>
 

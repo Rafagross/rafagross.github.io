@@ -29,3 +29,7 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
+.ds-src/
+
+# Design system source bundle (kept locally, not deployed)
+*.zip

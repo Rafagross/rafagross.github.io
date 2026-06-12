@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WritingRow from '../../../components/ds/WritingRow.astro';
+import SectionHeader from '../../../components/ds/SectionHeader.astro';
 import { getCollection } from 'astro:content';
 import { WRITING_CATEGORIES, categoryToSlug, slugToCategory, formatDate } from '../../../lib/filters';
 import { formatReadingTime, estimateReadingTime } from '../../../lib/reading-time';
@@ -25,66 +27,40 @@ const { category, posts } = Astro.props;
   title={`${category} — Writing`}
   description={`Technical writing, notes, and tutorials about ${category} by Rafael Gross.`}
 >
-  <section class="py-12 md:py-16">
-    <div class="container" style="max-width:1200px">
-      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
-          <li><a href="/writing" class="hover:underline" style="color:var(--color-accent)">Writing</a></li>
-          <li aria-hidden="true">/</li>
-          <li aria-current="page" style="color:var(--color-text-secondary)">{category}</li>
+  <section style="padding:var(--section-gap) clamp(20px,4vw,48px)">
+    <div style="max-width:var(--max-width);margin:0 auto">
+      <nav style="margin-bottom:32px;font-size:var(--text-sm)" aria-label="Breadcrumb">
+        <ol style="display:flex;align-items:center;gap:8px;color:var(--text-muted)">
+          <li><a href="/writing" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:2px">Writing</a></li>
+          <li aria-hidden="true" style="color:var(--text-faint)">/</li>
+          <li aria-current="page" style="color:var(--text)">{category}</li>
         </ol>
       </nav>
 
-      <header class="mb-12">
-        <span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium mb-4" style="background:var(--color-accent-muted); color:var(--color-accent)">
-          Category
-        </span>
-        <h1 class="text-3xl md:text-4xl font-semibold mb-3" style="color:var(--color-text-primary); letter-spacing:-0.02em">
-          {category}
-        </h1>
-        <p class="text-sm" style="color:var(--color-text-muted)">
-          {posts.length} article{posts.length !== 1 ? 's' : ''}
-        </p>
-      </header>
+      <SectionHeader
+        label="CATEGORY"
+        en={{ heading: category, sub: `${posts.length} article${posts.length !== 1 ? 's' : ''}` }}
+        es={{ heading: category, sub: `${posts.length} artículo${posts.length !== 1 ? 's' : ''}` }}
+      />
 
       {posts.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => {
-            const readTime = formatReadingTime(post.data.readingTime ?? estimateReadingTime(post.body ?? ''));
-            return (
-              <article
-                class="group relative flex flex-col rounded-lg overflow-hidden transition-shadow hover:shadow-lg"
-                style="background:var(--color-surface); border:1px solid var(--color-border)"
-              >
-                <div class="flex flex-col flex-1 p-5">
-                  <div class="flex justify-between items-center mb-3">
-                    <span class="text-xs" style="color:var(--color-text-muted)">{formatDate(post.data.publishedDate)}</span>
-                    <span class="text-xs" style="color:var(--color-text-muted)">{readTime}</span>
-                  </div>
-                  <h2 class="text-base font-semibold mb-2 leading-snug group-hover:opacity-80 transition-opacity" style="color:var(--color-text-primary)">
-                    <a href={`/writing/${post.id}`} class="stretched-link">{post.data.title}</a>
-                  </h2>
-                  <p class="text-sm leading-relaxed" style="color:var(--color-text-secondary)">{post.data.description}</p>
-                </div>
-              </article>
-            );
-          })}
+        <div style="display:flex;flex-direction:column;gap:1px">
+          {posts.map((post) => (
+            <WritingRow
+              href={`/writing/${post.id}`}
+              title={post.data.title}
+              category={post.data.category}
+              date={post.data.publishedDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              description={post.data.description}
+            />
+          ))}
         </div>
       ) : (
-        <div class="py-20 text-center rounded-lg" style="border:1px dashed var(--color-border)">
-          <p class="text-sm" style="color:var(--color-text-muted)">No posts in this category yet.</p>
-          <a href="/writing" class="text-sm mt-3 inline-block hover:underline" style="color:var(--color-accent)">← Back to all writing</a>
+        <div style="padding:80px 20px;text-align:center;border:1px dashed var(--border);border-radius:4px">
+          <p style="font-size:var(--text-sm);color:var(--text-faint)">No posts in this category yet.</p>
+          <a href="/writing" style="font-size:var(--text-sm);color:var(--text-muted);display:inline-block;margin-top:12px;text-decoration:underline;text-underline-offset:2px">← Back to all writing</a>
         </div>
       )}
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .stretched-link::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-  }
-</style>
