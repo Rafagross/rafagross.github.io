@@ -25,7 +25,7 @@ const licenses = certsData.certifications.filter(
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:24px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:16px">
         <div>
           <p style="font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">Resume</p>
-          <p style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-muted)">Last updated: May 2026</p>
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs,0.8125rem);color:var(--text-muted)">Last updated: June 2026</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <Button href="/cover-letter.pdf" variant="secondary">Cover Letter</Button>
@@ -127,7 +127,7 @@ const licenses = certsData.certifications.filter(
                 </li>
                 <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
                   <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
-                  <span>Conducted AWS Well-Architected Framework reviews across 2 HRI lenses and 3 workload assessments — identifying and remediating 6 critical gaps including missing backups, overly permissive IAM policies, unencrypted data at rest, and absent tagging strategy. Delivered improvement plans reducing risk exposure across reliability and security pillars.</span>
+                  <span>Conducted AWS Well-Architected Framework reviews across 2 HRI lenses and 3 workload assessments using the Well-Architected Tool — identifying and remediating 6 critical gaps including lack of backups, missing CloudWatch alarms, overly permissive IAM policies, unencrypted data at rest, no multi-AZ design, and absent tagging strategy. Delivered improvement plans reducing risk exposure across reliability and security pillars.</span>
                 </li>
                 <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted)">
                   <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
@@ -255,24 +255,37 @@ const licenses = certsData.certifications.filter(
             {[
               {
                 title: 'Production-Grade Homelab — Hybrid Cloud Environment',
-                desc: 'Self-hosted bare-metal Kubernetes cluster on physical nodes managed with Proxmox. GitOps delivery via ArgoCD integrated with Jenkins CI/CD and GitHub self-hosted runners. Configuration management with Ansible + Ansible Vault. Secrets via HashiCorp Vault. Observability stack: Prometheus, Grafana, and Loki. Event-driven autoscaling with KEDA. Deployed a Go-based load testing application across bare-metal nodes and AWS EC2 via secure hybrid tunnel. Security posture managed with Wiz.'
+                desc: 'Self-hosted bare-metal Kubernetes cluster on physical nodes managed with Proxmox. GitOps delivery via ArgoCD integrated with Jenkins CI/CD pipelines and GitHub self-hosted runners. Configuration management with Ansible + Ansible Vault. Secrets managed via HashiCorp Vault. Observability stack: Prometheus, Grafana, and Loki. Event-driven autoscaling with KEDA. Deployed a Go-based load testing application to evaluate real workload performance across bare-metal nodes and AWS EC2 via secure hybrid tunnel. Security posture managed with Wiz.'
               },
               {
-                title: 'AWS CloudOps Private EC2 Operations Platform',
-                desc: 'Secure platform for managing private EC2 instances without public exposure using SSM Session Manager via VPC endpoints, CloudWatch monitoring, encrypted backups via AWS Backup, and hardened Golden AMIs with least-privilege IAM.'
-              },
-              {
-                title: 'Rocky Linux Custom AMI — AWS VM Import Pipeline',
-                desc: 'Imported custom Rocky Linux image into AWS EC2 via S3 VM Import/Export, configured CloudWatch Agent, and automated agent deployment through a bastion host — simulating an enterprise Golden AMI pipeline for non-marketplace OS images.'
-              },
-              {
-                title: 'Windows LAPS 2024+ Proof of Concept on AWS',
-                desc: 'Designed and tested Windows LAPS implementation on AWS EC2 with AWS Systems Manager Parameter Store integration for centralized password management and audit trail logging.'
+                title: 'fraud-detection-aws-platform — AWS Private EC2 Operations Platform',
+                url: 'https://github.com/Rafagross/fraud-detection-aws-platform',
+                bullets: [
+                  'Architected a fraud transaction scoring platform on AWS with a Python worker in private EC2 subnets — no SSH, no bastion, zero inbound exposure; operator access exclusively via SSM Session Manager over VPC Interface Endpoints, with a fully operational SQS → EC2 → DynamoDB pipeline.',
+                  'Authored 11 single-responsibility Terraform modules and implemented OIDC-based GitHub Actions CI/CD with no static credentials — dual-role model (read-only plan / admin apply) scoped to exact OIDC sub claims, with terraform plan posted as a PR comment on every pull request.',
+                  'Built an EC2 Image Builder pipeline producing hardened AL2023 ARM64 Golden AMIs with CIS baseline, CloudWatch Agent, and an ARM64 Python validation gate — malformed AMIs never reach the fleet, with ASG rolling updates on new AMI publish.',
+                  'Integrated GuardDuty (S3 + EC2 malware scanning), AWS Backup (7-day warm / 30-day cold, KMS-encrypted vault), EventBridge routing of HIGH/CRITICAL findings to SNS → Lambda → Slack, and AWS Budgets capped at $100/month.'
+                ]
               }
             ].map((proj) => (
               <div>
-                <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:4px">{proj.title}</p>
-                <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)">{proj.desc}</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:4px">
+                  {proj.url ? (
+                    <a href={proj.url} target="_blank" rel="noopener noreferrer" class="ds-link" style="color:var(--text)">{proj.title} ↗</a>
+                  ) : proj.title}
+                </p>
+                {proj.bullets ? (
+                  <ul style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+                    {proj.bullets.map((b) => (
+                      <li style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)">
+                        <span style="flex-shrink:0;margin-top:1px;color:var(--text-faint)">→</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style="font-family:var(--font-sans);font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-relaxed)">{proj.desc}</p>
+                )}
               </div>
             ))}
           </div>
@@ -289,7 +302,6 @@ const licenses = certsData.certifications.filter(
           <div style="display:flex;align-items:center;justify-content:space-between;font-size:var(--text-sm)">
             <div style="display:flex;align-items:center;gap:8px">
               <span style="font-family:var(--font-sans);color:var(--text)">High School Equivalency (HSE) — HiSET Examination</span>
-              <Badge variant="muted">In Progress</Badge>
             </div>
           </div>
         </section>
