@@ -11,11 +11,12 @@ const { type = 'info', title } = Astro.props;
  *   info    — hairline border, "NOTE" label
  *   warning — thick left border (2px), "WARNING" label
  *   danger  — thick left border (2px), "DANGER" label
- *   tip     — thin border + --green accent dot, "TIP" label (--green is the one allowed hue)
+ *   tip     — thick left border (2px), "TIP" label
  *   note    — same as info, alias
  *
- * All backgrounds use --bg-subtle.
- * Labels are uppercase mono in --text-muted, except tip which uses --green.
+ * All backgrounds use --bg-subtle. Strict monochrome: --green is reserved
+ * exclusively for the availability dot, so it is NOT used here.
+ * Labels are uppercase mono in grayscale tokens.
  */
 
 const config = {
@@ -35,9 +36,9 @@ const config = {
     labelColor: 'var(--text)',
   },
   tip: {
-    borderLeft: '2px solid var(--green)',
+    borderLeft: '2px solid var(--border-strong)',
     label: title ?? 'TIP',
-    labelColor: 'var(--green)',
+    labelColor: 'var(--text)',
   },
   note: {
     borderLeft: '1px solid var(--border-strong)',
