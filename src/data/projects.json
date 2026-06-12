@@ -1,5 +1,68 @@
 [
   {
+    "slug": "fraud-detection-aws-platform",
+    "title": "Fraud Detection AWS Platform",
+    "shortDescription": "Fraud transaction scoring platform on AWS — a Python worker in private EC2 subnets with zero inbound exposure, SSM-only access, and a full SQS → EC2 → DynamoDB pipeline.",
+    "longDescription": "A fraud transaction scoring platform built on AWS with a Python worker running in private EC2 subnets — no SSH, no bastion, zero inbound exposure. Operator access is exclusively through SSM Session Manager over VPC Interface Endpoints. The processing pipeline runs SQS → EC2 → DynamoDB, provisioned by 11 single-responsibility Terraform modules and deployed via OIDC-based GitHub Actions CI/CD with no static credentials (a dual-role read-only-plan / admin-apply model scoped to exact OIDC sub claims, with terraform plan posted as a PR comment). Hardened AL2023 ARM64 Golden AMIs are produced by an EC2 Image Builder pipeline with a CIS baseline and an ARM64 validation gate before ASG rolling updates, and security/observability is wired through GuardDuty, AWS Backup, and EventBridge → SNS → Lambda → Slack alerting.",
+    "category": "AWS CloudOps",
+    "status": "active",
+    "featured": true,
+    "displayOrder": 1,
+    "github": {
+      "owner": "Rafagross",
+      "repo": "fraud-detection-aws-platform",
+      "url": "https://github.com/Rafagross/fraud-detection-aws-platform"
+    },
+    "techStack": {
+      "cloud": ["AWS"],
+      "compute": ["EC2", "Auto Scaling", "Systems Manager"],
+      "messaging": ["SQS", "SNS", "EventBridge"],
+      "data": ["DynamoDB"],
+      "networking": ["VPC", "VPC Interface Endpoints", "Private Subnets"],
+      "security": ["GuardDuty", "KMS", "IAM", "OIDC"],
+      "observability": ["CloudWatch", "AWS Backup"],
+      "iac": ["Terraform", "EC2 Image Builder"],
+      "cicd": ["GitHub Actions"],
+      "languages": ["Python", "HCL", "Bash"]
+    },
+    "awsServices": ["EC2", "SSM", "SQS", "DynamoDB", "VPC", "IAM", "GuardDuty", "EventBridge", "SNS", "Lambda", "AWS Backup", "KMS", "EC2 Image Builder", "Auto Scaling"],
+    "gcpServices": [],
+    "architecture": {
+      "summary": "A Python scoring worker runs in private EC2 subnets behind an Auto Scaling group, consuming from SQS and writing scored results to DynamoDB. There is no public ingress — operators reach instances only through SSM Session Manager over VPC Interface Endpoints. Hardened ARM64 Golden AMIs flow from an EC2 Image Builder pipeline with a CIS baseline and a validation gate before ASG rolling updates. GuardDuty, AWS Backup, and EventBridge → SNS → Lambda → Slack provide threat detection, recovery, and alerting.",
+      "diagramUrl": null,
+      "diagramAlt": null
+    },
+    "operationalValue": {
+      "problemSolved": "Scores fraud transactions on infrastructure with zero inbound exposure and no static credentials anywhere in the delivery path.",
+      "outcomes": [
+        "Zero inbound exposure — no SSH, no bastion; SSM-only operator access over VPC Interface Endpoints",
+        "11 single-responsibility Terraform modules with OIDC-based CI/CD (no static credentials)",
+        "Hardened AL2023 ARM64 Golden AMIs gated by an ARM64 validation step before reaching the fleet",
+        "HIGH/CRITICAL GuardDuty findings routed to Slack via EventBridge → SNS → Lambda"
+      ],
+      "metrics": {
+        "costImpact": "AWS Budgets capped at $100/month",
+        "reliabilityImpact": "AWS Backup with a 7-day warm / 30-day cold KMS-encrypted vault"
+      }
+    },
+    "links": {
+      "readme": "https://github.com/Rafagross/fraud-detection-aws-platform#readme",
+      "runbook": "/runbooks/ec2-instance-unreachable-via-ssm",
+      "diagram": null,
+      "demo": null
+    },
+    "screenshots": [],
+    "tags": ["aws", "ec2", "ssm", "terraform", "dynamodb", "sqs", "guardduty", "github-actions", "oidc", "golden-ami", "zero-trust"],
+    "metadata": {
+      "stars": null,
+      "lastCommit": null,
+      "primaryLanguage": "Python",
+      "lastEnrichedAt": null
+    },
+    "publishedDate": "2026-05-01",
+    "updatedDate": "2026-06-12"
+  },
+  {
     "slug": "aws-cloudops-private-ec2-operations-platform",
     "title": "AWS CloudOps Private EC2 Operations Platform",
     "shortDescription": "Production-grade operations platform for managing private EC2 fleets via SSM, CloudWatch, and automated runbooks.",
@@ -7,7 +70,7 @@
     "category": "AWS CloudOps",
     "status": "active",
     "featured": true,
-    "displayOrder": 1,
+    "displayOrder": 5,
     "github": {
       "owner": "Rafagross",
       "repo": "aws-cloudops-private-ec2-operations-platform",
