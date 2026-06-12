@@ -1,0 +1,41 @@
+---
+import Tag from './Tag.astro';
+import Badge from './Badge.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  severity: string;
+  status: string;
+  estimatedTime: string;
+  tags: string[];
+}
+
+const { href, title, severity, status, estimatedTime, tags } = Astro.props;
+---
+
+<a class="ds-card fade-in" href={href} style="padding:0">
+  <div class="ds-spot" aria-hidden="true"></div>
+  <div class="ds-card-body">
+    <!-- Header row -->
+    <div style="display:flex;align-items:center;gap:16px;padding:18px 24px">
+      <!-- Severity badge -->
+      <span style="font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:3px 8px;background:var(--bg-subtle);flex-shrink:0">{severity}</span>
+      <!-- Title -->
+      <span style="font-family:var(--font-sans);font-weight:600;font-size:var(--text-base);letter-spacing:var(--tracking-tight);color:var(--text);flex:1;line-height:var(--leading-snug)">{title}</span>
+      <!-- Meta group -->
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-faint)">{estimatedTime}</span>
+        <Badge variant="muted">{status}</Badge>
+        <!-- Chevron right -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint)">
+          <polyline points="9 6 15 12 9 18"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Tags row -->
+    <div style="padding:0 24px 16px;display:flex;gap:6px;flex-wrap:wrap">
+      {tags.map(tag => <Tag>{tag}</Tag>)}
+    </div>
+  </div>
+</a>

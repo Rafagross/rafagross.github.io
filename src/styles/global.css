@@ -464,3 +464,21 @@ main { padding-top: 56px; }
 .ds-btn:hover { transform: translateY(-1px); }
 .ds-btn[data-variant="primary"]:hover { background: transparent; color: var(--text); }
 .ds-btn[data-variant="secondary"]:hover { border-color: var(--text); }
+
+/* ── DS card hover + spotlight (interactivity wired in ds-interactions.ts) ── */
+.ds-card { position: relative; overflow: hidden; display: block; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--card-pad);
+  transition: transform 200ms cubic-bezier(.4,0,.2,1), box-shadow 200ms cubic-bezier(.4,0,.2,1), border-color 120ms cubic-bezier(.4,0,.2,1); }
+.ds-card:hover { border-color: var(--border-strong); transform: scale(1.015) translateY(-3px); box-shadow: var(--shadow-md); }
+.ds-card > .ds-spot { position: absolute; inset: 0; pointer-events: none; z-index: 0; border-radius: inherit;
+  background: radial-gradient(380px circle at var(--mx,50%) var(--my,50%), var(--spotlight), transparent 70%); }
+.ds-card > .ds-card-body { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .ds-card:hover { transform: none; } }
+
+/* ── DS writing row ── */
+.ds-row { display: flex; align-items: flex-start; gap: 24px; padding: 24px 0; text-decoration: none; color: inherit;
+  border-bottom: 1px solid var(--border); opacity: 0.92; transition: opacity var(--duration-fast) var(--ease-default); }
+.ds-row:hover { opacity: 1; }
+.ds-row .ds-row-arrow { flex-shrink: 0; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); padding-top: 2px;
+  transition: color var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default); }
+.ds-row:hover .ds-row-arrow { color: var(--text); transform: translateX(4px); }

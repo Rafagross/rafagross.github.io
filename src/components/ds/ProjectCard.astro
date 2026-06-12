@@ -1,0 +1,41 @@
+---
+import Tag from './Tag.astro';
+import Badge from './Badge.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  status: string;
+  tags: string[];
+  featured?: boolean;
+}
+
+const { href, title, description, status, tags, featured = false } = Astro.props;
+---
+
+<a class="ds-card fade-in" href={href}>
+  <div class="ds-spot" aria-hidden="true"></div>
+  <div class="ds-card-body" style="display:flex;flex-direction:column;height:100%;gap:16px">
+    <!-- Top row: badges + external link icon -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        {featured && <Badge variant="accent">Featured</Badge>}
+        <Badge variant="muted">{status}</Badge>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint);flex-shrink:0;margin-top:1px">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        <polyline points="15 3 21 3 21 9"/>
+        <line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+    </div>
+    <!-- Title -->
+    <h3 style="font-family:var(--font-sans);font-weight:600;font-size:var(--text-base);letter-spacing:var(--tracking-tight);color:var(--text);line-height:var(--leading-snug);flex:1">{title}</h3>
+    <!-- Description -->
+    <p style="font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-normal);margin-bottom:8px">{description}</p>
+    <!-- Tags -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      {tags.map(tag => <Tag>{tag}</Tag>)}
+    </div>
+  </div>
+</a>

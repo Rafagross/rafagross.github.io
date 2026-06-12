@@ -1,0 +1,27 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  category: string;
+  date: string;
+  description: string;
+  readLabel?: string;
+}
+
+const { href, title, category, date, description, readLabel = 'Read →' } = Astro.props;
+---
+
+<a class="ds-row fade-in" href={href}>
+  <!-- Left column: date + category pill -->
+  <div style="flex-shrink:0;width:120px;padding-top:2px">
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:0.06em;margin-bottom:4px">{date}</div>
+    <div style="display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);border-radius:9999px;padding:2px 8px">{category}</div>
+  </div>
+  <!-- Center: title + description -->
+  <div style="flex:1">
+    <h3 style="font-family:var(--font-sans);font-weight:600;font-size:var(--text-base);letter-spacing:var(--tracking-tight);color:var(--text);line-height:var(--leading-snug);margin-bottom:8px">{title}</h3>
+    <p style="font-size:var(--text-sm);color:var(--text-muted);line-height:var(--leading-normal)">{description}</p>
+  </div>
+  <!-- Right: animated arrow -->
+  <div class="ds-row-arrow">{readLabel}</div>
+</a>
