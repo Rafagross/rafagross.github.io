@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import Nav from '../components/islands/Nav.jsx';
-import Footer from '../components/layout/Footer.astro';
+import Footer from '../components/islands/Footer.jsx';
 
 interface Props {
   title: string;
@@ -93,7 +93,7 @@ const fullTitle = title === 'Home'
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+    <Footer client:visible />
     <script>
       import '../scripts/ds-interactions.ts';
     </script>
