@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Header from '../components/layout/Header.astro';
+import Nav from '../components/islands/Nav.jsx';
 import Footer from '../components/layout/Footer.astro';
 
 interface Props {
@@ -89,7 +89,7 @@ const fullTitle = title === 'Home'
       document.documentElement.classList.remove('no-transition');
     </script>
 
-    <Header />
+    <Nav client:load />
     <main id="main-content">
       <slot />
     </main>
