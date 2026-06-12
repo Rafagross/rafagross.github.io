@@ -52,17 +52,20 @@ export default function Terminal() {
   const [history, setHistory] = useState([]);
   const [running, setRunning] = useState(null);
   const outputRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
 
   const run = (cmd) => {
     if (running) return;
     setRunning(cmd);
     const lines = COMMANDS[cmd] || ['command not found'];
     let i = 0;
-    const id = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setHistory(h => [...h, { cmd: i === 0 ? cmd : null, line: lines[i] }]);
       i++;
       if (i >= lines.length) {
-        clearInterval(id);
+        clearInterval(intervalRef.current);
         setRunning(null);
         setTimeout(() => {
           if (outputRef.current) {
