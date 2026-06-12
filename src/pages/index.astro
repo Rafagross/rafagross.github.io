@@ -34,7 +34,7 @@ const featuredProjects = projectsData
       <SectionHeader label="01"
         en={{ heading: 'Projects', sub: 'Selected infrastructure work' }}
         es={{ heading: 'Proyectos', sub: 'Trabajo de infraestructura seleccionado' }} />
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+      <div class="ds-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
         {featuredProjects.map((p) => (
           <ProjectCard
             href={`/projects/${p.slug}`}
@@ -58,7 +58,7 @@ const featuredProjects = projectsData
       <SectionHeader label="02"
         en={{ heading: 'Runbooks', sub: 'Field-tested operational procedures' }}
         es={{ heading: 'Runbooks', sub: 'Procedimientos operativos probados en campo' }} />
-      <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="ds-stagger" style="display:flex;flex-direction:column;gap:12px">
         {recentRunbooks.map((rb) => (
           <RunbookCard
             href={`/runbooks/${rb.id}`}

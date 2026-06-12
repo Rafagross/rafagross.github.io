@@ -482,3 +482,308 @@ main { padding-top: 56px; }
 .ds-row .ds-row-arrow { flex-shrink: 0; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); padding-top: 2px;
   transition: color var(--duration-fast) var(--ease-default), transform var(--duration-fast) var(--ease-default); }
 .ds-row:hover .ds-row-arrow { color: var(--text); transform: translateX(4px); }
+
+/* ============================================================
+   ANIMATION SYSTEM ADDITIONS v2
+   Append the contents of this file to the end of:
+     src/styles/global.css
+
+   Requires: the CSS custom properties already declared in
+   global.css (--bg, --text, --border, --font-mono, etc.)
+   ============================================================ */
+
+/* ── View Transitions (page fade + lift) ──────────────────── */
+/* These fire automatically when <ClientRouter /> is in BaseLayout */
+
+@keyframes ds-page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ds-page-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+::view-transition-new(root) {
+  animation: ds-page-in 320ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+::view-transition-old(root) {
+  animation: ds-page-out 180ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* Nav persists across transitions — opt it out of the default morph */
+::view-transition-group(ds-nav) { animation-duration: 0ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* ── Custom cursor ─────────────────────────────────────────── */
+/* Elements injected by BaseLayout.astro into <body>           */
+#ds-cursor,
+#ds-cursor-ring {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  will-change: transform;
+  border-radius: 50%;
+  /* Start off-screen */
+  transform: translate(-100px, -100px);
+  transition: opacity 200ms;
+}
+
+#ds-cursor {
+  width: 8px;
+  height: 8px;
+  background: var(--text);
+  /* Blend mode: white dot becomes black on light bg, white on dark */
+  mix-blend-mode: difference;
+}
+
+#ds-cursor-ring {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  /* Size + color transitions; transform is driven by rAF in JS */
+  transition: width 200ms cubic-bezier(.4,0,.2,1),
+              height 200ms cubic-bezier(.4,0,.2,1),
+              border-color 200ms cubic-bezier(.4,0,.2,1),
+              opacity 200ms;
+}
+
+#ds-cursor-ring.is-hover {
+  width: 44px;
+  height: 44px;
+  border-color: var(--text-muted);
+}
+
+/* Hide on touch devices */
+@media (pointer: coarse) {
+  #ds-cursor,
+  #ds-cursor-ring { display: none !important; }
+}
+
+/* ── Text reveal (.ds-reveal) ─────────────────────────────── */
+/* Apply class to <p> or <h*> elements you want illuminated    */
+.ds-word {
+  display: inline;
+  color: var(--text-faint);
+  transition: color 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.ds-word.is-lit {
+  color: var(--text-muted);
+}
+
+/* ── Metrics grid (.ds-metrics) ───────────────────────────── */
+.ds-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 48px 0;
+}
+
+.ds-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 22px 24px;
+  background: var(--surface);
+  transition: background var(--duration-fast) var(--ease-default);
+}
+
+.ds-metric:hover {
+  background: var(--bg-subtle);
+}
+
+.ds-counter {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+  color: var(--text);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-metric-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text);
+  margin-top: 2px;
+}
+
+.ds-metric-note {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 0.6875rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+/* ── Experience timeline (.ds-timeline) ───────────────────── */
+.ds-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Vertical rule */
+.ds-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--border);
+}
+
+.ds-timeline-entry {
+  padding: 24px 0 24px 32px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.ds-timeline-entry:last-child {
+  border-bottom: none;
+}
+
+/* Timeline dot */
+.ds-timeline-entry::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 30px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--border-strong);
+  transition: border-color var(--duration-fast) var(--ease-default),
+              background var(--duration-fast) var(--ease-default);
+}
+
+.ds-timeline-entry:hover::before {
+  background: var(--text-faint);
+  border-color: var(--text-faint);
+}
+
+.ds-timeline-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ds-timeline-role {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.ds-timeline-company {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.ds-timeline-period {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs, 0.8125rem);
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+/* ── Stagger (.ds-stagger > *) ────────────────────────────── */
+/* Parent: add class ds-stagger. JS adds fade-in + delay to children. */
+.ds-stagger > * {
+  /* base state — JS will add fade-in class */
+}
+
+/* ── Enhanced contact card spotlight ─────────────────────── */
+/* Add class ds-contact-card to existing contact <a> elements  */
+/* Also add a <div class="ds-spot" aria-hidden="true"></div>   */
+/* as the first child (same pattern as ProjectCard.astro)      */
+.ds-contact-card {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* ── Subtle animated underline for section labels ──────────── */
+.ds-section-label {
+  display: inline-block;
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.ds-section-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 0;
+  background: var(--border-strong);
+  transition: width 600ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.ds-section-label.is-visible::after {
+  width: 100%;
+}
+
+/* ── Skill bar (.ds-skill-bar) ────────────────────────────── */
+/* Optional: add to skill rows in about.astro for visual depth */
+.ds-skill-bar-wrap {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-top: 6px;
+  width: 100%;
+  max-width: 160px;
+}
+
+.ds-skill-bar {
+  height: 100%;
+  background: var(--text-faint);
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 600ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.ds-skill-bar.is-visible {
+  transform: scaleX(1);
+}
+
+/* ── Page-level entry animation ───────────────────────────── */
+/* Add .ds-page-hero to the first <section> on each page      */
+/* for an elegant entrance on first load                       */
+.ds-page-hero {
+  animation: ds-page-in 500ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-page-hero { animation: none; }
+}

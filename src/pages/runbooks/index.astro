@@ -27,7 +27,7 @@ const severities = ['P1', 'P2', 'P3', 'P4'];
       />
 
       {runbooks.length > 0 ? (
-        <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="ds-stagger" style="display:flex;flex-direction:column;gap:12px">
           {runbooks.map((rb) => (
             <RunbookCard
               href={`/runbooks/${rb.id}`}

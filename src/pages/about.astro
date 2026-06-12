@@ -3,6 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Tag from '../components/ds/Tag.astro';
 import Badge from '../components/ds/Badge.astro';
 import Button from '../components/ds/Button.astro';
+import MetricsCounter from '../components/islands/MetricsCounter.jsx';
+import Timeline from '../components/islands/Timeline.jsx';
 import skillsData from '../data/skills.json';
 import certsData from '../data/certifications.json';
 ---
@@ -41,10 +43,19 @@ import certsData from '../data/certifications.json';
         </div>
       </header>
 
+      <!-- Key metrics -->
+      <MetricsCounter client:visible />
+
+      <!-- Experience -->
+      <section style="margin-bottom:48px">
+        <h2 style="font-family:var(--font-display);font-size:var(--text-h2);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:24px">Experience</h2>
+        <Timeline client:visible />
+      </section>
+
       <!-- Skills -->
       <section style="margin-bottom:48px">
         <h2 style="font-family:var(--font-display);font-size:var(--text-h2);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:24px">Technical Skills</h2>
-        <div style="display:flex;flex-direction:column;gap:32px">
+        <div class="ds-stagger" style="display:flex;flex-direction:column;gap:32px">
           {skillsData.categories.map((cat) => (
             <div>
               <h3 style="font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:12px">{cat.name}</h3>
@@ -69,7 +80,7 @@ import certsData from '../data/certifications.json';
       <!-- Certifications -->
       <section style="margin-bottom:48px">
         <h2 style="font-family:var(--font-display);font-size:var(--text-h2);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:24px">Certifications</h2>
-        <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="ds-stagger" style="display:flex;flex-direction:column;gap:12px">
           {certsData.certifications.map((cert) => (
             <div style="display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
               <div style="flex:1">

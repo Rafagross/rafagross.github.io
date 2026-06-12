@@ -21,7 +21,7 @@ const totalCount = projects.length;
         es={{ heading: 'Proyectos', sub: `Trabajo de producción en AWS CloudOps, Kubernetes, infraestructura híbrida y observabilidad. ${totalCount} proyecto${totalCount !== 1 ? 's' : ''}.` }}
       />
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+      <div class="ds-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
         {projects.map((p) => (
           <ProjectCard
             href={`/projects/${p.slug}`}
