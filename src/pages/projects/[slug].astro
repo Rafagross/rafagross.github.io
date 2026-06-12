@@ -33,8 +33,8 @@ const { project } = Astro.props;
     Future enhancement: load a matching MDX file from src/content/projects/[slug].mdx
     for full case study content, deployment steps, lessons learned, etc.
   -->
-  <p style="color:var(--color-text-muted); font-style:italic">
-    Detailed case study documentation is in progress. 
-    See the <a href={project.github.url} target="_blank" rel="noopener noreferrer">GitHub repository</a> for implementation details and README.
+  <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:var(--text-sm);font-style:italic">
+    Detailed case study documentation is in progress.
+    See the <a href={project.github.url} target="_blank" rel="noopener noreferrer" class="ds-link">GitHub repository</a> for implementation details and README.
   </p>
 </ProjectLayout>
