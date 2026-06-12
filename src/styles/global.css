@@ -459,3 +459,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 /* Fixed nav is 56px tall — offset page content so it isn't hidden. */
 main { padding-top: 56px; }
 @media (max-width: 680px) { .ds-nav-links { display: none !important; } }
+
+/* ── DS Button hover states ── */
+.ds-btn:hover { transform: translateY(-1px); }
+.ds-btn[data-variant="primary"]:hover { background: transparent; color: var(--text); }
+.ds-btn[data-variant="secondary"]:hover { border-color: var(--text); }

@@ -1,0 +1,17 @@
+---
+interface Props {
+  label: string;
+  en: { heading: string; sub: string };
+  es: { heading: string; sub: string };
+}
+const { label, en, es } = Astro.props;
+---
+<div style="margin-bottom:36px">
+  <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);display:block;margin-bottom:8px">{label}</span>
+  <h2 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h2);letter-spacing:var(--tracking-tight);color:var(--text);line-height:var(--leading-tight);margin-bottom:6px">
+    <span data-lang-en>{en.heading}</span><span data-lang-es>{es.heading}</span>
+  </h2>
+  <p style="font-size:var(--text-sm);color:var(--text-muted)">
+    <span data-lang-en>{en.sub}</span><span data-lang-es>{es.sub}</span>
+  </p>
+</div>
