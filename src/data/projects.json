@@ -29,8 +29,8 @@
     "gcpServices": [],
     "architecture": {
       "summary": "A Python scoring worker runs in private EC2 subnets behind an Auto Scaling group, consuming from SQS and writing scored results to DynamoDB. There is no public ingress — operators reach instances only through SSM Session Manager over VPC Interface Endpoints. Hardened ARM64 Golden AMIs flow from an EC2 Image Builder pipeline with a CIS baseline and a validation gate before ASG rolling updates. GuardDuty, AWS Backup, and EventBridge → SNS → Lambda → Slack provide threat detection, recovery, and alerting.",
-      "diagramUrl": null,
-      "diagramAlt": null
+      "diagramUrl": "/diagrams/fraud-detection-aws-platform.png",
+      "diagramAlt": "Fraud Detection Platform AWS architecture: a Python worker in private EC2 subnets behind an Auto Scaling group consuming from SQS and writing to DynamoDB, SSM-only access over VPC Interface Endpoints, an EC2 Image Builder Golden AMI pipeline, GitHub Actions OIDC CI/CD, and GuardDuty / EventBridge / SNS / Lambda alerting."
     },
     "operationalValue": {
       "problemSolved": "Scores fraud transactions on infrastructure with zero inbound exposure and no static credentials anywhere in the delivery path.",
