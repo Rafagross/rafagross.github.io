@@ -64,22 +64,22 @@ const fullTitle = title === 'Home'
       href="/rss.xml"
     />
 
-    <!-- Fonts: Self-hosted Inter and JetBrains Mono -->
-    <!-- Using Google Fonts CDN as placeholder — replace with self-hosted in production -->
+    <!-- Fonts: Space Grotesk (display/sans) + JetBrains Mono (technical) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Theme initialization — runs before paint to prevent FOUC -->
+    <!-- Theme + language initialization — runs before paint to prevent FOUC -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = stored ?? (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
+        const t = localStorage.getItem('theme') ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', t === 'dark');
+        document.documentElement.setAttribute('data-theme', t);
+        const l = localStorage.getItem('lang') ?? 'en';
+        document.documentElement.setAttribute('data-lang', l);
       })();
     </script>
   </head>
