@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectCard from '../../components/project/ProjectCard.astro';
+import ProjectCard from '../../components/ds/ProjectCard.astro';
+import SectionHeader from '../../components/ds/SectionHeader.astro';
 import projectsData from '../../data/projects.json';
 
 const projects = projectsData.sort((a, b) => a.displayOrder - b.displayOrder);
@@ -12,105 +13,32 @@ const totalCount = projects.length;
   title="Projects"
   description="CloudOps, Kubernetes, and Platform Engineering projects by Elvis Rafael Gross — real-world work with architecture, operational value, and runbooks."
 >
-  <section class="py-12 md:py-16">
-    <div class="container" style="max-width:1200px">
-      <!-- Page header -->
-      <header class="mb-12">
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--color-accent)">Portfolio</p>
-        <h1 class="text-3xl md:text-4xl font-semibold mb-4" style="color:var(--color-text-primary); letter-spacing:-0.02em">Projects</h1>
-        <p class="text-lg max-w-2xl" style="color:var(--color-text-secondary)">
-          Production-grade work in AWS CloudOps, Kubernetes, hybrid infrastructure, and observability. 
-          Each project includes architecture, operational value, and linked runbooks.
-        </p>
-        <p class="text-sm mt-3" style="color:var(--color-text-muted)">{totalCount} project{totalCount !== 1 ? 's' : ''}</p>
-      </header>
+  <section style="padding:var(--section-gap) clamp(20px,4vw,48px)">
+    <div style="max-width:var(--max-width);margin:0 auto">
+      <SectionHeader
+        label="PROJECTS"
+        en={{ heading: 'Projects', sub: `Production-grade work in AWS CloudOps, Kubernetes, hybrid infrastructure, and observability. ${totalCount} project${totalCount !== 1 ? 's' : ''}.` }}
+        es={{ heading: 'Proyectos', sub: `Trabajo de producción en AWS CloudOps, Kubernetes, infraestructura híbrida y observabilidad. ${totalCount} proyecto${totalCount !== 1 ? 's' : ''}.` }}
+      />
 
-      <!-- Category filter -->
-      {categories.length > 1 && (
-        <div class="flex flex-wrap gap-2 mb-10" id="category-filters" role="group" aria-label="Filter by category">
-          <button
-            class="filter-btn active px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-            data-category="all"
-          >
-            All
-          </button>
-          {categories.map((cat) => (
-            <button
-              class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
-              data-category={cat}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <!-- Projects grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
-        {projects.map((project) => (
-          <div class="project-item" data-category={project.category}>
-            <ProjectCard
-              slug={project.slug}
-              title={project.title}
-              shortDescription={project.shortDescription}
-              category={project.category}
-              status={project.status}
-              tags={project.tags}
-              techStack={project.techStack}
-              awsServices={project.awsServices}
-              featured={project.featured}
-              stars={project.metadata.stars}
-              primaryLanguage={project.metadata.primaryLanguage}
-              githubUrl={project.github.url}
-            />
-          </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+        {projects.map((p) => (
+          <ProjectCard
+            href={`/projects/${p.slug}`}
+            title={p.title}
+            description={p.shortDescription}
+            status={p.status}
+            tags={p.tags ?? p.awsServices ?? []}
+            featured={p.featured}
+          />
         ))}
       </div>
 
-      <!-- Empty state -->
-      <div id="empty-state" class="hidden py-16 text-center" style="border:1px dashed var(--color-border); border-radius:0.5rem">
-        <p class="text-sm" style="color:var(--color-text-muted)">No projects in this category yet.</p>
-      </div>
+      {projects.length === 0 && (
+        <div style="padding:80px 20px;text-align:center;border:1px dashed var(--border);border-radius:4px">
+          <p style="font-size:var(--text-sm);color:var(--text-faint)">No projects yet — check back soon.</p>
+        </div>
+      )}
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .filter-btn {
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-  }
-  .filter-btn:hover,
-  .filter-btn.active {
-    background: var(--color-accent-muted);
-    color: var(--color-accent);
-    border-color: transparent;
-  }
-</style>
-
-<script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const items = document.querySelectorAll<HTMLElement>('.project-item');
-  const emptyState = document.getElementById('empty-state');
-
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const category = btn.dataset.category;
-
-      // Toggle active
-      buttons.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      // Filter
-      let visible = 0;
-      items.forEach((item) => {
-        const show = category === 'all' || item.dataset.category === category;
-        item.style.display = show ? 'block' : 'none';
-        if (show) visible++;
-      });
-
-      emptyState?.classList.toggle('hidden', visible > 0);
-    });
-  });
-</script>
