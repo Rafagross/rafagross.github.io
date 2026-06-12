@@ -39,32 +39,53 @@ export function getAllTags(entries: Array<{ data: { tags: string[] } }>): string
 }
 
 /**
- * Status badge color classes.
+ * Status badge inline styles (monochrome DS).
+ * Returns a `style` string for use with the `style` attribute.
+ * active/stable  → --green (the one permitted hue, same as availability dot)
+ * progress       → --text-muted on --bg-subtle, thicker border
+ * draft/archived → --text-faint on --bg-subtle
+ * deprecated     → --text on --bg-subtle, strong border
  */
-export function getStatusClasses(status: string): string {
+export function getStatusStyle(status: string): string {
+  const base = 'background:var(--bg-subtle);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:0.6875rem;font-family:var(--font-mono);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;';
   const map: Record<string, string> = {
-    active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    stable: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    progress: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-    'in-progress': 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-    draft: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-    deprecated: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-    archived: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+    active:       base + 'color:var(--green);border-color:var(--green);',
+    stable:       base + 'color:var(--green);border-color:var(--green);',
+    progress:     base + 'color:var(--text-muted);border-color:var(--border-strong);',
+    'in-progress':base + 'color:var(--text-muted);border-color:var(--border-strong);',
+    draft:        base + 'color:var(--text-faint);',
+    deprecated:   base + 'color:var(--text);border-color:var(--border-strong);',
+    archived:     base + 'color:var(--text-faint);',
   };
   return map[status.toLowerCase()] ?? map.draft;
 }
 
+/** @deprecated Use getStatusStyle() instead — returns inline style string for monochrome DS. */
+export function getStatusClasses(status: string): string {
+  return '';
+}
+
 /**
- * Severity badge color classes for runbooks.
+ * Severity badge inline styles for runbooks (monochrome DS).
+ * P1 → strong border + primary text (most severe)
+ * P2 → strong border + muted text
+ * P3 → default border + muted text
+ * P4 → default border + faint text
  */
-export function getSeverityClasses(severity: string): string {
+export function getSeverityStyle(severity: string): string {
+  const base = 'background:var(--bg-subtle);border-radius:4px;padding:2px 6px;font-size:0.6875rem;font-family:var(--font-mono);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;';
   const map: Record<string, string> = {
-    P1: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800',
-    P2: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800',
-    P3: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
-    P4: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700',
+    P1: base + 'border:2px solid var(--border-strong);color:var(--text);',
+    P2: base + 'border:2px solid var(--border);color:var(--text-muted);',
+    P3: base + 'border:1px solid var(--border);color:var(--text-muted);',
+    P4: base + 'border:1px solid var(--border);color:var(--text-faint);',
   };
   return map[severity] ?? map.P4;
+}
+
+/** @deprecated Use getSeverityStyle() instead — returns inline style string for monochrome DS. */
+export function getSeverityClasses(severity: string): string {
+  return '';
 }
 
 /**
