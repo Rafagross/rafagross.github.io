@@ -1,7 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Tag from '../components/ui/Tag.astro';
-import { getSeverityClasses, getStatusClasses, formatDate } from '../lib/filters';
+import Tag from '../components/ds/Tag.astro';
+import Badge from '../components/ds/Badge.astro';
+import { formatDate } from '../lib/filters';
 
 interface Props {
   title: string;
@@ -33,21 +34,19 @@ const {
   relatedRunbooks,
 } = Astro.props;
 
-const severityClasses = getSeverityClasses(severity);
-const statusClasses = getStatusClasses(status);
 const published = formatDate(publishedDate);
 const updated = updatedDate ? formatDate(updatedDate) : null;
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="py-12 md:py-16">
-    <div class="container" style="max-width:1200px">
+  <article style="padding:3rem 0 4rem">
+    <div style="width:100%;max-width:var(--max-width);margin-left:auto;margin-right:auto;padding-left:1.5rem;padding-right:1.5rem">
       <!-- Breadcrumb -->
-      <nav class="mb-8 text-sm" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2" style="color:var(--color-text-muted)">
-          <li><a href="/runbooks" class="hover:underline" style="color:var(--color-accent)">Runbooks</a></li>
+      <nav class="mb-8" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">
+          <li><a href="/runbooks" class="ds-link" style="color:var(--text-muted)">Runbooks</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page" style="color:var(--color-text-secondary)">{title}</li>
+          <li aria-current="page" style="color:var(--text-faint)">{title}</li>
         </ol>
       </nav>
 
@@ -55,36 +54,30 @@ const updated = updatedDate ? formatDate(updatedDate) : null;
         <!-- Main content -->
         <div class="lg:col-span-3">
           <!-- Header -->
-          <header class="mb-10 pb-8" style="border-bottom:1px solid var(--color-border)">
+          <header class="mb-10 pb-8" style="border-bottom:1px solid var(--border)">
             <div class="flex flex-wrap items-center gap-3 mb-4">
-              <span class={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold font-mono ${severityClasses}`}>
-                {severity}
-              </span>
-              <span class={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${statusClasses}`}>
-                {status}
-              </span>
-              <span class="text-sm" style="color:var(--color-text-muted)">{category}</span>
+              <Badge variant="muted">{severity}</Badge>
+              <Badge variant="muted">{status}</Badge>
+              <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">{category}</span>
             </div>
 
-            <h1 class="text-2xl md:text-3xl font-semibold mb-4 leading-tight" style="color:var(--color-text-primary); letter-spacing:-0.015em">
+            <h1 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h1);letter-spacing:var(--tracking-display);color:var(--text);line-height:var(--leading-tight);margin-bottom:1rem">
               {title}
             </h1>
 
-            <p class="text-base leading-relaxed mb-5" style="color:var(--color-text-secondary)">{description}</p>
+            <p style="font-size:var(--text-base);line-height:var(--leading-relaxed);color:var(--text-muted);margin-bottom:1.25rem">{description}</p>
 
             <!-- Quick info bar -->
-            <div class="flex flex-wrap gap-6 text-sm" style="color:var(--color-text-muted)">
+            <div class="flex flex-wrap gap-6" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint)">
               <div class="flex items-center gap-1.5">
-                <span>⏱</span>
+                <span>~</span>
                 <span>{estimatedTime}</span>
               </div>
               <div class="flex items-center gap-1.5">
-                <span>📅</span>
                 <span>Updated {updated ?? published}</span>
               </div>
               {awsServices.length > 0 && (
                 <div class="flex items-center gap-1.5">
-                  <span>☁️</span>
                   <span>{awsServices.slice(0, 3).join(', ')}{awsServices.length > 3 ? ` +${awsServices.length - 3}` : ''}</span>
                 </div>
               )}
@@ -93,12 +86,12 @@ const updated = updatedDate ? formatDate(updatedDate) : null;
 
           <!-- Prerequisites callout -->
           {prerequisites.length > 0 && (
-            <div class="mb-8 p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border); border-left:3px solid var(--color-accent)">
-              <p class="text-sm font-semibold mb-3" style="color:var(--color-text-primary)">Prerequisites</p>
-              <ul class="space-y-1.5">
+            <div style="margin-bottom:2rem;padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--border-strong)">
+              <p style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:0.75rem">Prerequisites</p>
+              <ul style="list-style:none;padding:0;margin:0">
                 {prerequisites.map((req) => (
-                  <li class="flex items-start gap-2 text-sm" style="color:var(--color-text-secondary)">
-                    <span class="mt-0.5 flex-shrink-0">→</span>
+                  <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:var(--text-sm);color:var(--text-muted);margin-bottom:0.375rem">
+                    <span style="font-family:var(--font-mono);margin-top:0.1rem;flex-shrink:0">→</span>
                     <span>{req}</span>
                   </li>
                 ))}
@@ -107,7 +100,7 @@ const updated = updatedDate ? formatDate(updatedDate) : null;
           )}
 
           <!-- MDX Content -->
-          <div class="prose max-w-none">
+          <div class="prose" style="max-width:var(--max-width-text)">
             <slot />
           </div>
         </div>
@@ -116,52 +109,52 @@ const updated = updatedDate ? formatDate(updatedDate) : null;
         <aside class="lg:col-span-1">
           <div class="sticky top-24 space-y-6">
             <!-- Quick Reference -->
-            <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-              <h3 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color:var(--color-text-muted)">Quick Reference</h3>
-              <div class="space-y-3 text-sm">
+            <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+              <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:1rem">Quick Reference</h3>
+              <div class="space-y-3">
                 <div>
-                  <p class="text-xs" style="color:var(--color-text-muted)">Severity</p>
-                  <span class={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold font-mono ${severityClasses}`}>{severity}</span>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);margin-bottom:0.25rem">Severity</p>
+                  <Badge variant="muted">{severity}</Badge>
                 </div>
                 <div>
-                  <p class="text-xs" style="color:var(--color-text-muted)">Est. Time</p>
-                  <p class="font-medium" style="color:var(--color-text-primary)">{estimatedTime}</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);margin-bottom:0.25rem">Est. Time</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text)">{estimatedTime}</p>
                 </div>
                 <div>
-                  <p class="text-xs" style="color:var(--color-text-muted)">Status</p>
-                  <span class={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${statusClasses}`}>{status}</span>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);margin-bottom:0.25rem">Status</p>
+                  <Badge variant="muted">{status}</Badge>
                 </div>
               </div>
             </div>
 
             <!-- AWS Services -->
             {awsServices.length > 0 && (
-              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">AWS Services</h3>
+              <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+                <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.75rem">AWS Services</h3>
                 <div class="flex flex-wrap gap-1.5">
-                  {awsServices.map((svc) => <Tag size="sm" variant="accent">{svc}</Tag>)}
+                  {awsServices.map((svc) => <Tag>{svc}</Tag>)}
                 </div>
               </div>
             )}
 
             <!-- Tags -->
             {tags.length > 0 && (
-              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Tags</h3>
+              <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+                <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.75rem">Tags</h3>
                 <div class="flex flex-wrap gap-1.5">
-                  {tags.map((tag) => <Tag size="sm">{tag}</Tag>)}
+                  {tags.map((tag) => <Tag>{tag}</Tag>)}
                 </div>
               </div>
             )}
 
             <!-- Related Runbooks -->
             {relatedRunbooks.length > 0 && (
-              <div class="p-5 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)">
-                <h3 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color:var(--color-text-muted)">Related Runbooks</h3>
-                <ul class="space-y-2">
+              <div style="padding:1.25rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)">
+                <h3 style="font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.75rem">Related Runbooks</h3>
+                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem">
                   {relatedRunbooks.map((slug) => (
                     <li>
-                      <a href={`/runbooks/${slug}`} class="text-sm hover:underline" style="color:var(--color-accent)">
+                      <a href={`/runbooks/${slug}`} class="ds-link" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted)">
                         → {slug.replace(/-/g, ' ')}
                       </a>
                     </li>
@@ -171,9 +164,9 @@ const updated = updatedDate ? formatDate(updatedDate) : null;
             )}
 
             <!-- Dates -->
-            <div class="text-xs space-y-1" style="color:var(--color-text-muted)">
+            <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-faint);line-height:var(--leading-normal)">
               <p>Published: {published}</p>
-              {updated && <p>Updated: {updated}</p>}
+              {updated && <p style="margin-top:0.25rem">Updated: {updated}</p>}
             </div>
           </div>
         </aside>
