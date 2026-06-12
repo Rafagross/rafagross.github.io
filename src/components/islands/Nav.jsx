@@ -64,6 +64,7 @@ export default function Nav() {
 
   return (
     <nav
+      aria-label="Main navigation"
       style={{
         position: 'fixed',
         top: 0,
@@ -110,7 +111,7 @@ export default function Nav() {
           style={{ display: 'flex', gap: 28, flex: 1, justifyContent: 'center' }}
         >
           {NAV[lang].map((label, i) => (
-            <NavLinkInline key={i} href={NAV_HREFS[i]}>
+            <NavLinkInline key={NAV_HREFS[i]} href={NAV_HREFS[i]}>
               {label}
             </NavLinkInline>
           ))}
@@ -120,6 +121,7 @@ export default function Nav() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           {/* Language toggle */}
           <button
+            aria-label={lang === 'en' ? 'Switch to Spanish' : 'Switch to English'}
             onClick={() => setLangStore(lang === 'en' ? 'es' : 'en')}
             style={{
               fontFamily: 'var(--font-mono)',
