@@ -6,6 +6,7 @@ import Tag from '../components/ui/Tag.astro';
 import { getCollection } from 'astro:content';
 import projectsData from '../data/projects.json';
 import skillsData from '../data/skills.json';
+import Hero from '../components/islands/Hero.jsx';
 
 const runbooks = await getCollection('runbooks', ({ data }) => !data.draft);
 const writing = await getCollection('writing', ({ data }) => !data.draft);
@@ -28,6 +29,8 @@ const topSkills = skillsData.categories
 ---
 
 <BaseLayout title="Home">
+  <Hero client:load />
+
   <!-- Hero -->
   <section class="py-20 md:py-28" style="border-bottom:1px solid var(--color-border)">
     <div class="container" style="max-width:800px">
