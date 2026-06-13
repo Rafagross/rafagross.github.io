@@ -126,11 +126,18 @@ function initCursor(): void {
   let rx = mx, ry = my;
   let ringHalf = 14; // half of default ring size (28px)
 
+  // Stay hidden until the first real pointer movement so no stray ring sits
+  // at the screen centre on load.
+  dot.style.opacity = '0';
+  ring.style.opacity = '0';
+
   // Dot: immediate follow
   document.addEventListener('mousemove', (e) => {
     mx = e.clientX;
     my = e.clientY;
     dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+    dot.style.opacity = '1';
+    ring.style.opacity = '1';
   });
 
   // Ring: hover state expands
