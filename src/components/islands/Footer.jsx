@@ -16,7 +16,7 @@ const T_FOOT = {
   },
 };
 
-const LINK_HREFS = ['https://github.com/Rafagross', 'https://linkedin.com/in/rafagross', 'mailto:rafagross15@gmail.com'];
+const LINK_HREFS = ['https://github.com/Rafagross', 'https://www.linkedin.com/in/erafael-gross', 'mailto:rafagross15@gmail.com'];
 
 function FooterLink({ href, children, external }) {
   const [hov, setHov] = useState(false);
