@@ -546,6 +546,25 @@ main { padding-top: 56px; }
   #ds-cursor-ring { display: none !important; }
 }
 
+/* Hide the native arrow/hand once the custom cursor is live (fine pointers
+   only — the `.ds-cursor-active` class is added by ds-interactions.ts after
+   the cursor initialises, so touch devices and any JS failure keep the
+   system cursor). The custom dot/ring elements opt back in to keep painting. */
+@media (pointer: fine) {
+  html.ds-cursor-active,
+  html.ds-cursor-active body,
+  html.ds-cursor-active a,
+  html.ds-cursor-active button,
+  html.ds-cursor-active [role="button"],
+  html.ds-cursor-active label,
+  html.ds-cursor-active .ds-card,
+  html.ds-cursor-active input[type="checkbox"],
+  html.ds-cursor-active input[type="radio"],
+  html.ds-cursor-active select {
+    cursor: none !important;
+  }
+}
+
 /* ── Text reveal (.ds-reveal) ─────────────────────────────── */
 /* Apply class to <p> or <h*> elements you want illuminated    */
 .ds-word {

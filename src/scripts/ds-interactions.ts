@@ -118,6 +118,10 @@ function initCursor(): void {
   const ring = document.getElementById('ds-cursor-ring') as HTMLElement | null;
   if (!dot || !ring) return;
 
+  // Custom cursor is live → hide the native arrow/hand (CSS scopes this to
+  // pointer:fine, so touch devices and a JS failure keep the system cursor).
+  document.documentElement.classList.add('ds-cursor-active');
+
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
   let rx = mx, ry = my;
   let ringHalf = 14; // half of default ring size (28px)
