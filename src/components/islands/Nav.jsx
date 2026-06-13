@@ -46,10 +46,26 @@ export default function Nav() {
   // Start `false` on both server and client so hydration matches; read the
   // real theme after mount (the inline head script has already applied it).
   const [isDark, setIsDark] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
   }, []);
+
+  // Lock scroll + close on Escape / resize-to-desktop while the mobile menu is open.
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    if (!menuOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    const onResize = () => { if (window.innerWidth > 680) setMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -215,8 +231,81 @@ export default function Nav() {
               </svg>
             )}
           </button>
+
+          {/* Mobile menu toggle — hidden on desktop via .ds-nav-burger */}
+          <button
+            className="ds-nav-burger"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(o => !o)}
+            style={{
+              display: 'none', // overridden to flex on mobile by .ds-nav-burger
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              width: 34,
+              height: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+            }}
+          >
+            {menuOpen ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.6" strokeLinecap="round">
+                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.6" strokeLinecap="round">
+                <line x1="3" y1="7" x2="21" y2="7" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="17" x2="21" y2="17" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile full-screen menu */}
+      {menuOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            top: 56,
+            background: 'var(--bg)',
+            zIndex: 99,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: 'clamp(24px,6vw,40px) clamp(20px,6vw,48px) 40px',
+            animation: 'fade-in-quick 160ms var(--ease-default) both',
+          }}
+        >
+          {NAV[lang].map((label, i) => (
+            <a
+              key={NAV_HREFS[i]}
+              href={NAV_HREFS[i]}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'var(--text-h3)',
+                fontWeight: 600,
+                letterSpacing: 'var(--tracking-tight)',
+                color: 'var(--text)',
+                textDecoration: 'none',
+                padding: '18px 2px',
+                borderBottom: '1px solid var(--border)',
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

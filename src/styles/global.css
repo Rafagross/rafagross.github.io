@@ -284,6 +284,15 @@ body.no-transition * {
 .prose {
   max-width: 72ch;
   color: var(--text);
+  /* Break long words / inline code / URLs instead of overflowing on mobile. */
+  overflow-wrap: break-word;
+}
+
+.prose img { max-width: 100%; height: auto; }
+
+/* Wide tables scroll horizontally on small screens instead of overflowing. */
+@media (max-width: 680px) {
+  .prose table { display: block; overflow-x: auto; }
 }
 
 .prose h1,
@@ -459,6 +468,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 /* Fixed nav is 56px tall — offset page content so it isn't hidden. */
 main { padding-top: 56px; }
 @media (max-width: 680px) { .ds-nav-links { display: none !important; } }
+/* Hamburger button: hidden on desktop, shown on mobile (overrides inline display:none). */
+@media (max-width: 680px) { .ds-nav-burger { display: flex !important; } }
+
+@keyframes fade-in-quick { from { opacity: 0; } to { opacity: 1; } }
 
 /* ── DS Button hover states ── */
 .ds-btn:hover { transform: translateY(-1px); }
