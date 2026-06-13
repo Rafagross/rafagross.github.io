@@ -44,8 +44,11 @@ function FooterLink({ href, children, external }) {
 }
 
 export default function Footer() {
-  const [lang, setLang] = useState(getLang());
-  useEffect(() => onLangChange(setLang), []);
+  const [lang, setLang] = useState('en'); // 'en' matches SSR; real value read on mount
+  useEffect(() => {
+    setLang(getLang());
+    return onLangChange(setLang);
+  }, []);
 
   const t = T_FOOT[lang];
   return (

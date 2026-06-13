@@ -1,17 +1,14 @@
 /**
- * ds-interactions.ts v2
- * Drop-in replacement for src/scripts/ds-interactions.ts
+ * ds-interactions.ts — progressive-enhancement behaviour, runs once per page load.
  *
- * New in v2:
- *   • Custom cursor (dot + ring, pointer:fine only, hide on touch)
- *   • Stagger children  (.ds-stagger > * cascade fade-in)
- *   • Metrics counter   (.ds-counter[data-target][data-suffix])
- *   • Text reveal       (.ds-reveal — words illuminate on scroll)
- *   • Re-initialises on Astro View Transitions (astro:page-load)
- *
- * Unchanged:
  *   • Fade-in observer  (.fade-in → .is-visible)
  *   • Card spotlight    (.ds-card mousemove → --mx / --my)
+ *   • Stagger children  (.ds-stagger > * cascade fade-in)
+ *   • Text reveal       (.ds-reveal — words illuminate on scroll)
+ *   • Custom cursor     (dot + ring, pointer:fine only, hidden on touch)
+ *
+ * Note: the metrics count-up is self-contained in the MetricsCounter React
+ * island (a vanilla version here fought React hydration and froze).
  */
 
 /* ── 1. Fade-in on scroll ────────────────────────────────────────── */
@@ -162,17 +159,13 @@ function initCursor(): void {
   animRing();
 }
 
-/* ── Main init + Astro page-load hook ───────────────────────────── */
+/* ── Main init ──────────────────────────────────────────────────── */
 function init(): void {
   initStagger(); // must run BEFORE initFadeIn so stagger children get observed
   initFadeIn();
   initSpotlight();
-  initCounters();
   initTextReveal();
   initCursor(); // no-op after first call
 }
 
 init();
-
-// Re-run for each View Transitions page load
-document.addEventListener('astro:page-load', init);

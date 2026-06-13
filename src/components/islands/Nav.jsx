@@ -41,10 +41,15 @@ function NavLinkInline({ href, children }) {
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [lang, setLang] = useState(getLang());
-  const [isDark, setIsDark] = useState(
-    () => typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark'
-  );
+  // Default 'en' matches the server render; real value read after mount.
+  const [lang, setLang] = useState('en');
+  // Start `false` on both server and client so hydration matches; read the
+  // real theme after mount (the inline head script has already applied it).
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -52,7 +57,10 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => onLangChange(setLang), []);
+  useEffect(() => {
+    setLang(getLang());
+    return onLangChange(setLang);
+  }, []);
 
   const toggleTheme = () => {
     const next = isDark ? 'light' : 'dark';

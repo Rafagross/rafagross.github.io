@@ -262,25 +262,35 @@ function BtnInline({ href, variant, children }) {
    Hero — default export
    ================================================================= */
 export default function Hero() {
-  const [lang, setLang] = useState(getLang());
-  useEffect(() => onLangChange(setLang), []);
+  const [lang, setLang] = useState('en');
+  useEffect(() => {
+    setLang(getLang());
+    return onLangChange(setLang);
+  }, []);
 
   const t = T_HERO[lang];
-  const pr = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   const r0=useRef(null),r1=useRef(null),r2=useRef(null),
         r3=useRef(null),r4=useRef(null),r5=useRef(null);
 
+  // Entrance: refs start hidden (consistent on server + client to avoid a
+  // hydration mismatch). On mount, reveal — instantly for reduced-motion,
+  // staggered otherwise.
   useEffect(function(){
-    if(pr) return;
-    const refs=[r0,r1,r2,r3,r4,r5], delays=[0,80,160,240,300,360];
+    const refs=[r0,r1,r2,r3,r4,r5];
+    const reveal = function(el){ if(el){ el.style.opacity='1'; el.style.transform='none'; } };
+    if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
+      refs.forEach(function(ref){ reveal(ref.current); });
+      return;
+    }
+    const delays=[0,80,160,240,300,360];
     const timers = refs.map(function(ref,i){
       const el = ref.current; if(!el) return null;
-      return setTimeout(function(){ if(el){ el.style.opacity='1'; el.style.transform='none'; } }, delays[i]);
+      return setTimeout(function(){ reveal(el); }, delays[i]);
     });
     return function(){ timers.forEach(function(id){ if(id) clearTimeout(id); }); };
   }, []);
 
-  const ini = pr ? {opacity:1} : {opacity:0, transform:'translateY(22px)'};
+  const ini = {opacity:0, transform:'translateY(22px)'};
 
   return (
     <section style={{position:'relative',overflow:'hidden',minHeight:'100vh',display:'flex',alignItems:'center',background:'var(--bg)'}}>

@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import Nav from '../components/islands/Nav.jsx';
 import Footer from '../components/islands/Footer.jsx';
-import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -73,24 +72,15 @@ const fullTitle = title === 'Home'
       rel="stylesheet"
     />
 
-    <!-- View Transitions — enables page fade animation between routes -->
-    <ClientRouter />
-
     <!-- Theme + language initialization — runs before paint to prevent FOUC.
-         Default theme is dark. Re-applied after every View Transition swap so
-         the choice persists across navigations (the inline script does not
-         re-run on client-side nav, but the listener on `document` does). -->
+         Default theme is dark. Runs on every (full) page load. -->
     <script is:inline>
       (function () {
-        function applyPrefs() {
-          const t = localStorage.getItem('theme') ?? 'dark';
-          document.documentElement.classList.toggle('dark', t === 'dark');
-          document.documentElement.setAttribute('data-theme', t);
-          const l = localStorage.getItem('lang') ?? 'en';
-          document.documentElement.setAttribute('data-lang', l);
-        }
-        applyPrefs();
-        document.addEventListener('astro:after-swap', applyPrefs);
+        const t = localStorage.getItem('theme') ?? 'dark';
+        document.documentElement.classList.toggle('dark', t === 'dark');
+        document.documentElement.setAttribute('data-theme', t);
+        const l = localStorage.getItem('lang') ?? 'en';
+        document.documentElement.setAttribute('data-lang', l);
       })();
     </script>
   </head>
@@ -104,10 +94,7 @@ const fullTitle = title === 'Home'
     <div id="ds-cursor" aria-hidden="true"></div>
     <div id="ds-cursor-ring" aria-hidden="true"></div>
 
-    <!-- Nav persists across page transitions via view-transition-name -->
-    <div style="view-transition-name: ds-nav;">
-      <Nav client:load />
-    </div>
+    <Nav client:load />
     <main id="main-content">
       <slot />
     </main>

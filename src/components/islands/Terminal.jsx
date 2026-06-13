@@ -46,8 +46,11 @@ const COMMANDS = {
 };
 
 export default function Terminal() {
-  const [lang, setLang] = useState(getLang());
-  useEffect(() => onLangChange(setLang), []);
+  const [lang, setLang] = useState('en'); // 'en' matches SSR; real value read on mount
+  useEffect(() => {
+    setLang(getLang());
+    return onLangChange(setLang);
+  }, []);
 
   const [history, setHistory] = useState([]);
   const [running, setRunning] = useState(null);
