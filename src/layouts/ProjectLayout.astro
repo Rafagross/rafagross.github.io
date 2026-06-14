@@ -23,6 +23,7 @@ interface Props {
     diagramUrl?: string;
     diagramAlt?: string;
   };
+  screenshots?: { src: string; alt?: string; caption?: string }[];
   operationalValue: {
     problemSolved: string;
     outcomes: string[];
@@ -53,6 +54,7 @@ const {
   awsServices,
   gcpServices,
   architecture,
+  screenshots,
   operationalValue,
   links,
   publishedDate,
@@ -131,6 +133,37 @@ const allCloudServices = [...awsServices, ...gcpServices];
               </div>
             )}
           </section>
+
+          <!-- Screenshots -->
+          {screenshots && screenshots.length > 0 && (
+            <section class="mb-10">
+              <h2 style="font-family:var(--font-display);font-weight:700;font-size:var(--text-h2);letter-spacing:var(--tracking-tight);color:var(--text);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">
+                Screenshots
+              </h2>
+              <p style="margin-bottom:1.5rem;line-height:var(--leading-relaxed);color:var(--text-muted)">
+                Live console captures from the running platform.
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {screenshots.map((shot) => (
+                  <figure style="margin:0;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden">
+                    <a href={shot.src} target="_blank" rel="noopener noreferrer" style="display:block" aria-label={shot.caption ?? shot.alt ?? `${title} screenshot`}>
+                      <img
+                        src={shot.src}
+                        alt={shot.alt ?? shot.caption ?? `${title} screenshot`}
+                        loading="lazy"
+                        style="width:100%;height:auto;display:block;border-bottom:1px solid var(--border)"
+                      />
+                    </a>
+                    {shot.caption && (
+                      <figcaption style="padding:0.625rem 0.875rem;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);line-height:var(--leading-normal)">
+                        {shot.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
 
           <!-- Operational Value -->
           <section class="mb-10">

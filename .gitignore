@@ -34,5 +34,8 @@ yarn-error.log*
 # Design system source bundle (kept locally, not deployed)
 *.zip
 
+# Unprocessed screenshot sources (processed copies live in public/screenshots/)
+Review/
+
 # Claude Code project guidance — kept local, not published to the repo
 CLAUDE.md

@@ -51,7 +51,22 @@
       "diagram": null,
       "demo": null
     },
-    "screenshots": [],
+    "screenshots": [
+      { "src": "/screenshots/fraud-detection/01-ssm-session-manager-connected.png", "alt": "EC2 console SSM Session Manager tab connected to a private instance", "caption": "Operator access via SSM Session Manager — connected to a private instance, no SSH keys and no bastion." },
+      { "src": "/screenshots/fraud-detection/02-vpc-endpoints-private.png", "alt": "VPC Endpoints list showing eight interface and gateway endpoints", "caption": "Eight VPC endpoints (SSM, SQS, DynamoDB, S3, CloudWatch Logs…) keep the data path fully private." },
+      { "src": "/screenshots/fraud-detection/03-asg-arm64-workers.png", "alt": "Auto Scaling group with two healthy ARM64 instances in service", "caption": "Auto Scaling group of ARM64 t4g.micro scoring workers — desired 2, all healthy." },
+      { "src": "/screenshots/fraud-detection/04-ec2-image-builder-golden-ami.png", "alt": "EC2 Image Builder pipeline enabled and available", "caption": "EC2 Image Builder pipeline producing hardened AL2023 ARM64 Golden AMIs." },
+      { "src": "/screenshots/fraud-detection/05-iam-least-privilege-role.png", "alt": "IAM role with SSM managed policy and two scoped inline policies", "caption": "Least-privilege IAM — the workload role carries AmazonSSMManagedInstanceCore plus two scoped inline policies." },
+      { "src": "/screenshots/fraud-detection/06-amazon-inspector-coverage.png", "alt": "Amazon Inspector resource coverage for EC2 instances", "caption": "Amazon Inspector enabled for agent-based vulnerability scanning of the EC2 fleet." },
+      { "src": "/screenshots/fraud-detection/07-guardduty-summary.png", "alt": "GuardDuty summary dashboard with runtime monitoring", "caption": "GuardDuty threat detection enabled across the account with runtime monitoring." },
+      { "src": "/screenshots/fraud-detection/08-dynamodb-fraud-decisions.png", "alt": "DynamoDB scan of the fraud-decisions table showing APPROVE and DENY scores", "caption": "Fraud-decisions DynamoDB table — live APPROVE/DENY scores written by the scoring worker." },
+      { "src": "/screenshots/fraud-detection/09-github-actions-cicd.png", "alt": "GitHub Actions workflow runs all passing", "caption": "GitHub Actions CI/CD — Terraform validate, Checkov and tflint passing across 82 runs." },
+      { "src": "/screenshots/fraud-detection/10-fis-chaos-asg-self-heal.png", "alt": "AWS FIS experiment completed terminating one EC2 instance", "caption": "AWS FIS chaos experiment — terminate one EC2 worker; the ASG self-heals in under two minutes." },
+      { "src": "/screenshots/fraud-detection/11-eventbridge-rules.png", "alt": "EventBridge event pattern rules for operational events", "caption": "EventBridge rules routing operational events: backup-job-failed, break-glass-assumed, EC2 state change, KMS key deletion." },
+      { "src": "/screenshots/fraud-detection/12-cloudwatch-dlq-alarm.png", "alt": "CloudWatch alarm on worker dead-letter-queue depth in alarm state", "caption": "CloudWatch alarm on the worker dead-letter-queue depth, shown in its in-alarm state." },
+      { "src": "/screenshots/fraud-detection/13-slack-cloudops-alerts.png", "alt": "Slack cloudops-alerts channel receiving an alarm notification", "caption": "Operational alerts delivered to the #cloudops-alerts Slack channel via EventBridge → SNS → Lambda." },
+      { "src": "/screenshots/fraud-detection/14-aws-budgets-monthly.png", "alt": "AWS Budgets monthly cost budget capped at 100 dollars", "caption": "AWS Budgets guardrail capping the environment at $100/month." }
+    ],
     "tags": ["aws", "ec2", "ssm", "terraform", "dynamodb", "sqs", "guardduty", "github-actions", "oidc", "golden-ami", "zero-trust"],
     "metadata": {
       "stars": null,
@@ -61,65 +76,6 @@
     },
     "publishedDate": "2026-05-01",
     "updatedDate": "2026-06-12"
-  },
-  {
-    "slug": "aws-cloudops-private-ec2-operations-platform",
-    "title": "AWS CloudOps Private EC2 Operations Platform",
-    "shortDescription": "Production-grade operations platform for managing private EC2 fleets via SSM, CloudWatch, and automated runbooks.",
-    "longDescription": "Hub-and-spoke architecture for managing private EC2 fleets at enterprise scale. SSM replaces bastion hosts entirely — all administrative access goes through Session Manager with full CloudWatch session logging. Designed for zero public SSH endpoints.",
-    "category": "AWS CloudOps",
-    "status": "active",
-    "featured": true,
-    "displayOrder": 5,
-    "github": {
-      "owner": "Rafagross",
-      "repo": "aws-cloudops-private-ec2-operations-platform",
-      "url": "https://github.com/Rafagross/aws-cloudops-private-ec2-operations-platform"
-    },
-    "techStack": {
-      "cloud": ["AWS"],
-      "compute": ["EC2", "Systems Manager"],
-      "networking": ["VPC", "VPC Endpoints", "Private Subnets"],
-      "observability": ["CloudWatch", "CloudWatch Logs"],
-      "iac": ["Terraform"],
-      "automation": ["SSM Documents", "EventBridge", "Lambda"],
-      "languages": ["Bash", "Python", "HCL"]
-    },
-    "awsServices": ["EC2", "SSM", "CloudWatch", "VPC", "IAM", "EventBridge", "Lambda"],
-    "gcpServices": [],
-    "architecture": {
-      "summary": "Hub-and-spoke design where a central operations VPC reaches private workload VPCs through VPC endpoints. SSM replaces bastion hosts for all administrative access.",
-      "diagramUrl": "/diagrams/aws-private-ec2-ops-platform.svg",
-      "diagramAlt": "Architecture diagram showing operations VPC connecting to workload VPCs via VPC endpoints"
-    },
-    "operationalValue": {
-      "problemSolved": "Eliminates SSH bastion hosts, reduces blast radius, provides auditable session logs.",
-      "outcomes": [
-        "Zero public-facing SSH endpoints",
-        "Full session logging to CloudWatch and S3",
-        "Mean time to access reduced from minutes to seconds"
-      ],
-      "metrics": {
-        "costImpact": "~40% reduction vs bastion-based alternative",
-        "reliabilityImpact": "No bastion = no bastion outages"
-      }
-    },
-    "links": {
-      "readme": "https://github.com/Rafagross/aws-cloudops-private-ec2-operations-platform#readme",
-      "runbook": "/runbooks/ec2-instance-unreachable-via-ssm",
-      "diagram": null,
-      "demo": null
-    },
-    "screenshots": [],
-    "tags": ["aws", "ec2", "ssm", "vpc", "cloudwatch", "terraform", "private-networking", "zero-trust"],
-    "metadata": {
-      "stars": null,
-      "lastCommit": null,
-      "primaryLanguage": null,
-      "lastEnrichedAt": null
-    },
-    "publishedDate": "2026-01-15",
-    "updatedDate": "2026-02-01"
   },
   {
     "slug": "kubernetes-homelab-platform",
